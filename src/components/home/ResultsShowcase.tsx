@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 
 const metrics = [
   {
@@ -159,7 +159,7 @@ const ResultsShowcase = () => {
             <div className="bg-gray-900 p-8 md:p-12 text-white">
               <div className="inline-flex items-center px-3 py-1 bg-white/10 rounded-full text-white text-sm font-medium mb-6">
                 <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
                 FEATURED CASE STUDY
               </div>
@@ -213,9 +213,11 @@ const ResultsShowcase = () => {
               
               <Button 
                 className="bg-white text-gray-900 hover:bg-green-500 hover:text-white transition-colors"
-                onClick={() => window.open(`/case-studies/${currentCase.id}`, '_self')}
+                asChild
               >
-                Read Full Case Study <ArrowRight className="h-4 w-4 ml-1" />
+                <Link to={`/case-studies/${currentCase.id}`}>
+                  Read Full Case Study <ArrowRight className="h-4 w-4 ml-1" />
+                </Link>
               </Button>
             </div>
             
@@ -260,9 +262,11 @@ const ResultsShowcase = () => {
           <Button 
             variant="outline" 
             className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
-            onClick={() => window.open('/case-studies', '_self')}
+            asChild
           >
-            View All Case Studies <ArrowRight className="h-4 w-4 ml-1" />
+            <Link to="/case-studies">
+              View All Case Studies <ArrowRight className="h-4 w-4 ml-1" />
+            </Link>
           </Button>
         </div>
       </div>

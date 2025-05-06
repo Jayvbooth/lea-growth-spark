@@ -64,15 +64,15 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
-            <a href="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
+            <Link to="/case-studies" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
               Case Studies
-            </a>
-            <a href="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
+            </Link>
+            <Link to="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
               Resources
-            </a>
-            <a href="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
+            </Link>
+            <Link to="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
               About
-            </a>
+            </Link>
           </nav>
 
           {/* CTA Button */}
@@ -111,15 +111,15 @@ const Navbar = () => {
               <Link to="/business-automation" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Business Automation
               </Link>
-              <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+              <Link to="/case-studies" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Case Studies
-              </a>
-              <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+              </Link>
+              <Link to="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Resources
-              </a>
-              <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+              </Link>
+              <Link to="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 About
-              </a>
+              </Link>
               <Button className="btn-primary w-full mt-4">Book Strategy Call</Button>
             </div>
           </div>

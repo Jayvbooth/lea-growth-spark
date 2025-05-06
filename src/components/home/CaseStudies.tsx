@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const caseStudies = [
   {
@@ -79,23 +80,23 @@ const CaseStudies = () => {
                   </div>
                 </div>
                 
-                <a 
-                  href="#" 
+                <Link 
+                  to="/case-studies" 
                   className="text-leadea-green font-medium hover:text-leadea-teal transition-colors flex items-center"
                 >
                   Read More
                   <svg className="ml-2 w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           ))}
         </div>
         
         <div className="text-center">
-          <Button className="btn-primary">
-            Explore All Case Studies
+          <Button asChild>
+            <Link to="/case-studies">Explore All Case Studies</Link>
           </Button>
         </div>
       </div>
