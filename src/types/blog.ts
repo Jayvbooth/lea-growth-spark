@@ -15,6 +15,7 @@ export interface BlogPost {
   excerpt: string;
   content: string;
   readTime: number;
+  status?: "draft" | "published";
   seo: {
     metaTitle?: string;
     metaDescription?: string;
@@ -22,3 +23,7 @@ export interface BlogPost {
     canonical?: string;
   };
 }
+
+export type BlogFormData = Omit<BlogPost, "id" | "readTime" | "slug"> & {
+  id?: string;
+};
