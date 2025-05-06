@@ -192,7 +192,7 @@ export const caseStudies: CaseStudy[] = [
       { label: 'Customer Acquisition Cost', before: '$3,200', after: '$1,850' }
     ],
     testimonial: {
-      quote: 'The automated lead scoring and routing changed everything for us. We're now focusing our energy on the right prospects at the right time, and it's paid off tremendously in our bottom line.',
+      quote: 'The automated lead scoring and routing changed everything for us. We\'re now focusing our energy on the right prospects at the right time, and it\'s paid off tremendously in our bottom line.',
       author: 'Michael Chen',
       role: 'CEO, MarketSphere'
     },
