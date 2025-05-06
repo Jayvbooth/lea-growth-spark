@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import AnimatedBeam from "@/components/ui/AnimatedBeam";
+import { Link } from 'react-router-dom';
 
 const serviceFeatures = {
   leadGeneration: [
@@ -102,6 +103,12 @@ const ServicesShowcase = () => {
                   <p className="text-sm text-leadea-navy">Meetings Weekly</p>
                 </div>
               </div>
+
+              <Link to="/lead-generation">
+                <Button variant="default" className="btn-primary">
+                  Learn More
+                </Button>
+              </Link>
             </div>
             
             <div className="relative h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-leadea-navy/5 to-leadea-teal/10 border border-leadea-navy/10 card-shadow">
@@ -200,6 +207,12 @@ const ServicesShowcase = () => {
                   <p className="text-sm text-leadea-navy">ROI Average</p>
                 </div>
               </div>
+
+              <Link to="/business-automation">
+                <Button variant="default" className="btn-primary">
+                  Learn More
+                </Button>
+              </Link>
             </div>
             
             <div className="relative h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-leadea-navy/5 to-leadea-teal/10 border border-leadea-navy/10 card-shadow">

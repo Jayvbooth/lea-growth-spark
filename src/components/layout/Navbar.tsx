@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,28 +40,28 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <span className="text-2xl font-bold text-leadea-green">LEADEA</span>
               <span className="ml-2 text-leadea-navy">Growth Partners</span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
+            <Link to="/" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
               Home
-            </a>
+            </Link>
             <div className="relative group">
               <button className="flex items-center text-leadea-navy hover:text-leadea-green transition-colors font-medium">
                 Services <ChevronDown className="ml-1 h-4 w-4" />
               </button>
               <div className="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden transform scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-200 origin-top-left">
-                <a href="#" className="block px-4 py-2 text-sm text-leadea-navy hover:bg-leadea-gray hover:text-leadea-green">
+                <Link to="/lead-generation" className="block px-4 py-2 text-sm text-leadea-navy hover:bg-leadea-gray hover:text-leadea-green">
                   Lead Generation
-                </a>
-                <a href="#" className="block px-4 py-2 text-sm text-leadea-navy hover:bg-leadea-gray hover:text-leadea-green">
+                </Link>
+                <Link to="/business-automation" className="block px-4 py-2 text-sm text-leadea-navy hover:bg-leadea-gray hover:text-leadea-green">
                   Business Automation
-                </a>
+                </Link>
               </div>
             </div>
             <a href="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
@@ -101,15 +102,15 @@ const Navbar = () => {
         >
           <div className="container mx-auto px-4">
             <div className="flex flex-col space-y-3">
-              <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+              <Link to="/" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Home
-              </a>
-              <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+              </Link>
+              <Link to="/lead-generation" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Lead Generation
-              </a>
-              <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+              </Link>
+              <Link to="/business-automation" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Business Automation
-              </a>
+              </Link>
               <a href="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Case Studies
               </a>
