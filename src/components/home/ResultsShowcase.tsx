@@ -1,5 +1,8 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
 const metrics = [
   {
@@ -40,13 +43,71 @@ const metrics = [
   }
 ];
 
+const caseStudies = [
+  {
+    id: "techflow",
+    name: "TechFlow Solutions",
+    industry: "B2B SaaS Company",
+    size: "50-100 employees",
+    challenge: "Manual prospecting and data entry consuming 30+ hours weekly",
+    results: [
+      { metric: "Lead Quality", value: "+185%" },
+      { metric: "Time Saved", value: "25 hrs/week" },
+      { metric: "Sales Conversion", value: "+42%" },
+      { metric: "Revenue Growth", value: "+37%" }
+    ],
+    quote: "LEADEA helped us eliminate manual tasks while significantly improving our lead quality. We're now closing larger deals with better clients, and our team has more time to focus on strategic initiatives.",
+    author: "Sarah Johnson",
+    position: "VP of Sales",
+    emoji: "🏢"
+  },
+  {
+    id: "marketsphere",
+    name: "MarketSphere",
+    industry: "Marketing Agency",
+    size: "10-50 employees",
+    challenge: "Poor lead quality resulting in wasted sales efforts and low conversion rates",
+    results: [
+      { metric: "Qualified Meetings", value: "+120%" },
+      { metric: "Deal Size", value: "+35%" },
+      { metric: "Close Rate", value: "+42%" },
+      { metric: "Pipeline Value", value: "+68%" }
+    ],
+    quote: "The quality of leads we now receive has transformed our business. Our sales team is more productive and our conversion rates have increased dramatically.",
+    author: "Michael Chen",
+    position: "CEO",
+    emoji: "🏗️"
+  },
+  {
+    id: "datacore",
+    name: "DataCore Analytics",
+    industry: "Data Services",
+    size: "100-250 employees",
+    challenge: "Unable to scale lead generation while maintaining quality standards",
+    results: [
+      { metric: "Weekly Appointments", value: "15+" },
+      { metric: "ROI", value: "3.2x" },
+      { metric: "Team Efficiency", value: "+48%" },
+      { metric: "Annual Growth", value: "+22%" }
+    ],
+    quote: "LEADEA's systems allowed us to scale our outreach without sacrificing quality. We're now booking more meetings with better prospects than ever before.",
+    author: "Rebecca Torres",
+    position: "Growth Director",
+    emoji: "📊"
+  }
+];
+
 const ResultsShowcase = () => {
+  const [activeCaseStudy, setActiveCaseStudy] = React.useState(caseStudies[0].id);
+
+  const currentCase = caseStudies.find(cs => cs.id === activeCaseStudy) || caseStudies[0];
+
   return (
     <section className="py-20">
       <div className="container mx-auto container-padding">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Data-Driven Results You Can Measure
+            Data-Driven Results You Can <span className="text-leadea-green">Measure</span>
           </h2>
           <p className="text-lg text-leadea-navy opacity-80">
             We're obsessed with metrics and measurable outcomes. Here's what our clients typically achieve.
@@ -73,8 +134,25 @@ const ResultsShowcase = () => {
           ))}
         </div>
         
+        {/* Case Study Selector */}
+        <div className="mb-8 flex flex-wrap gap-3 justify-center">
+          {caseStudies.map((study) => (
+            <button
+              key={study.id}
+              onClick={() => setActiveCaseStudy(study.id)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                activeCaseStudy === study.id 
+                  ? 'bg-leadea-green text-white' 
+                  : 'bg-white text-leadea-navy hover:bg-leadea-green/10'
+              }`}
+            >
+              {study.name}
+            </button>
+          ))}
+        </div>
+        
         {/* Case Study Highlight */}
-        <div className="bg-gradient-to-br from-leadea-navy to-leadea-navy/90 rounded-2xl overflow-hidden">
+        <Card className="bg-gradient-to-br from-leadea-navy to-leadea-navy/90 rounded-2xl overflow-hidden border-0 shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left Column - Case Study Details */}
             <div className="p-10 md:p-12">
@@ -87,11 +165,11 @@ const ResultsShowcase = () => {
               
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-2xl">
-                  🏢
+                  {currentCase.emoji}
                 </div>
                 <div className="ml-4">
-                  <h3 className="text-white font-bold">TechFlow Solutions</h3>
-                  <p className="text-white/70 text-sm">B2B SaaS Company • 50-100 employees</p>
+                  <h3 className="text-white font-bold">{currentCase.name}</h3>
+                  <p className="text-white/70 text-sm">{currentCase.industry} • {currentCase.size}</p>
                 </div>
               </div>
               
@@ -100,7 +178,7 @@ const ResultsShowcase = () => {
               </h4>
               
               <p className="text-white/80 mb-8">
-                TechFlow was spending 30+ hours weekly on manual prospecting and data entry, with poor lead quality and a disjointed sales process.
+                {currentCase.challenge}
               </p>
               
               <div className="space-y-4 mb-8">
@@ -140,9 +218,9 @@ const ResultsShowcase = () => {
               
               <Button 
                 className="bg-white text-leadea-navy hover:bg-leadea-gold hover:text-white transition-colors"
-                onClick={() => window.open('#case-studies', '_self')}
+                onClick={() => window.open(`/case-studies/${currentCase.id}`, '_self')}
               >
-                Read Full Case Study
+                Read Full Case Study <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
             
@@ -154,60 +232,45 @@ const ResultsShowcase = () => {
                 </h4>
                 
                 <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-white font-medium">Lead Quality</span>
-                      <span className="text-leadea-teal font-bold">+185%</span>
+                  {currentCase.results.map((result, index) => (
+                    <div key={index}>
+                      <div className="flex justify-between mb-2">
+                        <span className="text-white font-medium">{result.metric}</span>
+                        <span className="text-leadea-teal font-bold">{result.value}</span>
+                      </div>
+                      <div className="h-3 bg-white/20 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-leadea-teal rounded-full" 
+                          style={{ width: `${75 + (index * 5)}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <div className="h-3 bg-white/20 rounded-full overflow-hidden">
-                      <div className="h-full bg-leadea-teal rounded-full" style={{ width: '85%' }}></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-white font-medium">Time Saved</span>
-                      <span className="text-leadea-teal font-bold">25 hrs/week</span>
-                    </div>
-                    <div className="h-3 bg-white/20 rounded-full overflow-hidden">
-                      <div className="h-full bg-leadea-teal rounded-full" style={{ width: '78%' }}></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-white font-medium">Sales Conversion</span>
-                      <span className="text-leadea-teal font-bold">+42%</span>
-                    </div>
-                    <div className="h-3 bg-white/20 rounded-full overflow-hidden">
-                      <div className="h-full bg-leadea-teal rounded-full" style={{ width: '65%' }}></div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-white font-medium">Revenue Growth</span>
-                      <span className="text-leadea-teal font-bold">+37%</span>
-                    </div>
-                    <div className="h-3 bg-white/20 rounded-full overflow-hidden">
-                      <div className="h-full bg-leadea-teal rounded-full" style={{ width: '60%' }}></div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
                 
                 <div className="mt-8 bg-white/10 rounded-lg p-4 border border-white/10">
                   <p className="text-white italic">
-                    "LEADEA helped us eliminate manual tasks while significantly improving our lead quality. We're now closing larger deals with better clients, and our team has more time to focus on strategic initiatives."
+                    "{currentCase.quote}"
                   </p>
                   <div className="mt-3 flex items-center">
-                    <p className="text-white font-bold">Sarah Johnson</p>
+                    <p className="text-white font-bold">{currentCase.author}</p>
                     <span className="mx-2 text-white/50">•</span>
-                    <p className="text-white/70">VP of Sales, TechFlow</p>
+                    <p className="text-white/70">{currentCase.position}, {currentCase.name}</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </Card>
+        
+        <div className="mt-12 text-center">
+          <Button 
+            variant="outline" 
+            className="border-leadea-green text-leadea-green hover:bg-leadea-green hover:text-white"
+            onClick={() => window.open('/case-studies', '_self')}
+          >
+            View All Case Studies <ArrowRight className="h-4 w-4 ml-1" />
+          </Button>
         </div>
       </div>
     </section>
