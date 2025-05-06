@@ -9,6 +9,7 @@ export interface ServiceCardProps {
   tools: string[];
   className?: string;
   animationDelay?: string;
+  style?: React.CSSProperties; // Added style prop
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ 
@@ -17,7 +18,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   description, 
   tools, 
   className,
-  animationDelay 
+  animationDelay,
+  style 
 }) => {
   return (
     <div 
@@ -25,7 +27,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         "bg-white rounded-xl p-6 shadow-soft hover:shadow-card-hover transition-all duration-300 hover:translate-y-[-5px]",
         className
       )}
-      style={{ animationDelay }}
+      style={{ animationDelay, ...style }} // Spread any additional style props
     >
       <div className="text-green-600 mb-4 text-3xl">
         {icon}
