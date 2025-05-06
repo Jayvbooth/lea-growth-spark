@@ -1,15 +1,16 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Twitter, Mail, Phone, Globe } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Twitter, Mail, Phone, Globe, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
+  
   return (
-    <footer className="bg-gradient-to-b from-leadea-navy to-[#0c1624] text-white pt-16 pb-8">
-      <div className="container mx-auto container-padding">
+    <footer className="bg-gradient-to-b from-green-900/90 to-[#0c1624] text-white pt-16 pb-8">
+      <div className="container mx-auto px-4 md:px-6">
         {/* Top Section with Logo, Description and Newsletter */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
           {/* Logo and Company Info */}
@@ -23,16 +24,16 @@ const Footer = () => {
               business processes to accelerate growth and maximize operational efficiency.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="bg-white/10 hover:bg-green-600/80 p-2.5 rounded-full transition-all duration-300">
+              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
                 <Facebook size={18} className="text-white" />
               </a>
-              <a href="#" className="bg-white/10 hover:bg-green-600/80 p-2.5 rounded-full transition-all duration-300">
+              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
                 <Twitter size={18} className="text-white" />
               </a>
-              <a href="#" className="bg-white/10 hover:bg-green-600/80 p-2.5 rounded-full transition-all duration-300">
+              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
                 <Instagram size={18} className="text-white" />
               </a>
-              <a href="#" className="bg-white/10 hover:bg-green-600/80 p-2.5 rounded-full transition-all duration-300">
+              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
                 <Linkedin size={18} className="text-white" />
               </a>
             </div>
@@ -45,16 +46,28 @@ const Footer = () => {
               <h3 className="text-white font-semibold mb-5">Company</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/" className="text-white/70 hover:text-green-400 transition-colors">Home</Link>
+                  <Link to="/" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    Home
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="text-white/70 hover:text-green-400 transition-colors">About Us</Link>
+                  <Link to="/about" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    About Us
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/lead-generation" className="text-white/70 hover:text-green-400 transition-colors">Lead Generation</Link>
+                  <Link to="/lead-generation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    Lead Generation
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/business-automation" className="text-white/70 hover:text-green-400 transition-colors">Business Automation</Link>
+                  <Link to="/business-automation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    Business Automation
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -64,16 +77,28 @@ const Footer = () => {
               <h3 className="text-white font-semibold mb-5">Resources</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors">Case Studies</Link>
+                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    Case Studies
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors">Blog</Link>
+                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    Blog
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors">Tools</Link>
+                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    Tools
+                  </Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors">FAQ</Link>
+                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                    <ArrowRight size={14} className="mr-2" />
+                    FAQ
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -94,12 +119,12 @@ const Footer = () => {
                   required
                 />
               </div>
-              <button
+              <Button
                 type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
+                className="w-full bg-green-600 hover:bg-green-700 text-white"
               >
                 Subscribe
-              </button>
+              </Button>
             </form>
           </div>
         </div>
@@ -149,10 +174,10 @@ const Footer = () => {
         {/* Bottom Section with Copyright and Legal Links */}
         <div className="pt-4 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-white/60 mb-4 md:mb-0">
               &copy; {currentYear} LEADEA Growth Partners. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6">
               <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors">
                 Privacy Policy
               </Link>
