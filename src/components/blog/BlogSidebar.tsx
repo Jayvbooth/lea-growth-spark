@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { BlogPost } from '@/types/blog';
-import { Calendar, Tag, Heading, Newsletter } from 'lucide-react';
+import { Calendar, Tag, Heading, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -37,7 +36,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
       <Card className="overflow-hidden border-green-100">
         <div className="bg-gradient-to-r from-green-50 to-green-100 p-5">
           <div className="flex items-start space-x-3 mb-3">
-            <Newsletter className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
+            <Mail className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
             <div>
               <h3 className="text-lg font-bold text-green-800">Insider Newsletter</h3>
               <p className="text-sm text-green-700 mt-1">
@@ -159,4 +158,3 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
 };
 
 export default BlogSidebar;
-

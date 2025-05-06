@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -123,10 +122,11 @@ const BlogEditor: React.FC = () => {
     
     // Process tags correctly handling different data types
     let processedTags: string[];
-    if (Array.isArray(data.tags)) {
-      processedTags = data.tags;
-    } else if (typeof data.tags === 'string') {
+    
+    if (typeof data.tags === 'string') {
       processedTags = data.tags.split(',').map(tag => tag.trim());
+    } else if (Array.isArray(data.tags)) {
+      processedTags = data.tags;
     } else {
       processedTags = [];
     }
