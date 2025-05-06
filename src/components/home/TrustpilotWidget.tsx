@@ -1,34 +1,6 @@
 
 import React from 'react';
-import { Star } from "lucide-react";
-
-// Mock reviews to simulate Trustpilot data
-const reviews = [
-  {
-    name: "Michael Johnson",
-    company: "TechFlow Solutions",
-    rating: 5,
-    comment: "Working with LEADEA transformed our lead generation process. We're now getting 3x more qualified leads than before."
-  },
-  {
-    name: "Sarah Williams",
-    company: "Growth Partners Inc",
-    rating: 5,
-    comment: "The automation solutions they implemented saved our team over 20 hours per week on manual tasks. ROI was visible within the first month."
-  },
-  {
-    name: "David Chen",
-    company: "Ascend Marketing",
-    rating: 5,
-    comment: "Their strategic approach to B2B growth is unmatched. We've doubled our pipeline within 90 days of working with them."
-  },
-  {
-    name: "Rebecca Taylor",
-    company: "Innovate SaaS",
-    rating: 4,
-    comment: "Great team with excellent communication. They delivered quality leads consistently and helped us optimize our sales process."
-  }
-];
+import { Star, ExternalLink } from "lucide-react";
 
 const TrustpilotWidget = () => {
   return (
@@ -61,34 +33,15 @@ const TrustpilotWidget = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {reviews.map((review, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-soft hover:shadow-hover transition-all duration-300">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h4 className="font-bold text-monochrome-800">{review.name}</h4>
-                  <p className="text-sm text-monochrome-500">{review.company}</p>
-                </div>
-                <div className="flex">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-[#00b67a] text-[#00b67a]" />
-                  ))}
-                </div>
-              </div>
-              <p className="text-monochrome-600">{review.comment}</p>
-            </div>
-          ))}
-        </div>
-        
         <div className="mt-10 text-center">
           <a 
-            href="#" 
-            className="inline-flex items-center text-green-600 font-medium hover:text-green-700 transition-colors"
+            href="https://www.trustpilot.com" 
+            target="_blank"
+            rel="noopener noreferrer" 
+            className="inline-flex items-center bg-white px-6 py-3 rounded-lg shadow-soft text-green-600 font-medium hover:shadow-hover transition-all duration-300"
           >
-            Read more reviews on Trustpilot
-            <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
+            View All Reviews On Trustpilot
+            <ExternalLink className="ml-2 h-4 w-4" />
           </a>
         </div>
       </div>
