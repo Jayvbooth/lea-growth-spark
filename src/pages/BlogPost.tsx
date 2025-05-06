@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -17,8 +16,8 @@ const BlogPostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
-  const [prevPost, setPrevPost] = useState<BlogPost | undefined>(undefined);
-  const [nextPost, setNextPost] = useState<BlogPost | undefined>(undefined);
+  const [prevPost, setPrevPost] = useState<Partial<BlogPost> | undefined>(undefined);
+  const [nextPost, setNextPost] = useState<Partial<BlogPost> | undefined>(undefined);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -59,7 +58,7 @@ const BlogPostDetail: React.FC = () => {
           excerpt: postData.excerpt,
           content: postData.content,
           readTime: postData.read_time,
-          status: postData.status,
+          status: postData.status as "published" | "draft" || "draft",
           seo: {
             metaTitle: postData.seo_meta_title,
             metaDescription: postData.seo_meta_description,
@@ -80,8 +79,30 @@ const BlogPostDetail: React.FC = () => {
         if (allPostsError) throw allPostsError;
         
         const index = allPostsData.findIndex(p => p.id === id);
-        setPrevPost(index > 0 ? allPostsData[index - 1] : undefined);
-        setNextPost(index < allPostsData.length - 1 ? allPostsData[index + 1] : undefined);
+        
+        if (index > 0) {
+          const prevPostData = allPostsData[index - 1];
+          setPrevPost({
+            id: prevPostData.id,
+            title: prevPostData.title,
+            slug: prevPostData.slug,
+            publishDate: prevPostData.publish_date
+          });
+        } else {
+          setPrevPost(undefined);
+        }
+        
+        if (index < allPostsData.length - 1) {
+          const nextPostData = allPostsData[index + 1];
+          setNextPost({
+            id: nextPostData.id,
+            title: nextPostData.title,
+            slug: nextPostData.slug,
+            publishDate: nextPostData.publish_date
+          });
+        } else {
+          setNextPost(undefined);
+        }
         
         // Fetch related posts by category
         const { data: relatedData, error: relatedError } = await supabase
@@ -110,7 +131,7 @@ const BlogPostDetail: React.FC = () => {
           excerpt: post.excerpt,
           content: post.content,
           readTime: post.read_time,
-          status: post.status,
+          status: post.status as "published" | "draft" || "draft",
           seo: {
             metaTitle: post.seo_meta_title,
             metaDescription: post.seo_meta_description,

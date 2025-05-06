@@ -20,7 +20,7 @@ interface CaseStudy {
   industry: string;
   logo: string;
   teaser: string;
-  metrics: any;
+  metrics: Record<string, string | number>;
   created_at: string;
 }
 
@@ -42,7 +42,7 @@ const CaseStudyManagement: React.FC = () => {
 
         if (error) throw error;
         
-        setCaseStudies(data);
+        setCaseStudies(data as CaseStudy[]);
       } catch (error: any) {
         toast.error(error.message || "Error fetching case studies");
       } finally {
@@ -188,7 +188,7 @@ const CaseStudyManagement: React.FC = () => {
                             key={idx}
                             className="text-xs bg-monochrome-100 text-monochrome-700 px-2 py-1 rounded-full"
                           >
-                            {key}: {value}
+                            {key}: {String(value)}
                           </span>
                         ))
                       }
