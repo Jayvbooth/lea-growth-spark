@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,7 +34,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
   return (
     <div className={cn("space-y-8", className)}>
       {/* Newsletter Card */}
-      <Card className="overflow-hidden border-green-100">
+      <Card className="overflow-hidden border-green-100 card-shadow hover:card-shadow-lg transition-all duration-300">
         <div className="bg-gradient-to-r from-green-50 to-green-100 p-5">
           <div className="flex items-start space-x-3 mb-3">
             <Mail className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
@@ -55,7 +56,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
               />
               <Button 
                 type="submit" 
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-green-600 hover:bg-green-700 text-white hover:translate-y-[-2px] transition-all"
               >
                 Subscribe
               </Button>
@@ -68,7 +69,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
       </Card>
       
       {/* Recent Posts */}
-      <Card>
+      <Card className="card-shadow hover:card-shadow-lg transition-all duration-300">
         <CardContent className="p-5">
           <h3 className="text-lg font-bold mb-4 flex items-center">
             <Heading className="w-5 h-5 mr-2" />
@@ -80,7 +81,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
                 <img 
                   src={post.featuredImage} 
                   alt={post.title} 
-                  className="w-16 h-16 object-cover rounded mr-3 flex-shrink-0"
+                  className="w-16 h-16 object-cover rounded-lg mr-3 flex-shrink-0 shadow-sm group-hover:shadow-md transition-all"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = '/placeholder.svg';
@@ -112,7 +113,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
       </Card>
       
       {/* Categories */}
-      <Card>
+      <Card className="card-shadow hover:card-shadow-lg transition-all duration-300">
         <CardContent className="p-5">
           <h3 className="text-lg font-bold mb-4">Categories</h3>
           <div className="space-y-2">
@@ -134,7 +135,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
       </Card>
       
       {/* Tags */}
-      <Card>
+      <Card className="card-shadow hover:card-shadow-lg transition-all duration-300">
         <CardContent className="p-5">
           <h3 className="text-lg font-bold mb-4 flex items-center">
             <Tag className="w-5 h-5 mr-2" />
@@ -145,7 +146,7 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
               <Link 
                 key={tag}
                 to={`/blog/tag/${tag.replace(/\s+/g, '-').toLowerCase()}`}
-                className="inline-flex items-center text-sm bg-monochrome-100 text-monochrome-700 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-green-100 hover:text-green-700 transition-colors"
+                className="inline-flex items-center text-sm bg-monochrome-100 text-monochrome-700 px-3 py-1.5 rounded-full whitespace-nowrap hover:bg-green-100 hover:text-green-700 transition-colors shadow-sm hover:shadow-md"
               >
                 #{tag}
               </Link>

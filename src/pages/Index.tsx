@@ -19,18 +19,46 @@ import TrustpilotWidget from '@/components/home/TrustpilotWidget';
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#FAFBFC] network-grid-bg">
       <Navbar />
       <main>
+        {/* Hero with floating elements */}
         <Hero />
-        <AnimatedLogoCarousel />
+        
+        {/* Trust indicators */}
+        <div className="relative">
+          <AnimatedLogoCarousel />
+          <div className="absolute inset-0 gradient-overlay pointer-events-none"></div>
+        </div>
+        
+        {/* Main content sections with enhanced depth and animations */}
         <PainPoints />
-        <ServicesShowcase />
-        <WhatWeDeliver />
+        
+        <div className="relative overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-50 rounded-full blur-3xl opacity-60"></div>
+          <ServicesShowcase />
+        </div>
+        
+        <div className="relative overflow-hidden">
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-green-50 rounded-full blur-3xl opacity-60"></div>
+          <WhatWeDeliver />
+        </div>
+        
         <ProcessSteps />
-        <MetricsDashboard />
+        
+        <div className="relative overflow-hidden grain-overlay">
+          <div className="absolute top-1/3 -right-20 w-64 h-64 rounded-full bg-gradient-to-br from-green-100/30 to-green-200/20 blur-xl"></div>
+          <div className="absolute bottom-1/3 -left-20 w-64 h-64 rounded-full bg-gradient-to-tl from-green-100/30 to-green-200/20 blur-xl"></div>
+          <MetricsDashboard />
+        </div>
+        
         <ResultsShowcase />
-        <Testimonials />
+        
+        <div className="relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-50/30 to-transparent"></div>
+          <Testimonials />
+        </div>
+        
         <TrustpilotWidget />
         <Assessment />
         <CaseStudies />

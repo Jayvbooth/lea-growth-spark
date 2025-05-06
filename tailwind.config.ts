@@ -87,6 +87,11 @@ export default {
 					700: '#1e6742',
 					800: '#1a5236',
 					900: '#15442e',
+				},
+				accent: {
+					light: '#A0F0B6',
+					DEFAULT: '#70E3A9',
+					dark: '#36A269',
 				}
 			},
 			borderRadius: {
@@ -96,7 +101,8 @@ export default {
 			},
 			fontFamily: {
 				sans: ['Inter', 'sans-serif'],
-				heading: ['Montserrat', 'sans-serif']
+				heading: ['Montserrat', 'sans-serif'],
+				mono: ['JetBrains Mono', 'monospace']
 			},
 			keyframes: {
 				'accordion-down': {
