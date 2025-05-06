@@ -36,7 +36,7 @@ const BlogEditor: React.FC = () => {
   const form = useForm<BlogFormData>({
     defaultValues: {
       title: "",
-      slug: "", // Initialize slug as empty string
+      slug: "", 
       author: {
         name: "",
         avatar: "/placeholder.svg"
@@ -102,13 +102,22 @@ const BlogEditor: React.FC = () => {
     // Create slug if not provided
     const slug = data.slug || data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     
+    // Process tags correctly handling different data types
+    let processedTags: string[];
+    if (Array.isArray(data.tags)) {
+      processedTags = data.tags;
+    } else if (typeof data.tags === 'string') {
+      processedTags = data.tags.split(',').map(tag => tag.trim());
+    } else {
+      processedTags = [];
+    }
+    
     const newPost: BlogPost = {
       ...data,
       id: postId,
       slug,
       readTime,
-      // Fix the tags processing to handle both array and string inputs safely
-      tags: Array.isArray(data.tags) ? data.tags : (typeof data.tags === 'string' ? data.tags.split(',').map(tag => tag.trim()) : []),
+      tags: processedTags
     };
     
     toast.success(isEditing ? "Blog post updated!" : "New blog post created!");
