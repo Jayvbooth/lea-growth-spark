@@ -1,0 +1,244 @@
+
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import { BlogBreadcrumb, BlogPostNavigation } from '@/components/blog/BlogNavigation';
+import BlogSidebar from '@/components/blog/BlogSidebar';
+import { blogPosts, getRecentBlogPosts, getRelatedPosts, getAllBlogCategories, getAllBlogTags } from '@/data/blogData';
+import { Calendar, Clock, Tag } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BlogPost } from '@/types/blog';
+
+const BlogPostDetail: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [prevPost, setPrevPost] = useState<BlogPost | undefined>(undefined);
+  const [nextPost, setNextPost] = useState<BlogPost | undefined>(undefined);
+  
+  useEffect(() => {
+    if (!id) return;
+    
+    const currentPost = blogPosts.find(post => post.id === id);
+    
+    if (!currentPost) {
+      navigate('/blog', { replace: true });
+      return;
+    }
+    
+    setPost(currentPost);
+    
+    // Get prev/next posts
+    const index = blogPosts.findIndex(post => post.id === id);
+    setPrevPost(index > 0 ? blogPosts[index - 1] : undefined);
+    setNextPost(index < blogPosts.length - 1 ? blogPosts[index + 1] : undefined);
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }, [id, navigate]);
+  
+  if (!post) return null;
+  
+  const allCategories = getAllBlogCategories();
+  const allTags = getAllBlogTags();
+  const popularTags = allTags.slice(0, 10);
+  
+  const formattedDate = new Date(post.publishDate).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{post.seo?.metaTitle || post.title} | Leadea</title>
+        <meta name="description" content={post.seo?.metaDescription || post.excerpt} />
+        <meta name="keywords" content={post.seo?.keywords?.join(', ') || post.tags.join(', ')} />
+        <meta property="og:title" content={post.seo?.metaTitle || post.title} />
+        <meta property="og:description" content={post.seo?.metaDescription || post.excerpt} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={post.featuredImage} />
+        <meta property="article:published_time" content={post.publishDate} />
+        <meta property="article:author" content={post.author.name} />
+        {post.tags.map(tag => (
+          <meta key={tag} property="article:tag" content={tag} />
+        ))}
+        <link rel="canonical" href={post.seo?.canonical || `https://leadea.com/blog/${post.id}`} />
+      </Helmet>
+      
+      <Navbar />
+      
+      <main className="flex-grow pt-32 pb-20">
+        <div className="container mx-auto container-padding">
+          {/* Breadcrumb */}
+          <BlogBreadcrumb blogPost={post} />
+          
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2">
+              {/* Article */}
+              <article>
+                {/* Featured Image */}
+                <div className="mb-6 rounded-lg overflow-hidden">
+                  <img 
+                    src={post.featuredImage} 
+                    alt={post.title}
+                    className="w-full h-auto object-cover"
+                    style={{ maxHeight: '400px' }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder.svg';
+                      target.onerror = null;
+                    }}
+                  />
+                </div>
+                
+                {/* Category */}
+                <Link 
+                  to={`/blog/category/${post.category.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="inline-block mb-4 text-sm font-medium bg-green-100 text-green-700 px-4 py-1.5 rounded-full hover:bg-green-200 transition-colors"
+                >
+                  {post.category}
+                </Link>
+                
+                {/* Title */}
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">{post.title}</h1>
+                
+                {/* Meta */}
+                <div className="flex flex-wrap items-center gap-4 mb-8 text-sm text-monochrome-600">
+                  <div className="flex items-center">
+                    <img 
+                      src={post.author.avatar} 
+                      alt={post.author.name}
+                      className="w-6 h-6 rounded-full mr-2"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.svg';
+                        target.onerror = null;
+                      }}
+                    />
+                    <span>{post.author.name}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    <span>{formattedDate}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-2" />
+                    <span>{post.readTime} min read</span>
+                  </div>
+                </div>
+                
+                {/* Content */}
+                <div 
+                  className="prose prose-green max-w-none mb-8"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+                
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 items-center border-t border-monochrome-100 pt-6 mt-8">
+                  <Tag className="h-4 w-4 text-monochrome-500" />
+                  <span className="text-monochrome-600 mr-2">Tags:</span>
+                  {post.tags.map((tag, index) => (
+                    <Link 
+                      key={index}
+                      to={`/blog/tag/${tag.replace(/\s+/g, '-').toLowerCase()}`}
+                      className="text-sm bg-monochrome-100 text-monochrome-700 px-3 py-1 rounded-full hover:bg-green-100 hover:text-green-700 transition-colors"
+                    >
+                      #{tag}
+                    </Link>
+                  ))}
+                </div>
+                
+                {/* Author Info */}
+                <div className="mt-10 p-6 bg-monochrome-50 rounded-lg border border-monochrome-100">
+                  <div className="flex items-center space-x-4">
+                    <img 
+                      src={post.author.avatar} 
+                      alt={post.author.name}
+                      className="w-16 h-16 rounded-full"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/placeholder.svg';
+                        target.onerror = null;
+                      }}
+                    />
+                    <div>
+                      <h3 className="font-bold text-lg">{post.author.name}</h3>
+                      <p className="text-monochrome-600">Content Writer at Leadea</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Post Navigation */}
+                <BlogPostNavigation prevPost={prevPost} nextPost={nextPost} />
+              </article>
+              
+              {/* Related Posts */}
+              <div className="mt-12">
+                <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {getRelatedPosts(post.id, 2).map((relatedPost) => (
+                    <Link 
+                      key={relatedPost.id}
+                      to={`/blog/${relatedPost.id}`}
+                      className="group"
+                    >
+                      <div className="bg-white border border-monochrome-100 rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-md flex flex-col h-full">
+                        <div className="h-48 overflow-hidden">
+                          <img 
+                            src={relatedPost.featuredImage} 
+                            alt={relatedPost.title}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = '/placeholder.svg';
+                              target.onerror = null;
+                            }}
+                          />
+                        </div>
+                        <div className="p-4 flex-grow">
+                          <div className="flex items-center mb-2 text-xs text-monochrome-600">
+                            <Calendar className="h-3 w-3 mr-1" />
+                            <span>
+                              {new Date(relatedPost.publishDate).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric'
+                              })}
+                            </span>
+                            <span className="mx-2">•</span>
+                            <span>{relatedPost.readTime} min read</span>
+                          </div>
+                          <h3 className="font-medium group-hover:text-green-600 transition-colors line-clamp-2">
+                            {relatedPost.title}
+                          </h3>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Sidebar */}
+            <div>
+              <BlogSidebar 
+                recentPosts={getRecentBlogPosts(5)}
+                categories={allCategories}
+                popularTags={popularTags}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default BlogPostDetail;

@@ -67,8 +67,8 @@ const Navbar = () => {
             <Link to="/case-studies" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
               Case Studies
             </Link>
-            <Link to="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
-              Resources
+            <Link to="/blog" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
+              Blog
             </Link>
             <Link to="#" className="text-leadea-navy hover:text-leadea-green transition-colors font-medium">
               About
@@ -114,8 +114,8 @@ const Navbar = () => {
               <Link to="/case-studies" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 Case Studies
               </Link>
-              <Link to="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
-                Resources
+              <Link to="/blog" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
+                Blog
               </Link>
               <Link to="#" className="text-leadea-navy hover:text-leadea-green py-2 transition-colors font-medium">
                 About
