@@ -107,8 +107,8 @@ const BlogEditor: React.FC = () => {
       id: postId,
       slug,
       readTime,
-      // Process the tags if they came in as string
-      tags: Array.isArray(data.tags) ? data.tags : data.tags.split(',').map(tag => tag.trim()),
+      // Fix the tags processing to handle both array and string inputs safely
+      tags: Array.isArray(data.tags) ? data.tags : (typeof data.tags === 'string' ? data.tags.split(',').map(tag => tag.trim()) : []),
     };
     
     toast.success(isEditing ? "Blog post updated!" : "New blog post created!");
