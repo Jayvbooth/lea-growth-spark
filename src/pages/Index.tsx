@@ -12,6 +12,10 @@ import Assessment from '@/components/home/Assessment';
 import CaseStudies from '@/components/home/CaseStudies';
 import FAQ from '@/components/home/FAQ';
 import CTASection from '@/components/home/CTASection';
+import AnimatedLogoCarousel from '@/components/home/AnimatedLogoCarousel';
+import WhatWeDeliver from '@/components/home/WhatWeDeliver';
+import MetricsDashboard from '@/components/home/MetricsDashboard';
+import TrustpilotWidget from '@/components/home/TrustpilotWidget';
 
 const Index = () => {
   return (
@@ -19,11 +23,15 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
+        <AnimatedLogoCarousel />
         <PainPoints />
         <ServicesShowcase />
+        <WhatWeDeliver />
         <ProcessSteps />
+        <MetricsDashboard />
         <ResultsShowcase />
         <Testimonials />
+        <TrustpilotWidget />
         <Assessment />
         <CaseStudies />
         <FAQ />

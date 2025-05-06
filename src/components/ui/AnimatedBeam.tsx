@@ -44,7 +44,7 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({ className = "" }) => {
         this.size = Math.random() * 3 + 1;
         this.directionX = (Math.random() * 2) - 1;
         this.directionY = (Math.random() * 2) - 1;
-        this.color = '#1E5631';
+        this.color = '#1e6742';
         this.alpha = Math.random() * 0.5 + 0.1;
       }
       
@@ -86,7 +86,7 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({ className = "" }) => {
           if (distance < connectionDistance) {
             const opacity = 1 - (distance / connectionDistance);
             ctx.globalAlpha = opacity * 0.4;
-            ctx.strokeStyle = '#36B37E';
+            ctx.strokeStyle = '#36a269';
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
