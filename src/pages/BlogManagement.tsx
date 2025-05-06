@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
@@ -7,37 +6,69 @@ import Footer from "@/components/layout/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { blogPosts } from "@/data/blogData";
 import { BlogPost } from "@/types/blog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Calendar, FileText, Edit, Trash2, AlertCircle } from "lucide-react";
+import { Calendar, FileText, Edit, Trash2, AlertCircle, LogOut, BarChart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-
-// Simple auth check function - in a real app, this would check session/token
-const isAuthenticated = () => {
-  // This is a mock auth check - in a real app, you'd validate a token/session
-  return true; // Simulate a logged-in user for demo purposes
-};
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+import { Spinner } from "@/components/ui/spinner";
 
 const BlogManagement: React.FC = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
-    // Check authentication when component mounts
-    const authCheck = isAuthenticated();
-    setIsAuthorized(authCheck);
-    
-    if (!authCheck) {
-      toast.error("You must be logged in to access this page");
-      navigate("/blog");
-    } else {
-      // Only fetch posts if authorized
-      setPosts(blogPosts);
-    }
-  }, [navigate]);
+    // Fetch blog posts from Supabase
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from("blog_posts")
+          .select("*")
+          .order("publish_date", { ascending: false });
+
+        if (error) throw error;
+        
+        // Transform the data to match our BlogPost type
+        const transformedPosts: BlogPost[] = data.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          author: {
+            name: post.author_name,
+            avatar: post.author_avatar || '',
+          },
+          publishDate: post.publish_date,
+          lastUpdated: post.last_updated,
+          category: post.category,
+          tags: post.tags || [],
+          featuredImage: post.featured_image || '',
+          excerpt: post.excerpt,
+          content: post.content,
+          readTime: post.read_time,
+          status: post.status,
+          seo: {
+            metaTitle: post.seo_meta_title,
+            metaDescription: post.seo_meta_description,
+            keywords: post.seo_keywords,
+            canonical: post.seo_canonical,
+          }
+        }));
+        
+        setPosts(transformedPosts);
+      } catch (error: any) {
+        toast.error(error.message || "Error fetching blog posts");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const handleCreateNew = () => {
     navigate("/blog/editor");
@@ -47,33 +78,31 @@ const BlogManagement: React.FC = () => {
     navigate(`/blog/editor/${id}`);
   };
 
-  const handleDelete = (id: string) => {
-    // In a real app, this would call an API
-    toast.success("In a real app, this would delete the blog post");
-    // For demonstration, we'll just filter it out
-    setPosts(posts.filter(post => post.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase.from("blog_posts").delete().eq("id", id);
+      
+      if (error) throw error;
+      
+      toast.success("Blog post deleted successfully");
+      // Update the posts list
+      setPosts(posts.filter(post => post.id !== id));
+    } catch (error: any) {
+      toast.error(error.message || "Error deleting blog post");
+    }
   };
 
-  if (!isAuthorized) {
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-grow pt-32 pb-20 flex items-center justify-center">
-          <Card className="max-w-md w-full">
-            <CardContent className="p-6 text-center">
-              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-              <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
-              <p className="text-monochrome-600 mb-4">
-                You must be logged in to access the blog management.
-              </p>
-              <Button 
-                onClick={() => navigate("/blog")}
-                className="w-full"
-              >
-                Return to Blog
-              </Button>
-            </CardContent>
-          </Card>
+          <Spinner size="lg" />
         </main>
         <Footer />
       </div>
@@ -96,29 +125,63 @@ const BlogManagement: React.FC = () => {
               <h1 className="text-3xl font-bold">Blog Management</h1>
               <p className="text-monochrome-600 mt-2">Create and manage your blog posts</p>
             </div>
-            <Button onClick={handleCreateNew} className="bg-green-600 hover:bg-green-700">
-              Create New Post
-            </Button>
+            <div className="flex gap-4">
+              <Button onClick={handleCreateNew} className="bg-green-600 hover:bg-green-700">
+                Create New Post
+              </Button>
+              <Button variant="outline" onClick={handleSignOut} className="flex items-center gap-2">
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </Button>
+            </div>
           </div>
 
-          <Card className="mb-8">
-            <CardContent className="p-6">
-              <p className="text-sm text-monochrome-600 mb-4">
-                Note: In this demo version, changes are not persistent and will reset when you refresh the page. 
-                In a real application, this would connect to a database.
-              </p>
-              <div className="grid grid-cols-2 gap-4 text-sm text-monochrome-600">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  <span>Total posts: {posts.length}</span>
+          <div className="flex flex-col md:flex-row gap-4 mb-8">
+            <Card className="flex-1">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-12 w-12">
+                    <AvatarFallback>{user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="font-medium">Welcome back!</p>
+                    <p className="text-sm text-monochrome-600">{user?.email}</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Latest update: {new Date().toLocaleDateString()}</span>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm text-monochrome-600 mt-4">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    <span>Total posts: {posts.length}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    <span>Latest update: {new Date().toLocaleDateString()}</span>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            <Card className="md:w-72">
+              <CardContent className="p-6">
+                <h3 className="font-medium mb-4">Content Management</h3>
+                <div className="space-y-2">
+                  <Button variant="outline" className="w-full justify-start" asChild>
+                    <Link to="/blog-management">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Blog Posts
+                    </Link>
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start" asChild>
+                    <Link to="/case-study-management">
+                      <BarChart className="h-4 w-4 mr-2" />
+                      Case Studies
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="space-y-4">
             {posts.map((post) => (

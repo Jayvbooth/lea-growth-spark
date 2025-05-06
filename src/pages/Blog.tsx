@@ -9,14 +9,15 @@ import BlogSidebar from '@/components/blog/BlogSidebar';
 import BlogFilter from '@/components/blog/BlogFilter';
 import { BlogBreadcrumb } from '@/components/blog/BlogNavigation';
 import { 
-  blogPosts, 
   getAllBlogCategories, 
-  getAllBlogTags, 
+  getAllBlogTags,
   getBlogPostsByCategory, 
   getBlogPostsByTag, 
   getRecentBlogPosts 
 } from '@/data/blogData';
 import { BlogPost } from '@/types/blog';
+import { supabase } from '@/integrations/supabase/client';
+import { Spinner } from '@/components/ui/spinner';
 
 const Blog: React.FC = () => {
   const { categorySlug, tagSlug } = useParams<{ categorySlug?: string, tagSlug?: string }>();
@@ -24,7 +25,10 @@ const Blog: React.FC = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [title, setTitle] = useState("Blog");
   const [subtitle, setSubtitle] = useState("Latest insights, guides and industry trends");
+  const [loading, setLoading] = useState(true);
   
+  // For now, we'll continue using the mock data for categories and tags
+  // In a future update, these could be fetched from Supabase too
   const allCategories = getAllBlogCategories();
   const allTags = getAllBlogTags();
   
@@ -44,26 +48,73 @@ const Blog: React.FC = () => {
   const displayCategory = currentCategory ? currentCategory.replace(/-/g, ' ') : undefined;
   
   useEffect(() => {
-    if (isTagView && tagSlug) {
-      // Show posts by tag
-      const tag = tagSlug.replace(/-/g, ' ');
-      const filteredPosts = getBlogPostsByTag(tag);
-      setPosts(filteredPosts);
-      setTitle(`#${tag}`);
-      setSubtitle(`Posts tagged with '${tag}'`);
-    } else if (isCategoryView && categorySlug) {
-      // Show posts by category
-      const category = categorySlug.replace(/-/g, ' ');
-      const filteredPosts = getBlogPostsByCategory(category);
-      setPosts(filteredPosts);
-      setTitle(category);
-      setSubtitle(`All posts in ${category}`);
-    } else {
-      // Show all posts
-      setPosts(blogPosts);
-      setTitle("Blog");
-      setSubtitle("Latest insights, guides and industry trends");
-    }
+    const fetchBlogPosts = async () => {
+      setLoading(true);
+      try {
+        let query = supabase
+          .from("blog_posts")
+          .select("*")
+          .eq("status", "published")
+          .order("publish_date", { ascending: false });
+        
+        if (isTagView && tagSlug) {
+          // Convert tagSlug to tag name format
+          const tag = tagSlug.replace(/-/g, ' ');
+          query = query.contains("tags", [tag]);
+          setTitle(`#${tag}`);
+          setSubtitle(`Posts tagged with '${tag}'`);
+        } else if (isCategoryView && categorySlug) {
+          // Convert categorySlug to category name format
+          const category = categorySlug.replace(/-/g, ' ');
+          query = query.eq("category", category);
+          setTitle(category);
+          setSubtitle(`All posts in ${category}`);
+        } else {
+          setTitle("Blog");
+          setSubtitle("Latest insights, guides and industry trends");
+        }
+        
+        const { data, error } = await query;
+        
+        if (error) throw error;
+        
+        // Transform data to match BlogPost type
+        const transformedPosts: BlogPost[] = data.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          author: {
+            name: post.author_name,
+            avatar: post.author_avatar || '',
+          },
+          publishDate: post.publish_date,
+          lastUpdated: post.last_updated,
+          category: post.category,
+          tags: post.tags || [],
+          featuredImage: post.featured_image || '',
+          excerpt: post.excerpt,
+          content: post.content,
+          readTime: post.read_time,
+          status: post.status,
+          seo: {
+            metaTitle: post.seo_meta_title,
+            metaDescription: post.seo_meta_description,
+            keywords: post.seo_keywords,
+            canonical: post.seo_canonical,
+          }
+        }));
+        
+        setPosts(transformedPosts);
+      } catch (error) {
+        console.error("Error fetching blog posts:", error);
+        // Fallback to mock data in case of error
+        setPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchBlogPosts();
   }, [tagSlug, categorySlug, isTagView, isCategoryView]);
 
   return (
@@ -108,21 +159,27 @@ const Blog: React.FC = () => {
               />
             
               {/* Blog Posts */}
-              <div className="space-y-8">
-                {posts.length > 0 ? (
-                  posts.map((post) => (
-                    <BlogCard key={post.id} post={post} />
-                  ))
-                ) : (
-                  <div className="p-8 text-center bg-monochrome-50 rounded-lg border border-monochrome-100">
-                    <h3 className="text-xl font-medium mb-2">No posts found</h3>
-                    <p className="text-monochrome-600">
-                      There are currently no blog posts in this category. 
-                      Please check back later or browse other categories.
-                    </p>
-                  </div>
-                )}
-              </div>
+              {loading ? (
+                <div className="flex justify-center py-12">
+                  <Spinner size="lg" />
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {posts.length > 0 ? (
+                    posts.map((post) => (
+                      <BlogCard key={post.id} post={post} />
+                    ))
+                  ) : (
+                    <div className="p-8 text-center bg-monochrome-50 rounded-lg border border-monochrome-100">
+                      <h3 className="text-xl font-medium mb-2">No posts found</h3>
+                      <p className="text-monochrome-600">
+                        There are currently no blog posts in this category. 
+                        Please check back later or browse other categories.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             
             {/* Sidebar */}

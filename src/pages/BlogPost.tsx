@@ -6,10 +6,12 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { BlogBreadcrumb, BlogPostNavigation } from '@/components/blog/BlogNavigation';
 import BlogSidebar from '@/components/blog/BlogSidebar';
-import { blogPosts, getRecentBlogPosts, getRelatedPosts, getAllBlogCategories, getAllBlogTags } from '@/data/blogData';
+import { getRecentBlogPosts, getRelatedPosts, getAllBlogCategories, getAllBlogTags } from '@/data/blogData';
 import { Calendar, Clock, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BlogPost } from '@/types/blog';
+import { supabase } from '@/integrations/supabase/client';
+import { Spinner } from '@/components/ui/spinner';
 
 const BlogPostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,27 +19,131 @@ const BlogPostDetail: React.FC = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [prevPost, setPrevPost] = useState<BlogPost | undefined>(undefined);
   const [nextPost, setNextPost] = useState<BlogPost | undefined>(undefined);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     if (!id) return;
     
-    const currentPost = blogPosts.find(post => post.id === id);
+    const fetchBlogPost = async () => {
+      setLoading(true);
+      try {
+        // Fetch the current post
+        const { data: postData, error: postError } = await supabase
+          .from("blog_posts")
+          .select("*")
+          .eq("id", id)
+          .single();
+        
+        if (postError) throw postError;
+        
+        if (!postData) {
+          navigate('/blog', { replace: true });
+          return;
+        }
+        
+        // Transform to match BlogPost type
+        const currentPost: BlogPost = {
+          id: postData.id,
+          title: postData.title,
+          slug: postData.slug,
+          author: {
+            name: postData.author_name,
+            avatar: postData.author_avatar || '',
+          },
+          publishDate: postData.publish_date,
+          lastUpdated: postData.last_updated,
+          category: postData.category,
+          tags: postData.tags || [],
+          featuredImage: postData.featured_image || '',
+          excerpt: postData.excerpt,
+          content: postData.content,
+          readTime: postData.read_time,
+          status: postData.status,
+          seo: {
+            metaTitle: postData.seo_meta_title,
+            metaDescription: postData.seo_meta_description,
+            keywords: postData.seo_keywords,
+            canonical: postData.seo_canonical,
+          }
+        };
+        
+        setPost(currentPost);
+        
+        // Fetch previous and next posts
+        const { data: allPostsData, error: allPostsError } = await supabase
+          .from("blog_posts")
+          .select("id, title, slug, publish_date")
+          .eq("status", "published")
+          .order("publish_date", { ascending: false });
+        
+        if (allPostsError) throw allPostsError;
+        
+        const index = allPostsData.findIndex(p => p.id === id);
+        setPrevPost(index > 0 ? allPostsData[index - 1] : undefined);
+        setNextPost(index < allPostsData.length - 1 ? allPostsData[index + 1] : undefined);
+        
+        // Fetch related posts by category
+        const { data: relatedData, error: relatedError } = await supabase
+          .from("blog_posts")
+          .select("*")
+          .eq("status", "published")
+          .eq("category", currentPost.category)
+          .neq("id", id)
+          .limit(2);
+        
+        if (relatedError) throw relatedError;
+        
+        const transformedRelated: BlogPost[] = relatedData.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          author: {
+            name: post.author_name,
+            avatar: post.author_avatar || '',
+          },
+          publishDate: post.publish_date,
+          lastUpdated: post.last_updated,
+          category: post.category,
+          tags: post.tags || [],
+          featuredImage: post.featured_image || '',
+          excerpt: post.excerpt,
+          content: post.content,
+          readTime: post.read_time,
+          status: post.status,
+          seo: {
+            metaTitle: post.seo_meta_title,
+            metaDescription: post.seo_meta_description,
+            keywords: post.seo_keywords,
+            canonical: post.seo_canonical,
+          }
+        }));
+        
+        setRelatedPosts(transformedRelated);
+      } catch (error) {
+        console.error("Error fetching blog post:", error);
+        navigate('/blog', { replace: true });
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    if (!currentPost) {
-      navigate('/blog', { replace: true });
-      return;
-    }
-    
-    setPost(currentPost);
-    
-    // Get prev/next posts
-    const index = blogPosts.findIndex(post => post.id === id);
-    setPrevPost(index > 0 ? blogPosts[index - 1] : undefined);
-    setNextPost(index < blogPosts.length - 1 ? blogPosts[index + 1] : undefined);
-    
+    fetchBlogPost();
     // Scroll to top
     window.scrollTo(0, 0);
   }, [id, navigate]);
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow pt-32 pb-20 flex items-center justify-center">
+          <Spinner size="lg" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
   
   if (!post) return null;
   
@@ -182,44 +288,50 @@ const BlogPostDetail: React.FC = () => {
               <div className="mt-12">
                 <h2 className="text-2xl font-bold mb-6">Related Posts</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {getRelatedPosts(post.id, 2).map((relatedPost) => (
-                    <Link 
-                      key={relatedPost.id}
-                      to={`/blog/${relatedPost.id}`}
-                      className="group"
-                    >
-                      <div className="bg-white border border-monochrome-100 rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-md flex flex-col h-full">
-                        <div className="h-48 overflow-hidden">
-                          <img 
-                            src={relatedPost.featuredImage} 
-                            alt={relatedPost.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = '/placeholder.svg';
-                              target.onerror = null;
-                            }}
-                          />
-                        </div>
-                        <div className="p-4 flex-grow">
-                          <div className="flex items-center mb-2 text-xs text-monochrome-600">
-                            <Calendar className="h-3 w-3 mr-1" />
-                            <span>
-                              {new Date(relatedPost.publishDate).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric'
-                              })}
-                            </span>
-                            <span className="mx-2">•</span>
-                            <span>{relatedPost.readTime} min read</span>
+                  {relatedPosts.length > 0 ? (
+                    relatedPosts.map((relatedPost) => (
+                      <Link 
+                        key={relatedPost.id}
+                        to={`/blog/${relatedPost.id}`}
+                        className="group"
+                      >
+                        <div className="bg-white border border-monochrome-100 rounded-lg overflow-hidden transition-shadow duration-300 hover:shadow-md flex flex-col h-full">
+                          <div className="h-48 overflow-hidden">
+                            <img 
+                              src={relatedPost.featuredImage} 
+                              alt={relatedPost.title}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.src = '/placeholder.svg';
+                                target.onerror = null;
+                              }}
+                            />
                           </div>
-                          <h3 className="font-medium group-hover:text-green-600 transition-colors line-clamp-2">
-                            {relatedPost.title}
-                          </h3>
+                          <div className="p-4 flex-grow">
+                            <div className="flex items-center mb-2 text-xs text-monochrome-600">
+                              <Calendar className="h-3 w-3 mr-1" />
+                              <span>
+                                {new Date(relatedPost.publishDate).toLocaleDateString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric'
+                                })}
+                              </span>
+                              <span className="mx-2">•</span>
+                              <span>{relatedPost.readTime} min read</span>
+                            </div>
+                            <h3 className="font-medium group-hover:text-green-600 transition-colors line-clamp-2">
+                              {relatedPost.title}
+                            </h3>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center p-8 bg-monochrome-50 rounded-lg border border-monochrome-100">
+                      <p className="text-monochrome-600">No related posts found</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

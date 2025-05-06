@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -23,15 +24,32 @@ import { toast } from "sonner";
 import { blogPosts, categories } from "@/data/blogData";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/context/AuthContext";
+import { Spinner } from "@/components/ui/spinner";
+
+// Helper function to generate a slug
+const generateSlug = (title: string) => {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, '')
+    .replace(/\s+/g, '-');
+};
+
+// Helper function to calculate read time
+const calculateReadTime = (content: string) => {
+  const wordsPerMinute = 200;
+  const wordCount = content.trim().split(/\s+/).length;
+  return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+};
 
 const BlogEditor = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const isEditMode = Boolean(id);
+  const [loading, setLoading] = useState(isEditMode);
   
-  // Check if user is authenticated (simplified mock)
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true); // In real app, get from auth context
-
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -39,41 +57,57 @@ const BlogEditor = () => {
     category: "",
     tags: "",
     author: {
-      name: "",
+      name: user?.user_metadata?.name || "",
       avatar: "",
     },
     featuredImage: "",
+    slug: "",
+    status: "draft"
   });
 
   useEffect(() => {
-    // Redirect unauthenticated users
-    if (!isAuthenticated) {
-      navigate("/blog");
-      toast.error("You must be logged in to access the editor");
-      return;
-    }
-    
     if (isEditMode && id) {
-      const post = blogPosts.find((post) => post.id === id);
-      if (post) {
-        setFormData({
-          title: post.title,
-          excerpt: post.excerpt,
-          content: post.content,
-          category: post.category,
-          tags: Array.isArray(post.tags) ? post.tags.join(", ") : "",
-          author: {
-            name: post.author.name,
-            avatar: post.author.avatar,
-          },
-          featuredImage: post.featuredImage,
-        });
-      } else {
-        toast.error("Blog post not found");
-        navigate("/blog");
-      }
+      const fetchBlogPost = async () => {
+        try {
+          setLoading(true);
+          const { data, error } = await supabase
+            .from("blog_posts")
+            .select("*")
+            .eq("id", id)
+            .single();
+          
+          if (error) throw error;
+          
+          if (data) {
+            setFormData({
+              title: data.title,
+              excerpt: data.excerpt,
+              content: data.content,
+              category: data.category,
+              tags: Array.isArray(data.tags) ? data.tags.join(", ") : "",
+              author: {
+                name: data.author_name,
+                avatar: data.author_avatar || "",
+              },
+              featuredImage: data.featured_image || "",
+              slug: data.slug,
+              status: data.status
+            });
+          } else {
+            toast.error("Blog post not found");
+            navigate("/blog-management");
+          }
+        } catch (error: any) {
+          toast.error(error.message || "Error fetching blog post");
+          navigate("/blog-management");
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      fetchBlogPost();
     }
-  }, [id, isEditMode, navigate, isAuthenticated]);
+  }, [id, isEditMode, navigate]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -91,51 +125,108 @@ const BlogEditor = () => {
         },
       });
     } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+      // Auto-generate slug when title changes
+      if (name === 'title' && !isEditMode) {
+        setFormData({
+          ...formData,
+          [name]: value,
+          slug: generateSlug(value)
+        });
+      } else {
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+      }
     }
   };
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (name: string, value: string) => {
     setFormData({
       ...formData,
-      category: value,
+      [name]: value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     
-    // Process tags correctly handling different data types
-    let processedTags: string[] = [];
-    
-    if (typeof formData.tags === 'string') {
-      // If tags is a string (from the form input), split it into an array
-      processedTags = formData.tags.split(',').map(tag => tag.trim());
-    } else if (Array.isArray(formData.tags)) {
-      // If it's already an array, use it directly
-      processedTags = formData.tags;
+    try {
+      // Process tags correctly handling different data types
+      let processedTags: string[] = [];
+      
+      if (typeof formData.tags === 'string') {
+        // If tags is a string (from the form input), split it into an array
+        processedTags = formData.tags.split(',').map(tag => tag.trim()).filter(Boolean);
+      } else if (Array.isArray(formData.tags)) {
+        // If it's already an array, use it directly
+        processedTags = formData.tags;
+      }
+      
+      // Calculate read time if not provided
+      const readTime = calculateReadTime(formData.content);
+      
+      const blogData = {
+        title: formData.title,
+        slug: formData.slug || generateSlug(formData.title),
+        author_id: user?.id,
+        author_name: formData.author.name || user?.user_metadata?.name || user?.email?.split('@')[0] || "Anonymous",
+        author_avatar: formData.author.avatar,
+        category: formData.category,
+        tags: processedTags,
+        featured_image: formData.featuredImage,
+        excerpt: formData.excerpt,
+        content: formData.content,
+        read_time: readTime,
+        status: formData.status,
+        // SEO fields
+        seo_meta_title: formData.title,
+        seo_meta_description: formData.excerpt,
+        seo_keywords: processedTags,
+        last_updated: new Date().toISOString()
+      };
+
+      let result;
+      
+      if (isEditMode) {
+        // Update existing blog post
+        result = await supabase
+          .from("blog_posts")
+          .update(blogData)
+          .eq("id", id);
+          
+        if (result.error) throw result.error;
+        toast.success("Blog post updated successfully!");
+      } else {
+        // Create new blog post
+        result = await supabase
+          .from("blog_posts")
+          .insert([blogData]);
+          
+        if (result.error) throw result.error;
+        toast.success("Blog post created successfully!");
+      }
+
+      navigate("/blog-management");
+    } catch (error: any) {
+      toast.error(error.message || "Error saving blog post");
+    } finally {
+      setLoading(false);
     }
-
-    const blogData = {
-      ...formData,
-      tags: processedTags,
-      id: isEditMode ? id : `post-${Date.now()}`,
-      publishDate: new Date().toISOString(),
-    };
-
-    if (isEditMode) {
-      toast.success("Blog post updated successfully!");
-    } else {
-      toast.success("Blog post created successfully!");
-    }
-
-    // In a real app, you would save to a database/API here
-    console.log("Saving blog post:", blogData);
-    navigate("/blog-management");
   };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen py-16 bg-[#FAFBFC] grain-overlay flex items-center justify-center">
+          <Spinner size="lg" />
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -175,6 +266,25 @@ const BlogEditor = () => {
                     required
                     className="w-full"
                   />
+                </div>
+
+                {/* Slug */}
+                <div className="space-y-2">
+                  <label htmlFor="slug" className="block text-sm font-medium">
+                    Slug
+                  </label>
+                  <Input
+                    id="slug"
+                    name="slug"
+                    value={formData.slug}
+                    onChange={handleInputChange}
+                    placeholder="url-friendly-slug"
+                    required
+                    className="w-full"
+                  />
+                  <p className="text-xs text-monochrome-500">
+                    URL-friendly version of the title. Automatically generated but can be edited.
+                  </p>
                 </div>
 
                 {/* Featured Image URL */}
@@ -218,6 +328,7 @@ const BlogEditor = () => {
                     placeholder="Brief summary of the post"
                     className="w-full"
                     rows={3}
+                    required
                   />
                 </div>
 
@@ -237,6 +348,25 @@ const BlogEditor = () => {
                   />
                 </div>
 
+                {/* Status */}
+                <div className="space-y-2">
+                  <label htmlFor="status" className="block text-sm font-medium">
+                    Status
+                  </label>
+                  <Select
+                    value={formData.status}
+                    onValueChange={(value) => handleSelectChange("status", value)}
+                  >
+                    <SelectTrigger id="status">
+                      <SelectValue placeholder="Select post status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="draft">Draft</SelectItem>
+                      <SelectItem value="published">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {/* Category */}
                 <div className="space-y-2">
                   <label htmlFor="category" className="block text-sm font-medium">
@@ -244,7 +374,7 @@ const BlogEditor = () => {
                   </label>
                   <Select
                     value={formData.category}
-                    onValueChange={handleSelectChange}
+                    onValueChange={(value) => handleSelectChange("category", value)}
                   >
                     <SelectTrigger id="category">
                       <SelectValue placeholder="Select a category" />
@@ -319,8 +449,11 @@ const BlogEditor = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" className="bg-green-600 text-white">
-                  {isEditMode ? "Update Post" : "Create Post"}
+                <Button type="submit" className="bg-green-600 text-white" disabled={loading}>
+                  {loading ? 
+                    "Saving..." : 
+                    isEditMode ? "Update Post" : "Create Post"
+                  }
                 </Button>
               </CardFooter>
             </form>

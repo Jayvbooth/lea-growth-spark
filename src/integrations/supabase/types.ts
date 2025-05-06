@@ -9,7 +9,159 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      blog_posts: {
+        Row: {
+          author_avatar: string | null
+          author_id: string | null
+          author_name: string
+          category: string
+          content: string
+          excerpt: string
+          featured_image: string | null
+          id: string
+          last_updated: string | null
+          publish_date: string | null
+          read_time: number | null
+          seo_canonical: string | null
+          seo_keywords: string[] | null
+          seo_meta_description: string | null
+          seo_meta_title: string | null
+          slug: string
+          status: string | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          author_avatar?: string | null
+          author_id?: string | null
+          author_name: string
+          category: string
+          content: string
+          excerpt: string
+          featured_image?: string | null
+          id?: string
+          last_updated?: string | null
+          publish_date?: string | null
+          read_time?: number | null
+          seo_canonical?: string | null
+          seo_keywords?: string[] | null
+          seo_meta_description?: string | null
+          seo_meta_title?: string | null
+          slug: string
+          status?: string | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          author_avatar?: string | null
+          author_id?: string | null
+          author_name?: string
+          category?: string
+          content?: string
+          excerpt?: string
+          featured_image?: string | null
+          id?: string
+          last_updated?: string | null
+          publish_date?: string | null
+          read_time?: number | null
+          seo_canonical?: string | null
+          seo_keywords?: string[] | null
+          seo_meta_description?: string | null
+          seo_meta_title?: string | null
+          slug?: string
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      case_studies: {
+        Row: {
+          author_name: string | null
+          author_role: string | null
+          challenge: string
+          content: string
+          created_at: string | null
+          id: string
+          industry: string
+          logo: string | null
+          metrics: Json
+          results: Json
+          slug: string
+          solution: string[]
+          teaser: string
+          testimonial: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_name?: string | null
+          author_role?: string | null
+          challenge: string
+          content: string
+          created_at?: string | null
+          id?: string
+          industry: string
+          logo?: string | null
+          metrics: Json
+          results: Json
+          slug: string
+          solution: string[]
+          teaser: string
+          testimonial?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_name?: string | null
+          author_role?: string | null
+          challenge?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          industry?: string
+          logo?: string | null
+          metrics?: Json
+          results?: Json
+          slug?: string
+          solution?: string[]
+          teaser?: string
+          testimonial?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
