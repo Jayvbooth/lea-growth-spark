@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -86,7 +85,8 @@ const BlogEditor = () => {
       setFormData({
         ...formData,
         [parent]: {
-          ...formData[parent as keyof typeof formData],
+          // This is safe because we know parent is an object key from formData
+          ...(formData[parent as keyof typeof formData] as object),
           [child]: value,
         },
       });
@@ -109,7 +109,7 @@ const BlogEditor = () => {
     e.preventDefault();
     
     // Process tags correctly handling different data types
-    let processedTags: string[];
+    let processedTags: string[] = [];
     
     if (typeof formData.tags === 'string') {
       // If tags is a string (from the form input), split it into an array
@@ -117,9 +117,6 @@ const BlogEditor = () => {
     } else if (Array.isArray(formData.tags)) {
       // If it's already an array, use it directly
       processedTags = formData.tags;
-    } else {
-      // Default to empty array if neither string nor array
-      processedTags = [];
     }
 
     const blogData = {
@@ -201,7 +198,7 @@ const BlogEditor = () => {
                         className="h-40 object-cover rounded-md"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = "/placeholder.svg";
+                          target.src = '/placeholder.svg';
                         }}
                       />
                     </div>

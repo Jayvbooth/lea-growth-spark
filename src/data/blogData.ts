@@ -1,6 +1,9 @@
 
 import { BlogPost } from "@/types/blog";
 
+// Extract unique categories from blog posts
+export const categories: string[] = [...new Set(blogPosts.map(post => post.category))];
+
 export const blogPosts: BlogPost[] = [
   {
     id: "1",
