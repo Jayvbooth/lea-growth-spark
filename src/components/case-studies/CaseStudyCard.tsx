@@ -35,29 +35,36 @@ const CaseStudyCard: React.FC<CaseStudyCardProps> = ({
       <CardContent className="p-0">
         <div className="p-5 border-b border-monochrome-100">
           <div className="flex items-center justify-between mb-3">
-            <img 
-              src={logo} 
-              alt={`${title} logo`} 
-              className="h-10 object-contain"
-            />
-            <span className="text-xs font-medium bg-monochrome-100 text-monochrome-700 px-3 py-1 rounded-full">
+            <div className="h-10 w-32 flex items-center">
+              <img 
+                src={logo} 
+                alt={`${title} logo`} 
+                className="h-10 max-w-full object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/placeholder.svg';
+                  target.onerror = null;
+                }}
+              />
+            </div>
+            <span className="text-xs font-medium bg-monochrome-100 text-monochrome-700 px-3 py-1.5 rounded-full whitespace-nowrap">
               {industry}
             </span>
           </div>
-          <h3 className="text-lg font-bold mb-3">{title}</h3>
+          <h3 className="text-lg font-bold mb-3 line-clamp-2">{title}</h3>
           
           <div className="flex flex-wrap gap-2 mb-3">
             {metrics.map((metric, index) => (
               <span 
                 key={index} 
-                className="inline-flex items-center text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full"
+                className="inline-flex items-center text-xs bg-green-100 text-green-700 px-2.5 py-1.5 rounded-full whitespace-nowrap"
               >
-                {metric.label}: {metric.value}
+                <span className="mr-1">{metric.label}:</span> {metric.value}
               </span>
             ))}
           </div>
           
-          <p className="text-monochrome-600 text-sm mb-4">
+          <p className="text-monochrome-600 text-sm mb-4 line-clamp-3">
             {teaser}
           </p>
         </div>

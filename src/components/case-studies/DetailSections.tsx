@@ -1,6 +1,6 @@
-
 import React from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface BreadcrumbProps {
   title: string;
@@ -8,12 +8,55 @@ interface BreadcrumbProps {
 
 export const BreadcrumbTrail: React.FC<BreadcrumbProps> = ({ title }) => {
   return (
-    <div className="flex items-center text-sm text-monochrome-500 mb-8">
-      <a href="/" className="hover:text-green-600 transition-colors">Home</a>
-      <ChevronRight className="h-4 w-4 mx-2" />
-      <a href="/case-studies" className="hover:text-green-600 transition-colors">Case Studies</a>
-      <ChevronRight className="h-4 w-4 mx-2" />
-      <span className="text-monochrome-800 truncate max-w-[200px]">{title}</span>
+    <div className="flex items-center text-sm text-monochrome-500 mb-8 overflow-hidden">
+      <Link to="/" className="hover:text-green-600 transition-colors whitespace-nowrap">Home</Link>
+      <ChevronRight className="h-4 w-4 mx-2 flex-shrink-0" />
+      <Link to="/case-studies" className="hover:text-green-600 transition-colors whitespace-nowrap">Case Studies</Link>
+      <ChevronRight className="h-4 w-4 mx-2 flex-shrink-0" />
+      <span className="text-monochrome-800 truncate">{title}</span>
+    </div>
+  );
+};
+
+export const CaseStudyNavigation: React.FC<{ prevCase?: {id: string, title: string}, nextCase?: {id: string, title: string} }> = ({ prevCase, nextCase }) => {
+  return (
+    <div className="flex items-center justify-between border-t border-monochrome-100 mt-10 pt-6">
+      <div>
+        {prevCase && (
+          <Link 
+            to={`/case-studies/${prevCase.id}`}
+            className="flex items-center text-monochrome-600 hover:text-green-600 transition-colors"
+          >
+            <ChevronLeft className="h-5 w-5 mr-2" />
+            <div>
+              <div className="text-xs">Previous Case Study</div>
+              <div className="font-medium">{prevCase.title}</div>
+            </div>
+          </Link>
+        )}
+      </div>
+      
+      <Link
+        to="/case-studies"
+        className="text-green-600 font-medium hover:text-green-700 transition-colors"
+      >
+        All Case Studies
+      </Link>
+      
+      <div>
+        {nextCase && (
+          <Link
+            to={`/case-studies/${nextCase.id}`}
+            className="flex items-center text-monochrome-600 hover:text-green-600 transition-colors"
+          >
+            <div className="text-right">
+              <div className="text-xs">Next Case Study</div>
+              <div className="font-medium">{nextCase.title}</div>
+            </div>
+            <ChevronRight className="h-5 w-5 ml-2" />
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

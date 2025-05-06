@@ -1,15 +1,17 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Button } from '@/components/ui/button';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import RelatedCaseStudies from '@/components/case-studies/RelatedCaseStudies';
 import { 
   BreadcrumbTrail, 
   MetricCard, 
   ProcessStep, 
   PullQuote, 
-  TechnicalDetail 
+  TechnicalDetail,
+  CaseStudyNavigation
 } from '@/components/case-studies/DetailSections';
 import { caseStudies, getRelatedCaseStudies } from '@/data/caseStudiesData';
 import { ArrowRight, Download, Link as LinkIcon } from 'lucide-react';
@@ -20,17 +22,30 @@ const CaseStudyDetail: React.FC = () => {
   const navigate = useNavigate();
   const [caseStudy, setCaseStudy] = useState<any>(null);
   const [relatedCases, setRelatedCases] = useState<any[]>([]);
+  const [prevNextCase, setPrevNextCase] = useState<{prev?: any, next?: any}>({});
   
   useEffect(() => {
     // Find the case study based on ID
-    const foundCase = caseStudies.find(cs => cs.id === id);
+    const caseIndex = caseStudies.findIndex(cs => cs.id === id);
     
-    if (foundCase) {
+    if (caseIndex >= 0) {
+      const foundCase = caseStudies[caseIndex];
       setCaseStudy(foundCase);
       
       // Get related case studies
       const related = getRelatedCaseStudies(id as string, foundCase.industryValue);
       setRelatedCases(related);
+      
+      // Set up prev/next navigation
+      const prevCase = caseIndex > 0 ? 
+        { id: caseStudies[caseIndex - 1].id, title: caseStudies[caseIndex - 1].title } : 
+        undefined;
+      
+      const nextCase = caseIndex < caseStudies.length - 1 ? 
+        { id: caseStudies[caseIndex + 1].id, title: caseStudies[caseIndex + 1].title } : 
+        undefined;
+      
+      setPrevNextCase({ prev: prevCase, next: nextCase });
       
       // Scroll to top
       window.scrollTo(0, 0);
@@ -55,7 +70,9 @@ const CaseStudyDetail: React.FC = () => {
         <meta name="description" content={caseStudy.teaser} />
       </Helmet>
       
-      <div className="container mx-auto px-4 py-10">
+      <Navbar />
+      
+      <div className="container mx-auto px-4 py-10 pt-32">
         {/* Breadcrumb */}
         <BreadcrumbTrail title={caseStudy.title} />
         
@@ -64,12 +81,19 @@ const CaseStudyDetail: React.FC = () => {
           <div className="grid md:grid-cols-2">
             <div className="p-8 md:p-10">
               <div className="flex items-center mb-6">
-                <img 
-                  src={caseStudy.logo} 
-                  alt={`${caseStudy.title} logo`} 
-                  className="h-12 mr-4"
-                />
-                <span className="text-sm bg-monochrome-100 text-monochrome-700 px-3 py-1 rounded-full">
+                <div className="h-12 w-32 flex items-center mr-4">
+                  <img 
+                    src={caseStudy.logo} 
+                    alt={`${caseStudy.title} logo`}
+                    className="h-12 max-w-full object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder.svg';
+                      target.onerror = null;
+                    }}
+                  />
+                </div>
+                <span className="text-sm bg-monochrome-100 text-monochrome-700 px-3 py-1.5 rounded-full whitespace-nowrap">
                   {caseStudy.industry}
                 </span>
               </div>
@@ -105,6 +129,11 @@ const CaseStudyDetail: React.FC = () => {
                   src={caseStudy.featuredImage} 
                   alt={caseStudy.title} 
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/placeholder.svg';
+                    target.onerror = null;
+                  }}
                 />
               </div>
             )}
@@ -186,11 +215,17 @@ const CaseStudyDetail: React.FC = () => {
                 </div>
               </section>
             )}
+            
+            {/* Navigation between case studies */}
+            <CaseStudyNavigation 
+              prevCase={prevNextCase.prev} 
+              nextCase={prevNextCase.next} 
+            />
           </div>
           
           <div>
             {/* Sidebar */}
-            <div className="bg-white rounded-xl p-6 shadow-soft mb-6 sticky top-6">
+            <div className="bg-white rounded-xl p-6 shadow-soft mb-6 sticky top-24">
               <h3 className="font-bold mb-4">Share This Case Study</h3>
               <div className="flex gap-2 mb-6">
                 <Button variant="outline" size="sm" className="flex items-center gap-1">
@@ -244,6 +279,8 @@ const CaseStudyDetail: React.FC = () => {
           </Button>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
