@@ -2,9 +2,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { BlogPost } from '@/types/blog';
-import { Calendar, Tag, Heading } from 'lucide-react';
+import { Calendar, Tag, Heading, Newsletter } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface BlogSidebarProps {
   recentPosts: BlogPost[];
@@ -19,9 +22,53 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
   popularTags,
   className
 }) => {
+  const handleNewsletterSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const email = new FormData(e.currentTarget).get('email') as string;
+    if (email) {
+      toast.success(`Thank you for subscribing with ${email}!`);
+      (e.target as HTMLFormElement).reset();
+    }
+  };
+
   return (
     <div className={cn("space-y-8", className)}>
-      {/* Search */}
+      {/* Newsletter Card */}
+      <Card className="overflow-hidden border-green-100">
+        <div className="bg-gradient-to-r from-green-50 to-green-100 p-5">
+          <div className="flex items-start space-x-3 mb-3">
+            <Newsletter className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
+            <div>
+              <h3 className="text-lg font-bold text-green-800">Insider Newsletter</h3>
+              <p className="text-sm text-green-700 mt-1">
+                Get the latest insights on B2B automation, growth strategies, and industry trends directly to your inbox.
+              </p>
+            </div>
+          </div>
+          <form onSubmit={handleNewsletterSubmit} className="mt-4">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Input 
+                type="email" 
+                name="email"
+                placeholder="Your email address" 
+                className="flex-grow" 
+                required 
+              />
+              <Button 
+                type="submit" 
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Subscribe
+              </Button>
+            </div>
+            <p className="text-xs text-green-600 mt-2">
+              We respect your privacy. Unsubscribe at any time.
+            </p>
+          </form>
+        </div>
+      </Card>
+      
+      {/* Recent Posts */}
       <Card>
         <CardContent className="p-5">
           <h3 className="text-lg font-bold mb-4 flex items-center">
@@ -112,3 +159,4 @@ const BlogSidebar: React.FC<BlogSidebarProps> = ({
 };
 
 export default BlogSidebar;
+

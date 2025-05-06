@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -23,7 +24,13 @@ import { BlogFormData, BlogPost } from "@/types/blog";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Save, Image } from "lucide-react";
+import { Save, Image, AlertCircle } from "lucide-react";
+
+// Simple auth check function - in a real app, this would check session/token
+const isAuthenticated = () => {
+  // This is a mock auth check - in a real app, you'd validate a token/session
+  return true; // Simulate a logged-in user for demo purposes
+};
 
 const BlogEditor: React.FC = () => {
   const { id } = useParams();
@@ -31,12 +38,24 @@ const BlogEditor: React.FC = () => {
   const isEditing = !!id;
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const allCategories = getAllBlogCategories();
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  
+  useEffect(() => {
+    // Check authentication when component mounts
+    const authCheck = isAuthenticated();
+    setIsAuthorized(authCheck);
+    
+    if (!authCheck) {
+      toast.error("You must be logged in to access this page");
+      navigate("/blog");
+    }
+  }, [navigate]);
   
   // Initialize the form with default values or the existing blog post data
   const form = useForm<BlogFormData>({
     defaultValues: {
       title: "",
-      slug: "", 
+      slug: "",
       author: {
         name: "",
         avatar: "/placeholder.svg"
@@ -126,6 +145,32 @@ const BlogEditor: React.FC = () => {
     // Navigate back to management page
     setTimeout(() => navigate("/blog-management"), 1000);
   };
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow pt-32 pb-20 flex items-center justify-center">
+          <Card className="max-w-md w-full">
+            <CardContent className="p-6 text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
+              <p className="text-monochrome-600 mb-4">
+                You must be logged in to access the blog editor.
+              </p>
+              <Button 
+                onClick={() => navigate("/blog")}
+                className="w-full"
+              >
+                Return to Blog
+              </Button>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -10,18 +10,34 @@ import { Separator } from "@/components/ui/separator";
 import { blogPosts } from "@/data/blogData";
 import { BlogPost } from "@/types/blog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Calendar, FileText, Edit, Trash2 } from "lucide-react";
+import { Calendar, FileText, Edit, Trash2, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+
+// Simple auth check function - in a real app, this would check session/token
+const isAuthenticated = () => {
+  // This is a mock auth check - in a real app, you'd validate a token/session
+  return true; // Simulate a logged-in user for demo purposes
+};
 
 const BlogManagement: React.FC = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
   useEffect(() => {
-    // In a real app, this would fetch from API
-    setPosts(blogPosts);
-  }, []);
+    // Check authentication when component mounts
+    const authCheck = isAuthenticated();
+    setIsAuthorized(authCheck);
+    
+    if (!authCheck) {
+      toast.error("You must be logged in to access this page");
+      navigate("/blog");
+    } else {
+      // Only fetch posts if authorized
+      setPosts(blogPosts);
+    }
+  }, [navigate]);
 
   const handleCreateNew = () => {
     navigate("/blog/editor");
@@ -37,6 +53,32 @@ const BlogManagement: React.FC = () => {
     // For demonstration, we'll just filter it out
     setPosts(posts.filter(post => post.id !== id));
   };
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow pt-32 pb-20 flex items-center justify-center">
+          <Card className="max-w-md w-full">
+            <CardContent className="p-6 text-center">
+              <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+              <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
+              <p className="text-monochrome-600 mb-4">
+                You must be logged in to access the blog management.
+              </p>
+              <Button 
+                onClick={() => navigate("/blog")}
+                className="w-full"
+              >
+                Return to Blog
+              </Button>
+            </CardContent>
+          </Card>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
