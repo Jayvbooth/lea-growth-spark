@@ -19,7 +19,7 @@ import TrustpilotWidget from '@/components/home/TrustpilotWidget';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[#FAFBFC] network-grid-bg">
+    <div className="min-h-screen bg-[#FAFBFC]">
       <Navbar />
       <main>
         {/* Hero with floating elements */}

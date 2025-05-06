@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden network-grid-bg">
+    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       <div className="container mx-auto container-padding">
         {/* Floating elements for depth */}
         <div className="hidden lg:block absolute top-20 -left-20 w-64 h-64 rounded-full bg-gradient-to-br from-green-100/50 to-green-200/30 animate-float-slow blur-xl"></div>
