@@ -1,5 +1,12 @@
 
 import React from 'react';
+import { cn } from '@/lib/utils';
+
+interface LogoCarouselProps {
+  title?: string;
+  className?: string;
+  grayscaleHoverEffect?: boolean;
+}
 
 const logos = [
   { name: 'Microsoft', src: 'https://cdn.worldvectorlogo.com/logos/microsoft-5.svg' },
@@ -12,11 +19,15 @@ const logos = [
   { name: 'Cisco', src: 'https://cdn.worldvectorlogo.com/logos/cisco-1.svg' },
 ];
 
-const LogoCarousel: React.FC = () => {
+const LogoCarousel: React.FC<LogoCarouselProps> = ({ 
+  title = "Trusted by industry leaders",
+  className,
+  grayscaleHoverEffect = true
+}) => {
   return (
-    <div className="relative overflow-hidden py-10">
+    <div className={cn("relative overflow-hidden py-10", className)}>
       <div className="relative max-w-7xl mx-auto px-4">
-        <p className="text-center text-monochrome-600 mb-8">Trusted by industry leaders</p>
+        {title && <p className="text-center text-monochrome-600 mb-8">{title}</p>}
         
         <div className="relative">
           {/* Gradient overlays for infinite scroll effect */}
@@ -31,7 +42,10 @@ const LogoCarousel: React.FC = () => {
                   <img 
                     src={logo.src} 
                     alt={logo.name} 
-                    className="h-12 w-auto opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                    className={cn(
+                      "h-12 w-auto transition-all duration-300",
+                      grayscaleHoverEffect ? "opacity-60 grayscale hover:opacity-100 hover:grayscale-0" : ""
+                    )}
                   />
                 </div>
               ))}
@@ -42,7 +56,10 @@ const LogoCarousel: React.FC = () => {
                   <img 
                     src={logo.src} 
                     alt={logo.name} 
-                    className="h-12 w-auto opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                    className={cn(
+                      "h-12 w-auto transition-all duration-300",
+                      grayscaleHoverEffect ? "opacity-60 grayscale hover:opacity-100 hover:grayscale-0" : ""
+                    )}
                   />
                 </div>
               ))}
