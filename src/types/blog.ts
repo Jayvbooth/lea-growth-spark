@@ -24,6 +24,7 @@ export interface BlogPost {
   };
 }
 
-export type BlogFormData = Omit<BlogPost, "id" | "readTime" | "slug"> & {
+export type BlogFormData = Omit<BlogPost, "id" | "readTime"> & {
   id?: string;
+  slug: string; // Added slug field
 };

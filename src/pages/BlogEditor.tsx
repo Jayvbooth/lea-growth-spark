@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -37,7 +36,7 @@ const BlogEditor: React.FC = () => {
   const form = useForm<BlogFormData>({
     defaultValues: {
       title: "",
-      slug: "",
+      slug: "", // Initialize slug as empty string
       author: {
         name: "",
         avatar: "/placeholder.svg"
@@ -109,7 +108,7 @@ const BlogEditor: React.FC = () => {
       slug,
       readTime,
       // Process the tags if they came in as string
-      tags: typeof data.tags === 'string' ? data.tags.split(',').map(tag => tag.trim()) : data.tags,
+      tags: Array.isArray(data.tags) ? data.tags : data.tags.split(',').map(tag => tag.trim()),
     };
     
     toast.success(isEditing ? "Blog post updated!" : "New blog post created!");
