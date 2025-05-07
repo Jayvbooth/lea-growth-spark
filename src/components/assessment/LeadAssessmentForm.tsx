@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,12 +45,25 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+// Option types for visual interactive elements
+type SituationOption = {
+  icon: string;
+  title: string;
+  description: string;
+  value: string;
+};
+
+type SelectableOption = {
+  icon: string;
+  label: string;
+  value: string;
+};
+
 const LeadAssessmentForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  // Fix: Replace process.env with a default empty string or a placeholder
-  const [webhookUrl, setWebhookUrl] = useState(""); // Removed process.env reference
+  const [webhookUrl, setWebhookUrl] = useState("");
   const totalSteps = 4;
   
   const form = useForm<FormValues>({
@@ -69,6 +83,127 @@ const LeadAssessmentForm = () => {
       additionalInfo: "",
     },
   });
+  
+  // Business situation options with emojis
+  const situationOptions: SituationOption[] = [
+    {
+      icon: "⚡️",
+      title: "B2B Services",
+      description: "You provide services to other businesses",
+      value: "B2B Services"
+    },
+    {
+      icon: "📦",
+      title: "B2B Products",
+      description: "You sell products to other businesses",
+      value: "B2B Products"
+    },
+    {
+      icon: "👥",
+      title: "B2C Services",
+      description: "You provide services to consumers",
+      value: "B2C Services"
+    },
+    {
+      icon: "🛍️",
+      title: "B2C Products",
+      description: "You sell products to consumers",
+      value: "B2C Products"
+    },
+    {
+      icon: "🏢",
+      title: "Agency/Consulting",
+      description: "You provide professional expertise",
+      value: "Agency/Consulting"
+    },
+    {
+      icon: "💻",
+      title: "SaaS/Technology",
+      description: "You provide software solutions",
+      value: "SaaS/Technology"
+    },
+    {
+      icon: "🏥",
+      title: "Healthcare",
+      description: "You provide healthcare services",
+      value: "Healthcare"
+    },
+    {
+      icon: "🔄",
+      title: "Other",
+      description: "None of the above",
+      value: "Other"
+    }
+  ];
+  
+  // Company size options
+  const employeeOptions: SelectableOption[] = [
+    { icon: "👤", label: "1-10 employees", value: "1-10 employees" },
+    { icon: "👥", label: "11-50 employees", value: "11-50 employees" },
+    { icon: "🏢", label: "51-200 employees", value: "51-200 employees" },
+    { icon: "🏙️", label: "201-500 employees", value: "201-500 employees" },
+    { icon: "🌆", label: "501+ employees", value: "501+ employees" }
+  ];
+  
+  // Revenue options
+  const revenueOptions: SelectableOption[] = [
+    { icon: "💰", label: "Less than $100K", value: "Less than $100K" },
+    { icon: "💰💰", label: "$100K - $500K", value: "$100K - $500K" },
+    { icon: "💰💰💰", label: "$500K - $1M", value: "$500K - $1M" },
+    { icon: "💰💰💰💰", label: "$1M - $5M", value: "$1M - $5M" },
+    { icon: "💰💰💰💰💰", label: "$5M - $10M", value: "$5M - $10M" },
+    { icon: "💰💰💰💰💰💰", label: "$10M+", value: "$10M+" }
+  ];
+  
+  // Primary interest options
+  const interestOptions: SituationOption[] = [
+    {
+      icon: "🎯",
+      title: "Lead Generation",
+      description: "Get more qualified prospects for your business",
+      value: "Lead Generation"
+    },
+    {
+      icon: "⚙️",
+      title: "Business Automation",
+      description: "Streamline your operations and processes",
+      value: "Business Automation"
+    },
+    {
+      icon: "🔄",
+      title: "Both",
+      description: "Need help with both lead gen and automation",
+      value: "Both Lead Generation & Automation"
+    },
+    {
+      icon: "❓",
+      title: "Not Sure Yet",
+      description: "Need guidance on what would help most",
+      value: "Not sure yet - Need guidance"
+    }
+  ];
+  
+  // Pain point options
+  const painPointOptions = [
+    { id: "not_enough_leads", label: "Not generating enough leads", icon: "📉" },
+    { id: "low_quality_leads", label: "Poor quality leads", icon: "👎" },
+    { id: "manual_processes", label: "Too many manual processes", icon: "⚙️" },
+    { id: "sales_conversion", label: "Low sales conversion rates", icon: "💸" },
+    { id: "marketing_roi", label: "Poor marketing ROI", icon: "📊" },
+    { id: "team_efficiency", label: "Team efficiency issues", icon: "👥" },
+    { id: "data_silos", label: "Disconnected systems & data", icon: "🔌" },
+    { id: "scaling", label: "Difficulty scaling operations", icon: "📈" }
+  ];
+  
+  // Timeline options
+  const timelineOptions: SelectableOption[] = [
+    { icon: "⚡", label: "Immediate (ASAP)", value: "Immediate (ASAP)" },
+    { icon: "🔜", label: "Within 1 month", value: "Within 1 month" },
+    { icon: "📅", label: "1-3 months", value: "1-3 months" },
+    { icon: "📆", label: "3-6 months", value: "3-6 months" },
+    { icon: "🗓️", label: "6+ months", value: "6+ months" },
+    { icon: "🔍", label: "Just researching options", value: "Just researching options" }
+  ];
   
   const handleNextStep = async () => {
     let fieldsToValidate: string[] = [];
@@ -170,8 +305,114 @@ const LeadAssessmentForm = () => {
     );
   };
   
-  const PainPointCheckbox = ({ id, label }: { id: string, label: string }) => {
-    const { control } = form;
+  // Interactive business type selector
+  const BusinessTypeSelector = () => {
+    const selectedValue = form.watch("businessType");
+    
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {situationOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-md'
+                : 'border-gray-200 hover:border-green-300 hover:shadow-sm'
+            }`}
+            onClick={() => form.setValue("businessType", option.value)}
+          >
+            <div className="flex items-start">
+              <div className="text-3xl mr-4">{option.icon}</div>
+              <div>
+                <h4 className="font-bold text-gray-800 mb-1">{option.title}</h4>
+                <p className="text-sm text-gray-600">{option.description}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive company size selector
+  const CompanySizeSelector = () => {
+    const selectedValue = form.watch("employees");
+    
+    return (
+      <div className="space-y-3">
+        {employeeOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => form.setValue("employees", option.value)}
+          >
+            <div className="text-2xl mr-4">{option.icon}</div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive revenue selector
+  const RevenueSelector = () => {
+    const selectedValue = form.watch("revenue");
+    
+    return (
+      <div className="space-y-3">
+        {revenueOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => form.setValue("revenue", option.value)}
+          >
+            <div className="text-lg mr-4">{option.icon}</div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive primary interest selector
+  const PrimaryInterestSelector = () => {
+    const selectedValue = form.watch("primaryInterest");
+    
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        {interestOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-md'
+                : 'border-gray-200 hover:border-green-300 hover:shadow-sm'
+            }`}
+            onClick={() => form.setValue("primaryInterest", option.value)}
+          >
+            <div className="flex items-start">
+              <div className="text-3xl mr-4">{option.icon}</div>
+              <div>
+                <h4 className="font-bold text-gray-800 mb-1">{option.title}</h4>
+                <p className="text-sm text-gray-600">{option.description}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive pain point selector
+  const PainPointSelector = () => {
     const painPoints = form.watch("painPoints") || [];
     
     const togglePainPoint = (id: string) => {
@@ -184,26 +425,56 @@ const LeadAssessmentForm = () => {
     };
     
     return (
-      <div 
-        className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
-          painPoints.includes(id)
-            ? 'border-green-500/50 bg-green-50 shadow-sm'
-            : 'border-gray-200 hover:border-green-300'
-        }`}
-        onClick={() => togglePainPoint(id)}
-      >
-        <div 
-          className={`w-5 h-5 rounded border flex-shrink-0 mr-3 flex items-center justify-center ${
-            painPoints.includes(id)
-              ? 'bg-green-500 border-green-500'
-              : 'border-gray-300'
-          }`}
-        >
-          {painPoints.includes(id) && (
-            <Check className="w-3 h-3 text-white" />
-          )}
-        </div>
-        <span className="text-gray-800">{label}</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {painPointOptions.map((option) => (
+          <div 
+            key={option.id}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              painPoints.includes(option.id)
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => togglePainPoint(option.id)}
+          >
+            <div className="text-2xl mr-3">{option.icon}</div>
+            <div 
+              className={`w-5 h-5 rounded border flex-shrink-0 mr-3 flex items-center justify-center ${
+                painPoints.includes(option.id)
+                  ? 'bg-green-500 border-green-500'
+                  : 'border-gray-300'
+              }`}
+            >
+              {painPoints.includes(option.id) && (
+                <Check className="w-3 h-3 text-white" />
+              )}
+            </div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive timeline selector
+  const TimelineSelector = () => {
+    const selectedValue = form.watch("timeline");
+    
+    return (
+      <div className="space-y-3">
+        {timelineOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => form.setValue("timeline", option.value)}
+          >
+            <div className="text-2xl mr-4">{option.icon}</div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
       </div>
     );
   };
@@ -335,29 +606,7 @@ const LeadAssessmentForm = () => {
                         <FormItem>
                           <FormLabel>What best describes your business?</FormLabel>
                           <FormControl>
-                            <RadioGroup 
-                              onValueChange={field.onChange} 
-                              defaultValue={field.value} 
-                              className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2"
-                            >
-                              {[
-                                "B2B Services", 
-                                "B2B Products", 
-                                "B2C Services", 
-                                "B2C Products", 
-                                "Agency/Consulting", 
-                                "SaaS/Technology", 
-                                "Healthcare", 
-                                "Other"
-                              ].map((type) => (
-                                <FormItem key={type} className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value={type} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">{type}</FormLabel>
-                                </FormItem>
-                              ))}
-                            </RadioGroup>
+                            <BusinessTypeSelector />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -371,26 +620,7 @@ const LeadAssessmentForm = () => {
                         <FormItem>
                           <FormLabel>How many employees do you have?</FormLabel>
                           <FormControl>
-                            <RadioGroup 
-                              onValueChange={field.onChange} 
-                              defaultValue={field.value} 
-                              className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2"
-                            >
-                              {[
-                                "1-10 employees", 
-                                "11-50 employees", 
-                                "51-200 employees", 
-                                "201-500 employees",
-                                "501+ employees"
-                              ].map((range) => (
-                                <FormItem key={range} className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value={range} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">{range}</FormLabel>
-                                </FormItem>
-                              ))}
-                            </RadioGroup>
+                            <CompanySizeSelector />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -404,27 +634,7 @@ const LeadAssessmentForm = () => {
                         <FormItem>
                           <FormLabel>What is your annual revenue?</FormLabel>
                           <FormControl>
-                            <RadioGroup 
-                              onValueChange={field.onChange} 
-                              defaultValue={field.value} 
-                              className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2"
-                            >
-                              {[
-                                "Less than $100K", 
-                                "$100K - $500K", 
-                                "$500K - $1M", 
-                                "$1M - $5M",
-                                "$5M - $10M",
-                                "$10M+"
-                              ].map((range) => (
-                                <FormItem key={range} className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value={range} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">{range}</FormLabel>
-                                </FormItem>
-                              ))}
-                            </RadioGroup>
+                            <RevenueSelector />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -450,25 +660,7 @@ const LeadAssessmentForm = () => {
                         <FormItem>
                           <FormLabel>What are you primarily interested in?</FormLabel>
                           <FormControl>
-                            <RadioGroup 
-                              onValueChange={field.onChange} 
-                              defaultValue={field.value} 
-                              className="space-y-3 pt-2"
-                            >
-                              {[
-                                "Lead Generation", 
-                                "Business Automation", 
-                                "Both Lead Generation & Automation", 
-                                "Not sure yet - Need guidance"
-                              ].map((option) => (
-                                <FormItem key={option} className="flex items-start space-x-3 space-y-0 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                                  <FormControl>
-                                    <RadioGroupItem value={option} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">{option}</FormLabel>
-                                </FormItem>
-                              ))}
-                            </RadioGroup>
+                            <PrimaryInterestSelector />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -481,16 +673,9 @@ const LeadAssessmentForm = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>What challenges are you facing? (Select all that apply)</FormLabel>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                            <PainPointCheckbox id="not_enough_leads" label="Not generating enough leads" />
-                            <PainPointCheckbox id="low_quality_leads" label="Poor quality leads" />
-                            <PainPointCheckbox id="manual_processes" label="Too many manual processes" />
-                            <PainPointCheckbox id="sales_conversion" label="Low sales conversion rates" />
-                            <PainPointCheckbox id="marketing_roi" label="Poor marketing ROI" />
-                            <PainPointCheckbox id="team_efficiency" label="Team efficiency issues" />
-                            <PainPointCheckbox id="data_silos" label="Disconnected systems & data" />
-                            <PainPointCheckbox id="scaling" label="Difficulty scaling operations" />
-                          </div>
+                          <FormControl>
+                            <PainPointSelector />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -533,27 +718,7 @@ const LeadAssessmentForm = () => {
                         <FormItem>
                           <FormLabel>What's your implementation timeline?</FormLabel>
                           <FormControl>
-                            <RadioGroup 
-                              onValueChange={field.onChange} 
-                              defaultValue={field.value} 
-                              className="space-y-3 pt-2"
-                            >
-                              {[
-                                "Immediate (ASAP)", 
-                                "Within 1 month", 
-                                "1-3 months", 
-                                "3-6 months",
-                                "6+ months",
-                                "Just researching options"
-                              ].map((option) => (
-                                <FormItem key={option} className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value={option} />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">{option}</FormLabel>
-                                </FormItem>
-                              ))}
-                            </RadioGroup>
+                            <TimelineSelector />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
