@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -70,12 +69,15 @@ type SelectableOption = {
   value: string;
 };
 
+// Define the possible form path types
+type FormPath = "both" | "leadgen" | "automation" | null;
+
 const LeadAssessmentForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [formPath, setFormPath] = useState<"both" | "leadgen" | "automation" | null>(null);
+  const [formPath, setFormPath] = useState<FormPath>(null);
   const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
 
   // Determine total steps based on selected path
@@ -832,7 +834,7 @@ const LeadAssessmentForm = () => {
                   )}
                   
                   {/* Step 4: Lead Generation Specific Questions */}
-                  {currentStep === 4 && (formPath === "leadgen" || formPath === "both") && (
+                  {currentStep === 4 && formPath === "leadgen" && (
                     <div className="space-y-6 animate-fade-in">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4">
                         Your Lead Generation Process
@@ -872,7 +874,7 @@ const LeadAssessmentForm = () => {
                   )}
                   
                   {/* Step 4: Business Automation Specific Questions */}
-                  {currentStep === 4 && (formPath === "automation" || formPath === "both") && formPath !== "leadgen" && (
+                  {currentStep === 4 && (formPath === "automation" || formPath === "both") && (
                     <div className="space-y-6 animate-fade-in">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4">
                         Your Current Systems & Processes
