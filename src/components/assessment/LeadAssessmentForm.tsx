@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Check, ArrowRight, Building, Mail, User, Users, Send, Calendar } from "lucide-react";
+import { Check, ArrowRight, Building, Mail, User, Users, Send, Calendar, Link } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,25 +19,36 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import CalendarBooking from './CalendarBooking';
+
+// Define the webhook URL for Make.com (replace with your actual webhook URL)
+const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/your-webhook-id"; // Replace with your Make.com webhook
 
 // Define form validation schema
 const formSchema = z.object({
-  // Step 1: Personal Information
+  // Step 1: Initial Interest Selection
+  primaryInterest: z.string().min(1, { message: "Please select your primary interest" }),
+  
+  // Step 2: Personal & Business Information
   fullName: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
   companyName: z.string().min(1, { message: "Please enter your company name" }),
-  website: z.string().optional(),
-  
-  // Step 2: Business Information
+  website: z.string().min(1, { message: "Please enter your company website" }),
   businessType: z.string().min(1, { message: "Please select your business type" }),
-  employees: z.string().min(1, { message: "Please select your company size" }),
   revenue: z.string().min(1, { message: "Please select your revenue range" }),
   
-  // Step 3: Needs Assessment
-  primaryInterest: z.string().min(1, { message: "Please select your primary interest" }),
+  // Step 3: Business Pain Points
   painPoints: z.array(z.string()).min(1, { message: "Please select at least one pain point" }),
   
-  // Step 4: Goals & Timeline
+  // Step 4: Lead Generation Specific (conditional)
+  leadSources: z.array(z.string()).optional(),
+  currentLeadVolume: z.string().optional(),
+  
+  // Step 5: Business Automation Specific (conditional)
+  currentSystems: z.array(z.string()).optional(),
+  manualProcesses: z.string().optional(),
+  
+  // Step 6: Goals & Timeline (always shown)
   goals: z.string().min(5, { message: "Please describe your goals" }),
   timeline: z.string().min(1, { message: "Please select your timeline" }),
   additionalInfo: z.string().optional(),
@@ -63,8 +74,20 @@ const LeadAssessmentForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState("");
-  const totalSteps = 4;
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [formPath, setFormPath] = useState<"both" | "leadgen" | "automation" | null>(null);
+  const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
+
+  // Determine total steps based on selected path
+  const getTotalSteps = () => {
+    if (!formPath) return 6;
+    if (formPath === "both") return 6;
+    if (formPath === "leadgen") return 5;
+    if (formPath === "automation") return 5;
+    return 6;
+  };
+  
+  const totalSteps = getTotalSteps();
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -74,15 +97,59 @@ const LeadAssessmentForm = () => {
       companyName: "",
       website: "",
       businessType: "",
-      employees: "",
       revenue: "",
       primaryInterest: "",
       painPoints: [],
+      leadSources: [],
+      currentLeadVolume: "",
+      currentSystems: [],
+      manualProcesses: "",
       goals: "",
       timeline: "",
       additionalInfo: "",
     },
   });
+  
+  // Watch the primary interest to determine the form path
+  const primaryInterest = form.watch("primaryInterest");
+  
+  useEffect(() => {
+    if (primaryInterest === "Lead Generation") {
+      setFormPath("leadgen");
+    } else if (primaryInterest === "Business Automation") {
+      setFormPath("automation");
+    } else if (primaryInterest === "Both Lead Generation & Automation") {
+      setFormPath("both");
+    }
+  }, [primaryInterest]);
+  
+  // Primary interest options - this determines the path
+  const interestOptions: SituationOption[] = [
+    {
+      icon: "🎯",
+      title: "Lead Generation",
+      description: "Get more qualified prospects for your business",
+      value: "Lead Generation"
+    },
+    {
+      icon: "⚙️",
+      title: "Business Automation",
+      description: "Streamline your operations and processes",
+      value: "Business Automation"
+    },
+    {
+      icon: "🔄",
+      title: "Both",
+      description: "Need help with both lead gen and automation",
+      value: "Both Lead Generation & Automation"
+    },
+    {
+      icon: "❓",
+      title: "Not Sure Yet",
+      description: "Need guidance on what would help most",
+      value: "Not sure yet - Need guidance"
+    }
+  ];
   
   // Business situation options with emojis
   const situationOptions: SituationOption[] = [
@@ -136,15 +203,6 @@ const LeadAssessmentForm = () => {
     }
   ];
   
-  // Company size options
-  const employeeOptions: SelectableOption[] = [
-    { icon: "👤", label: "1-10 employees", value: "1-10 employees" },
-    { icon: "👥", label: "11-50 employees", value: "11-50 employees" },
-    { icon: "🏢", label: "51-200 employees", value: "51-200 employees" },
-    { icon: "🏙️", label: "201-500 employees", value: "201-500 employees" },
-    { icon: "🌆", label: "501+ employees", value: "501+ employees" }
-  ];
-  
   // Revenue options
   const revenueOptions: SelectableOption[] = [
     { icon: "💰", label: "Less than $100K", value: "Less than $100K" },
@@ -153,34 +211,6 @@ const LeadAssessmentForm = () => {
     { icon: "💰💰💰💰", label: "$1M - $5M", value: "$1M - $5M" },
     { icon: "💰💰💰💰💰", label: "$5M - $10M", value: "$5M - $10M" },
     { icon: "💰💰💰💰💰💰", label: "$10M+", value: "$10M+" }
-  ];
-  
-  // Primary interest options
-  const interestOptions: SituationOption[] = [
-    {
-      icon: "🎯",
-      title: "Lead Generation",
-      description: "Get more qualified prospects for your business",
-      value: "Lead Generation"
-    },
-    {
-      icon: "⚙️",
-      title: "Business Automation",
-      description: "Streamline your operations and processes",
-      value: "Business Automation"
-    },
-    {
-      icon: "🔄",
-      title: "Both",
-      description: "Need help with both lead gen and automation",
-      value: "Both Lead Generation & Automation"
-    },
-    {
-      icon: "❓",
-      title: "Not Sure Yet",
-      description: "Need guidance on what would help most",
-      value: "Not sure yet - Need guidance"
-    }
   ];
   
   // Pain point options
@@ -193,6 +223,38 @@ const LeadAssessmentForm = () => {
     { id: "team_efficiency", label: "Team efficiency issues", icon: "👥" },
     { id: "data_silos", label: "Disconnected systems & data", icon: "🔌" },
     { id: "scaling", label: "Difficulty scaling operations", icon: "📈" }
+  ];
+  
+  // Lead Generation specific options
+  const leadSourceOptions = [
+    { id: "cold_email", label: "Cold Email", icon: "📧" },
+    { id: "linkedin", label: "LinkedIn Outreach", icon: "👔" },
+    { id: "paid_ads", label: "Paid Advertising", icon: "💵" },
+    { id: "seo", label: "SEO/Content Marketing", icon: "🔍" },
+    { id: "social_media", label: "Social Media", icon: "📱" },
+    { id: "referrals", label: "Referrals", icon: "👋" },
+    { id: "events", label: "Events/Networking", icon: "🎪" },
+    { id: "other_source", label: "Other", icon: "🔄" },
+  ];
+  
+  // Lead volume options
+  const leadVolumeOptions: SelectableOption[] = [
+    { icon: "🔍", label: "0-10 leads per month", value: "0-10 leads per month" },
+    { icon: "📊", label: "11-50 leads per month", value: "11-50 leads per month" },
+    { icon: "📈", label: "51-200 leads per month", value: "51-200 leads per month" },
+    { icon: "📊📈", label: "201+ leads per month", value: "201+ leads per month" }
+  ];
+  
+  // Business Automation specific options
+  const systemsOptions = [
+    { id: "crm", label: "CRM (Salesforce, HubSpot, etc)", icon: "👥" },
+    { id: "marketing", label: "Marketing Automation", icon: "📣" },
+    { id: "erp", label: "ERP System", icon: "🏢" },
+    { id: "project_mgmt", label: "Project Management", icon: "📝" },
+    { id: "accounting", label: "Accounting Software", icon: "💲" },
+    { id: "custom", label: "Custom/Proprietary System", icon: "🔧" },
+    { id: "spreadsheets", label: "Spreadsheets/Manual", icon: "📊" },
+    { id: "none", label: "No systems in place", icon: "❌" }
   ];
   
   // Timeline options
@@ -210,15 +272,24 @@ const LeadAssessmentForm = () => {
     
     switch(currentStep) {
       case 1:
-        fieldsToValidate = ["fullName", "email", "companyName"];
+        fieldsToValidate = ["primaryInterest"];
         break;
       case 2:
-        fieldsToValidate = ["businessType", "employees", "revenue"];
+        fieldsToValidate = ["fullName", "email", "companyName", "website", "businessType", "revenue"];
         break;
       case 3:
-        fieldsToValidate = ["primaryInterest", "painPoints"];
+        fieldsToValidate = ["painPoints"];
         break;
       case 4:
+        // Validate based on path
+        if (formPath === "leadgen") {
+          fieldsToValidate = ["leadSources", "currentLeadVolume"];
+        } else if (formPath === "automation") {
+          fieldsToValidate = ["currentSystems", "manualProcesses"];
+        }
+        break;
+      case 5:
+      case 6:
         fieldsToValidate = ["goals", "timeline"];
         break;
     }
@@ -246,16 +317,11 @@ const LeadAssessmentForm = () => {
     try {
       setIsSubmitting(true);
       
-      if (!webhookUrl) {
-        toast.error("Webhook URL is not configured");
-        setIsSubmitting(false);
-        return;
-      }
-      
       const formData = form.getValues();
+      setSubmittedData(formData);
       
-      // Send data to webhook
-      const response = await fetch(webhookUrl, {
+      // Send data to Make.com webhook
+      const response = await fetch(MAKE_WEBHOOK_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -305,6 +371,35 @@ const LeadAssessmentForm = () => {
     );
   };
   
+  // Interactive primary interest selector (first step)
+  const PrimaryInterestSelector = () => {
+    const selectedValue = form.watch("primaryInterest");
+    
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {interestOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-md'
+                : 'border-gray-200 hover:border-green-300 hover:shadow-sm'
+            }`}
+            onClick={() => form.setValue("primaryInterest", option.value)}
+          >
+            <div className="flex items-start">
+              <div className="text-3xl mr-4">{option.icon}</div>
+              <div>
+                <h4 className="font-bold text-gray-800 mb-1">{option.title}</h4>
+                <p className="text-sm text-gray-600">{option.description}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
   // Interactive business type selector
   const BusinessTypeSelector = () => {
     const selectedValue = form.watch("businessType");
@@ -334,30 +429,6 @@ const LeadAssessmentForm = () => {
     );
   };
   
-  // Interactive company size selector
-  const CompanySizeSelector = () => {
-    const selectedValue = form.watch("employees");
-    
-    return (
-      <div className="space-y-3">
-        {employeeOptions.map((option, index) => (
-          <div 
-            key={index}
-            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
-              selectedValue === option.value
-                ? 'border-green-500 bg-green-50 shadow-sm'
-                : 'border-gray-200 hover:border-green-300'
-            }`}
-            onClick={() => form.setValue("employees", option.value)}
-          >
-            <div className="text-2xl mr-4">{option.icon}</div>
-            <span className="text-gray-800">{option.label}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
-  
   // Interactive revenue selector
   const RevenueSelector = () => {
     const selectedValue = form.watch("revenue");
@@ -376,35 +447,6 @@ const LeadAssessmentForm = () => {
           >
             <div className="text-lg mr-4">{option.icon}</div>
             <span className="text-gray-800">{option.label}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
-  
-  // Interactive primary interest selector
-  const PrimaryInterestSelector = () => {
-    const selectedValue = form.watch("primaryInterest");
-    
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {interestOptions.map((option, index) => (
-          <div 
-            key={index}
-            className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 ${
-              selectedValue === option.value
-                ? 'border-green-500 bg-green-50 shadow-md'
-                : 'border-gray-200 hover:border-green-300 hover:shadow-sm'
-            }`}
-            onClick={() => form.setValue("primaryInterest", option.value)}
-          >
-            <div className="flex items-start">
-              <div className="text-3xl mr-4">{option.icon}</div>
-              <div>
-                <h4 className="font-bold text-gray-800 mb-1">{option.title}</h4>
-                <p className="text-sm text-gray-600">{option.description}</p>
-              </div>
-            </div>
           </div>
         ))}
       </div>
@@ -455,6 +497,118 @@ const LeadAssessmentForm = () => {
     );
   };
   
+  // Interactive lead sources selector
+  const LeadSourcesSelector = () => {
+    const leadSources = form.watch("leadSources") || [];
+    
+    const toggleLeadSource = (id: string) => {
+      const currentSources = form.getValues("leadSources") || [];
+      if (currentSources.includes(id)) {
+        form.setValue("leadSources", currentSources.filter(item => item !== id));
+      } else {
+        form.setValue("leadSources", [...currentSources, id]);
+      }
+    };
+    
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {leadSourceOptions.map((option) => (
+          <div 
+            key={option.id}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              leadSources.includes(option.id)
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => toggleLeadSource(option.id)}
+          >
+            <div className="text-2xl mr-3">{option.icon}</div>
+            <div 
+              className={`w-5 h-5 rounded border flex-shrink-0 mr-3 flex items-center justify-center ${
+                leadSources.includes(option.id)
+                  ? 'bg-green-500 border-green-500'
+                  : 'border-gray-300'
+              }`}
+            >
+              {leadSources.includes(option.id) && (
+                <Check className="w-3 h-3 text-white" />
+              )}
+            </div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive lead volume selector
+  const LeadVolumeSelector = () => {
+    const selectedValue = form.watch("currentLeadVolume");
+    
+    return (
+      <div className="space-y-3">
+        {leadVolumeOptions.map((option, index) => (
+          <div 
+            key={index}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              selectedValue === option.value
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => form.setValue("currentLeadVolume", option.value)}
+          >
+            <div className="text-2xl mr-4">{option.icon}</div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  // Interactive systems selector
+  const SystemsSelector = () => {
+    const currentSystems = form.watch("currentSystems") || [];
+    
+    const toggleSystem = (id: string) => {
+      const systems = form.getValues("currentSystems") || [];
+      if (systems.includes(id)) {
+        form.setValue("currentSystems", systems.filter(item => item !== id));
+      } else {
+        form.setValue("currentSystems", [...systems, id]);
+      }
+    };
+    
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {systemsOptions.map((option) => (
+          <div 
+            key={option.id}
+            className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+              currentSystems.includes(option.id)
+                ? 'border-green-500 bg-green-50 shadow-sm'
+                : 'border-gray-200 hover:border-green-300'
+            }`}
+            onClick={() => toggleSystem(option.id)}
+          >
+            <div className="text-2xl mr-3">{option.icon}</div>
+            <div 
+              className={`w-5 h-5 rounded border flex-shrink-0 mr-3 flex items-center justify-center ${
+                currentSystems.includes(option.id)
+                  ? 'bg-green-500 border-green-500'
+                  : 'border-gray-300'
+              }`}
+            >
+              {currentSystems.includes(option.id) && (
+                <Check className="w-3 h-3 text-white" />
+              )}
+            </div>
+            <span className="text-gray-800">{option.label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
   // Interactive timeline selector
   const TimelineSelector = () => {
     const selectedValue = form.watch("timeline");
@@ -491,311 +645,382 @@ const LeadAssessmentForm = () => {
             ></div>
           </div>
           
-          <div className="p-6 md:p-8">
-            {renderStepIndicator()}
-            
-            <Form {...form}>
-              <form>
-                {/* Step 1: Personal Information */}
-                {currentStep === 1 && (
-                  <div className="space-y-6 animate-fade-in">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                      Let's Get Acquainted
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                      Start by sharing some basic information about you and your business.
-                    </p>
-                    
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Full Name</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                              <Input 
-                                {...field} 
-                                placeholder="Your full name" 
-                                className="pl-10"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                              <Input 
-                                {...field} 
-                                type="email" 
-                                placeholder="you@company.com" 
-                                className="pl-10"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="companyName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Company Name</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Building className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                              <Input 
-                                {...field} 
-                                placeholder="Your company name" 
-                                className="pl-10"
-                              />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="website"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Company Website <span className="text-gray-400">(optional)</span></FormLabel>
-                          <FormControl>
-                            <Input 
-                              {...field} 
-                              placeholder="https://www.yourcompany.com" 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
-                
-                {/* Step 2: Business Information */}
-                {currentStep === 2 && (
-                  <div className="space-y-6 animate-fade-in">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                      Tell Us About Your Business
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                      This information helps us understand your business context better.
-                    </p>
-                    
-                    <FormField
-                      control={form.control}
-                      name="businessType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What best describes your business?</FormLabel>
-                          <FormControl>
-                            <BusinessTypeSelector />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="employees"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>How many employees do you have?</FormLabel>
-                          <FormControl>
-                            <CompanySizeSelector />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="revenue"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What is your annual revenue?</FormLabel>
-                          <FormControl>
-                            <RevenueSelector />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
-                
-                {/* Step 3: Needs Assessment */}
-                {currentStep === 3 && (
-                  <div className="space-y-6 animate-fade-in">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                      Your Challenges & Needs
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                      Help us understand what you're looking to achieve.
-                    </p>
-                    
-                    <FormField
-                      control={form.control}
-                      name="primaryInterest"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What are you primarily interested in?</FormLabel>
-                          <FormControl>
-                            <PrimaryInterestSelector />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="painPoints"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What challenges are you facing? (Select all that apply)</FormLabel>
-                          <FormControl>
-                            <PainPointSelector />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
-                
-                {/* Step 4: Goals & Timeline */}
-                {currentStep === 4 && (
-                  <div className="space-y-6 animate-fade-in">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                      Your Goals & Timeline
-                    </h2>
-                    <p className="text-gray-600 mb-6">
-                      Help us understand your objectives and timeframe.
-                    </p>
-                    
-                    <FormField
-                      control={form.control}
-                      name="goals"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What specific goals are you looking to achieve?</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              {...field} 
-                              placeholder="E.g., Increase qualified leads by 30%, automate our sales follow-up process, etc." 
-                              className="min-h-[100px]"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="timeline"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>What's your implementation timeline?</FormLabel>
-                          <FormControl>
-                            <TimelineSelector />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="additionalInfo"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Anything else you'd like to share? <span className="text-gray-400">(optional)</span></FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              {...field} 
-                              placeholder="Any additional context that would help us understand your needs better..." 
-                              className="min-h-[100px]"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
-                
-                {/* Navigation Buttons */}
-                <div className="flex justify-between mt-10">
-                  {currentStep > 1 ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={handlePreviousStep}
-                      disabled={isSubmitting}
-                    >
-                      Back
-                    </Button>
-                  ) : (
-                    <div></div> // Empty div to maintain layout
+          {!showCalendar ? (
+            <div className="p-6 md:p-8">
+              {renderStepIndicator()}
+              
+              <Form {...form}>
+                <form>
+                  {/* Step 1: Choose Primary Interest (this determines the form path) */}
+                  {currentStep === 1 && (
+                    <div className="space-y-6 animate-fade-in">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        What can we help you with?
+                      </h2>
+                      <p className="text-gray-600 mb-6">
+                        This will help us tailor the assessment to your specific needs.
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="primaryInterest"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <PrimaryInterestSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   )}
                   
-                  <Button
-                    type="button"
-                    onClick={handleNextStep}
-                    disabled={isSubmitting}
-                    className="bg-green-500 hover:bg-green-600"
-                  >
-                    {isSubmitting ? (
-                      <Spinner size="sm" className="mr-2" />
-                    ) : currentStep < totalSteps ? (
-                      <>
-                        Next
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </>
+                  {/* Step 2: Business Information (combined on one page as requested) */}
+                  {currentStep === 2 && (
+                    <div className="space-y-6 animate-fade-in">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        Tell Us About Your Business
+                      </h2>
+                      <p className="text-gray-600 mb-6">
+                        Let's get to know you and your business better.
+                      </p>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <FormField
+                          control={form.control}
+                          name="fullName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Full Name</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                  <Input 
+                                    {...field} 
+                                    placeholder="Your full name" 
+                                    className="pl-10"
+                                  />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email Address</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                  <Input 
+                                    {...field} 
+                                    type="email" 
+                                    placeholder="you@company.com" 
+                                    className="pl-10"
+                                  />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <FormField
+                          control={form.control}
+                          name="companyName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Company Name</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Building className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                  <Input 
+                                    {...field} 
+                                    placeholder="Your company name" 
+                                    className="pl-10"
+                                  />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="website"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Company Website</FormLabel>
+                              <FormControl>
+                                <div className="relative">
+                                  <Link className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                  <Input 
+                                    {...field} 
+                                    placeholder="https://www.yourcompany.com" 
+                                    className="pl-10"
+                                  />
+                                </div>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="businessType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What best describes your business?</FormLabel>
+                            <FormControl>
+                              <BusinessTypeSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="revenue"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What is your annual revenue?</FormLabel>
+                            <FormControl>
+                              <RevenueSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Step 3: Pain Points (always shown) */}
+                  {currentStep === 3 && (
+                    <div className="space-y-6 animate-fade-in">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        Your Business Challenges
+                      </h2>
+                      <p className="text-gray-600 mb-6">
+                        What challenges are you currently facing in your business?
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="painPoints"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Select all that apply:</FormLabel>
+                            <FormControl>
+                              <PainPointSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Step 4: Lead Generation Specific Questions */}
+                  {currentStep === 4 && (formPath === "leadgen" || formPath === "both") && (
+                    <div className="space-y-6 animate-fade-in">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        Your Lead Generation Process
+                      </h2>
+                      <p className="text-gray-600 mb-6">
+                        Tell us about how you currently generate leads for your business.
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="leadSources"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>How do you currently acquire customers? (Select all that apply)</FormLabel>
+                            <FormControl>
+                              <LeadSourcesSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="currentLeadVolume"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What is your current lead volume?</FormLabel>
+                            <FormControl>
+                              <LeadVolumeSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Step 4: Business Automation Specific Questions */}
+                  {currentStep === 4 && (formPath === "automation" || formPath === "both") && formPath !== "leadgen" && (
+                    <div className="space-y-6 animate-fade-in">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        Your Current Systems & Processes
+                      </h2>
+                      <p className="text-gray-600 mb-6">
+                        Tell us about your existing business systems and workflows.
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="currentSystems"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What systems do you currently use? (Select all that apply)</FormLabel>
+                            <FormControl>
+                              <SystemsSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="manualProcesses"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What manual processes would you like to automate?</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field} 
+                                placeholder="Describe the workflows or tasks you'd like to automate..." 
+                                className="min-h-[100px]"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Step 5/6: Goals & Timeline (always shown) */}
+                  {(currentStep === 5 || currentStep === 6) && currentStep === totalSteps && (
+                    <div className="space-y-6 animate-fade-in">
+                      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                        Your Goals & Timeline
+                      </h2>
+                      <p className="text-gray-600 mb-6">
+                        Let us understand your objectives and timeframe.
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="goals"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What specific goals are you looking to achieve?</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field} 
+                                placeholder="E.g., Increase qualified leads by 30%, automate our sales follow-up process, etc." 
+                                className="min-h-[100px]"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="timeline"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What's your implementation timeline?</FormLabel>
+                            <FormControl>
+                              <TimelineSelector />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="additionalInfo"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Anything else you'd like to share? <span className="text-gray-400">(optional)</span></FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                {...field} 
+                                placeholder="Any additional context that would help us understand your needs better..." 
+                                className="min-h-[100px]"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                  
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-between mt-10">
+                    {currentStep > 1 ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handlePreviousStep}
+                        disabled={isSubmitting}
+                      >
+                        Back
+                      </Button>
                     ) : (
-                      <>
-                        Submit Assessment
-                        <Send className="ml-2 h-4 w-4" />
-                      </>
+                      <div></div> // Empty div to maintain layout
                     )}
-                  </Button>
-                </div>
-                
-                {/* For development: Webhook URL input (would be hidden in production) */}
-                <div className="mt-12 pt-6 border-t border-gray-100">
-                  <div className="text-sm text-gray-500 mb-2">Webhook URL (for development only)</div>
-                  <Input
-                    type="text"
-                    value={webhookUrl}
-                    onChange={(e) => setWebhookUrl(e.target.value)}
-                    placeholder="Enter Zapier webhook URL"
-                    className="text-xs"
-                  />
-                </div>
-              </form>
-            </Form>
-          </div>
+                    
+                    <Button
+                      type="button"
+                      onClick={handleNextStep}
+                      disabled={isSubmitting}
+                      className="bg-green-500 hover:bg-green-600"
+                    >
+                      {isSubmitting ? (
+                        <Spinner size="sm" className="mr-2" />
+                      ) : currentStep < totalSteps ? (
+                        <>
+                          Next
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      ) : (
+                        <>
+                          Submit Assessment
+                          <Send className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </div>
+          ) : (
+            <div className="p-6 md:p-8">
+              <CalendarBooking leadData={submittedData || {}} />
+            </div>
+          )}
         </div>
       </div>
       
@@ -823,8 +1048,8 @@ const LeadAssessmentForm = () => {
             <Button 
               className="bg-green-500 hover:bg-green-600 w-full flex items-center justify-center"
               onClick={() => {
-                // In a real implementation, this would link to a calendar booking tool
-                window.location.href = "/pre-call";
+                setShowSuccessDialog(false);
+                setShowCalendar(true);
               }}
             >
               <Calendar className="mr-2 h-5 w-5" />
