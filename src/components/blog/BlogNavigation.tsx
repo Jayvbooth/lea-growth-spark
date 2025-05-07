@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Breadcrumb, 
@@ -18,8 +17,8 @@ interface BlogNavigationProps {
   currentPage?: string;
   category?: string;
   tag?: string;
-  prevPost?: BlogPost;
-  nextPost?: BlogPost;
+  prevPost?: Partial<BlogPost>;
+  nextPost?: Partial<BlogPost>;
 }
 
 export const BlogBreadcrumb: React.FC<BlogNavigationProps> = ({
@@ -101,14 +100,14 @@ export const BlogBreadcrumb: React.FC<BlogNavigationProps> = ({
   );
 };
 
-export const BlogPostNavigation: React.FC<{ prevPost?: BlogPost, nextPost?: BlogPost }> = ({ 
+export const BlogPostNavigation: React.FC<{ prevPost?: Partial<BlogPost>, nextPost?: Partial<BlogPost> }> = ({ 
   prevPost, 
   nextPost 
 }) => {
   return (
     <div className="flex items-center justify-between border-t border-monochrome-100 mt-12 pt-8">
       <div>
-        {prevPost && (
+        {prevPost && prevPost.id && (
           <Link 
             to={`/blog/${prevPost.id}`}
             className="flex items-center text-monochrome-600 hover:text-green-600 transition-colors"
@@ -127,7 +126,7 @@ export const BlogPostNavigation: React.FC<{ prevPost?: BlogPost, nextPost?: Blog
       </Button>
       
       <div>
-        {nextPost && (
+        {nextPost && nextPost.id && (
           <Link
             to={`/blog/${nextPost.id}`}
             className="flex items-center text-monochrome-600 hover:text-green-600 transition-colors"
