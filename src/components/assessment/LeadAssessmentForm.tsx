@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,9 +26,9 @@ type FormPath = "lead_gen" | "automation" | "combined";
 // Define the webhook URL for Make.com
 const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/your-webhook-id"; // Replace with your actual webhook
 
-// Define form validation schema with conditional fields
+// Define form validation schema for each path separately without the complex refine function
 const formSchema = z.object({
-  // Section 1: Service Selection (always shown first)
+  // Service Selection (always shown first)
   service_selection: z.string().min(1, { message: "Please select a service" }),
   
   // Common fields for all paths
@@ -53,50 +52,6 @@ const formSchema = z.object({
   automationNeeds: z.array(z.string()).optional(),
   otherAutomation: z.string().optional(),
   idealSystem: z.string().optional(),
-  
-  // Combined path fields use all the above fields
-}).refine((data) => {
-  // For Lead Gen path
-  if (data.service_selection === "Lead Generation") {
-    return !!data.fullName && 
-           !!data.email && 
-           !!data.companyName && 
-           !!data.website && 
-           !!data.businessType && 
-           !!data.annualRevenue && 
-           (data.leadGenChallenges && data.leadGenChallenges.length > 0) && 
-           !!data.idealLeadResults &&
-           !!data.timeline;
-  }
-  
-  // For Automation path
-  if (data.service_selection === "Business Automation") {
-    return !!data.fullName && 
-           !!data.email && 
-           !!data.companyName && 
-           !!data.website && 
-           !!data.businessType && 
-           !!data.annualRevenue && 
-           (data.automationChallenges && data.automationChallenges.length > 0) && 
-           !!data.idealSystem &&
-           !!data.timeline;
-  }
-  
-  // For Combined path
-  if (data.service_selection === "Both" || data.service_selection === "Not Sure Yet") {
-    return !!data.fullName && 
-           !!data.email && 
-           !!data.companyName && 
-           !!data.website && 
-           !!data.businessType && 
-           !!data.annualRevenue && 
-           !!data.timeline;
-  }
-  
-  return true;
-}, {
-  message: "Please complete all required fields",
-  path: ["service_selection"], // This is just a placeholder, the actual validation happens above
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -108,6 +63,7 @@ const LeadAssessmentForm = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const [formPath, setFormPath] = useState<FormPath | null>(null);
   const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -148,10 +104,9 @@ const LeadAssessmentForm = () => {
   // Determine total steps based on selected path
   const getTotalSteps = () => {
     if (!formPath) return 1; // Just the service selection
-    if (formPath === "lead_gen") return 5; // Service + 4 steps
-    if (formPath === "automation") return 5; // Service + 4 steps
-    if (formPath === "combined") return 5; // Service + 4 steps
-    return 1;
+    
+    // Each path now has the same number of steps for consistency
+    return 6; 
   };
   
   const totalSteps = getTotalSteps();
@@ -261,51 +216,61 @@ const LeadAssessmentForm = () => {
     { value: "Researching", label: "Just researching options" }
   ];
   
-  const handleNextStep = async () => {
+  // Validate fields based on current step and path
+  const validateCurrentStep = async () => {
+    setValidationErrors([]);
     let fieldsToValidate: string[] = [];
     
     // Determine which fields to validate based on the current step and form path
     if (currentStep === 1) {
       fieldsToValidate = ["service_selection"];
-    } else if (currentStep === 2) {
+    } 
+    else if (currentStep === 2) {
       fieldsToValidate = ["fullName", "email", "companyName", "website", "businessType", "annualRevenue"];
-    } else if (currentStep === 3) {
+    }
+    else if (currentStep === 3) {
+      // Challenges step
       if (formPath === "lead_gen") {
         fieldsToValidate = ["leadGenChallenges"];
-      } else if (formPath === "automation") {
+      } 
+      else if (formPath === "automation") {
         fieldsToValidate = ["automationChallenges"];
-      } else if (formPath === "combined") {
-        // Optional in combined path
       }
-    } else if (currentStep === 4) {
-      // These are mostly optional fields, but we might want to validate some
+      // For combined path, these are optional
+    }
+    // Steps 4 and 5 have mostly optional fields, so we don't validate them
+    else if (currentStep === 6) {
+      // Final step - timeline is always required
+      fieldsToValidate = ["timeline"];
+      
+      // Other required fields based on path
       if (formPath === "lead_gen") {
-        // Optional fields
-      } else if (formPath === "automation") {
-        // Optional fields
-      } else if (formPath === "combined") {
-        // Optional fields
-      }
-    } else if (currentStep === 5) {
-      // Final step - validate required fields based on path
-      if (formPath === "lead_gen") {
-        fieldsToValidate = ["idealLeadResults", "timeline"];
-      } else if (formPath === "automation") {
-        fieldsToValidate = ["idealSystem", "timeline"];
-      } else if (formPath === "combined") {
-        fieldsToValidate = ["timeline"];
+        fieldsToValidate.push("idealLeadResults");
+      } 
+      else if (formPath === "automation") {
+        fieldsToValidate.push("idealSystem");
       }
     }
     
-    const result = await form.trigger(fieldsToValidate as any);
+    // Only validate required fields for the current step
+    const results = await form.trigger(fieldsToValidate as any);
     
-    if (result) {
+    return results;
+  };
+  
+  const handleNextStep = async () => {
+    const isValid = await validateCurrentStep();
+    
+    if (isValid) {
       if (currentStep < totalSteps) {
         setCurrentStep(prev => prev + 1);
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         handleSubmit();
       }
+    } else {
+      // Show error toast if validation fails
+      toast.error("Please complete all required fields for this step");
     }
   };
   
@@ -326,7 +291,7 @@ const LeadAssessmentForm = () => {
       // Log data to console for debugging
       console.log("Form submitted:", formData);
       
-      // Send data to Make.com webhook (would be configured with your actual webhook)
+      // Send data to webhook
       try {
         await fetch(MAKE_WEBHOOK_URL, {
           method: "POST",
@@ -822,30 +787,6 @@ const LeadAssessmentForm = () => {
                                 )}
                               />
                             </div>
-                            
-                            <div className="pt-4 border-t border-gray-100">
-                              <h3 className="text-lg font-medium text-gray-800 mb-3">
-                                Lead Systems & Tools
-                              </h3>
-                              <p className="text-gray-600 mb-4">
-                                What tools are you currently using for lead generation? (Select all that apply)
-                              </p>
-                              <FormField
-                                control={form.control}
-                                name="leadTools"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormControl>
-                                      <CheckboxGroup
-                                        options={leadToolsOptions}
-                                        values={field.value || []}
-                                        onChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
                           </div>
                         </>
                       )}
@@ -880,50 +821,6 @@ const LeadAssessmentForm = () => {
                                   </FormItem>
                                 )}
                               />
-                            </div>
-                            
-                            <div className="pt-4 border-t border-gray-100">
-                              <h3 className="text-lg font-medium text-gray-800 mb-3">
-                                What would you like to automate?
-                              </h3>
-                              <p className="text-gray-600 mb-4">
-                                Select the processes you'd like to automate (Select all that apply)
-                              </p>
-                              <FormField
-                                control={form.control}
-                                name="automationNeeds"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormControl>
-                                      <CheckboxGroup
-                                        options={automationNeedsOptions}
-                                        values={field.value || []}
-                                        onChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                  </FormItem>
-                                )}
-                              />
-                              
-                              {form.watch("automationNeeds")?.includes("other") && (
-                                <FormField
-                                  control={form.control}
-                                  name="otherAutomation"
-                                  render={({ field }) => (
-                                    <FormItem className="mt-4">
-                                      <FormLabel>What else would you like to automate?</FormLabel>
-                                      <FormControl>
-                                        <Textarea 
-                                          {...field} 
-                                          placeholder="Please describe what you'd like to automate..." 
-                                          className="min-h-[100px]"
-                                        />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                              )}
                             </div>
                           </div>
                         </>
@@ -984,58 +881,140 @@ const LeadAssessmentForm = () => {
                                 )}
                               />
                             </div>
-                            
-                            <div className="pt-4 border-t border-gray-100">
-                              <h3 className="text-lg font-medium text-gray-800 mb-3">
-                                What would you like to automate?
-                              </h3>
-                              <p className="text-gray-600 mb-4">
-                                Select the processes you'd like to automate (Select all that apply)
-                              </p>
-                              <FormField
-                                control={form.control}
-                                name="automationNeeds"
-                                render={({ field }) => (
-                                  <FormItem>
-                                    <FormControl>
-                                      <CheckboxGroup
-                                        options={automationNeedsOptions}
-                                        values={field.value || []}
-                                        onChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                  </FormItem>
-                                )}
-                              />
-                              
-                              {form.watch("automationNeeds")?.includes("other") && (
-                                <FormField
-                                  control={form.control}
-                                  name="otherAutomation"
-                                  render={({ field }) => (
-                                    <FormItem className="mt-4">
-                                      <FormLabel>What else would you like to automate?</FormLabel>
-                                      <FormControl>
-                                        <Textarea 
-                                          {...field} 
-                                          placeholder="Please describe what you'd like to automate..." 
-                                          className="min-h-[100px]"
-                                        />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                              )}
-                            </div>
                           </div>
                         </>
                       )}
                     </div>
                   )}
                   
-                  {/* Step 5: Goals & Timeline */}
+                  {/* Step 5: Lead Tools or Automation Needs */}
                   {currentStep === 5 && (
+                    <div className="space-y-6 animate-fade-in">
+                      {/* Lead Gen Path - Tools */}
+                      {formPath === "lead_gen" && (
+                        <>
+                          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                            Lead Systems & Tools
+                          </h2>
+                          <p className="text-gray-600 mb-4">
+                            What tools are you currently using for lead generation? (Select all that apply)
+                          </p>
+                          <FormField
+                            control={form.control}
+                            name="leadTools"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <CheckboxGroup
+                                    options={leadToolsOptions}
+                                    values={field.value || []}
+                                    onChange={field.onChange}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </>
+                      )}
+                      
+                      {/* Automation Path - What to Automate */}
+                      {formPath === "automation" && (
+                        <>
+                          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                            What would you like to automate?
+                          </h2>
+                          <p className="text-gray-600 mb-4">
+                            Select the processes you'd like to automate (Select all that apply)
+                          </p>
+                          <FormField
+                            control={form.control}
+                            name="automationNeeds"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <CheckboxGroup
+                                    options={automationNeedsOptions}
+                                    values={field.value || []}
+                                    onChange={field.onChange}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          {form.watch("automationNeeds")?.includes("other") && (
+                            <FormField
+                              control={form.control}
+                              name="otherAutomation"
+                              render={({ field }) => (
+                                <FormItem className="mt-4">
+                                  <FormLabel>What else would you like to automate?</FormLabel>
+                                  <FormControl>
+                                    <Textarea 
+                                      {...field} 
+                                      placeholder="Please describe what you'd like to automate..." 
+                                      className="min-h-[100px]"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          )}
+                        </>
+                      )}
+                      
+                      {/* Combined Path - What to Automate */}
+                      {formPath === "combined" && (
+                        <>
+                          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                            What would you like to automate?
+                          </h2>
+                          <p className="text-gray-600 mb-4">
+                            Select the processes you'd like to automate (Select all that apply)
+                          </p>
+                          <FormField
+                            control={form.control}
+                            name="automationNeeds"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <CheckboxGroup
+                                    options={automationNeedsOptions}
+                                    values={field.value || []}
+                                    onChange={field.onChange}
+                                  />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          {form.watch("automationNeeds")?.includes("other") && (
+                            <FormField
+                              control={form.control}
+                              name="otherAutomation"
+                              render={({ field }) => (
+                                <FormItem className="mt-4">
+                                  <FormLabel>What else would you like to automate?</FormLabel>
+                                  <FormControl>
+                                    <Textarea 
+                                      {...field} 
+                                      placeholder="Please describe what you'd like to automate..." 
+                                      className="min-h-[100px]"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                  
+                  {/* Step 6: Goals & Timeline */}
+                  {currentStep === 6 && (
                     <div className="space-y-6 animate-fade-in">
                       <h2 className="text-2xl font-bold text-gray-800 mb-4">
                         Your Goals & Timeline
