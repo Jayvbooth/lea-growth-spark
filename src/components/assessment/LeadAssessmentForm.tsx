@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,7 +48,8 @@ const LeadAssessmentForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState(process.env.ZAPIER_WEBHOOK_URL || "");
+  // Fix: Replace process.env with a default empty string or a placeholder
+  const [webhookUrl, setWebhookUrl] = useState(""); // Removed process.env reference
   const totalSteps = 4;
   
   const form = useForm<FormValues>({
