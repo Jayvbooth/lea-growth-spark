@@ -46,7 +46,9 @@ const CalendarBooking = ({ leadData }: CalendarBookingProps) => {
     
     return () => {
       // Cleanup if component unmounts
-      document.head.removeChild(script);
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
     };
   }, [leadData]);
   
