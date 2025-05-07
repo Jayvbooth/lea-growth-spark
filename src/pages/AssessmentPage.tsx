@@ -19,10 +19,10 @@ const AssessmentPage = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-slide-up">
-                Apply to <span className="text-fancy text-green-400">Work With Us</span>
+                Partner With Our <span className="text-fancy text-green-400">B2B Growth Systems</span>
               </h1>
               <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto animate-fade-in">
-                Complete this quick assessment to get a personalized growth strategy tailored to your business needs.
+                Complete this quick assessment to receive a personalized growth strategy tailored to your business needs.
               </p>
             </div>
           </div>

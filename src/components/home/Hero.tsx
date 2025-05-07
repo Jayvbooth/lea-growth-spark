@@ -2,8 +2,9 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import AnimatedBeam from "@/components/ui/AnimatedBeam";
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BarChart2, Zap, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 
 const Hero = () => {
   return (
@@ -21,16 +22,18 @@ const Hero = () => {
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight animate-slide-up" style={{ animationDelay: "100ms" }}>
               <span className="block">
-                <span className="text-highlight">10+ qualified</span>
+                Scalable <span className="text-fancy text-green-600">Growth</span>
               </span>
               <span className="block">
-                <span className="text-fancy">appointments</span> weekly
+                Through <span className="text-fancy text-green-600">AI</span> and
               </span>
-              <span className="text-balance text-monochrome-500 font-medium">or we work for free</span>
+              <span className="block">
+                <span className="text-fancy text-green-600">Automation</span>
+              </span>
             </h1>
             
             <p className="text-lg md:text-xl text-monochrome-700 mb-8 max-w-lg animate-slide-up" style={{ animationDelay: "200ms" }}>
-              Data-driven lead generation combined with business automation to accelerate your growth and save valuable time.
+              Integrate data-driven lead generation with powerful business automation to accelerate growth while saving valuable time.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: "300ms" }}>
@@ -44,6 +47,54 @@ const Hero = () => {
               <Button variant="outline" className="border-2 border-monochrome-800 text-monochrome-800 hover:bg-monochrome-800 hover:text-white px-6 py-6 rounded-lg font-medium transition-all text-lg">
                 See How It Works
               </Button>
+            </div>
+            
+            {/* Feature Highlights */}
+            <div className="grid grid-cols-3 gap-3 mt-10 animate-slide-up" style={{ animationDelay: "400ms" }}>
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <div className="flex flex-col items-center p-3 bg-white/80 backdrop-blur-sm rounded-lg border border-monochrome-100 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <Zap className="h-6 w-6 text-green-600 mb-2" />
+                    <span className="text-sm font-medium text-monochrome-800">Lead Gen</span>
+                  </div>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-monochrome-800">AI-Powered Lead Generation</h4>
+                    <p className="text-sm text-monochrome-600">Identify and connect with your ideal customers using sophisticated data analysis and multi-channel outreach.</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <div className="flex flex-col items-center p-3 bg-white/80 backdrop-blur-sm rounded-lg border border-monochrome-100 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <BarChart2 className="h-6 w-6 text-green-600 mb-2" />
+                    <span className="text-sm font-medium text-monochrome-800">Automation</span>
+                  </div>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-monochrome-800">Business Process Automation</h4>
+                    <p className="text-sm text-monochrome-600">Streamline workflows, eliminate manual tasks, and integrate your tech stack for seamless operation.</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+              
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <div className="flex flex-col items-center p-3 bg-white/80 backdrop-blur-sm rounded-lg border border-monochrome-100 shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <Rocket className="h-6 w-6 text-green-600 mb-2" />
+                    <span className="text-sm font-medium text-monochrome-800">Growth</span>
+                  </div>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-monochrome-800">Scalable Growth Systems</h4>
+                    <p className="text-sm text-monochrome-600">Data-driven strategies to accelerate your business growth with measurable ROI and continuous optimization.</p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
             </div>
           </div>
           
