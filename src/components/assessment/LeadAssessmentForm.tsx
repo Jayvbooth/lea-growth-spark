@@ -3,7 +3,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Check, ArrowRight, Building, Mail, User, Link as LinkIcon, Send, Calendar } from "lucide-react";
+import { 
+  Check, ArrowRight, Building, Mail, User, Link as LinkIcon, Send, Calendar,
+  FileSpreadsheet, Target, Zap, Settings, BarChart, Clock, Users, CheckCircle,
+  ArrowUpRight, Phone, Globe, Briefcase, ChevronDown, Package, Activity, X,
+  HelpCircle, Clipboard, LogIn, DollarSign, FileText, CheckSquare, Plus, Search
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,6 +23,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import { useIsMobile } from "@/hooks/use-mobile";
 import CalendarBooking from './CalendarBooking';
 
 // Define form path types and service selection options
@@ -64,6 +70,7 @@ const LeadAssessmentForm = () => {
   const [formPath, setFormPath] = useState<FormPath | null>(null);
   const [submittedData, setSubmittedData] = useState<FormValues | null>(null);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const isMobile = useIsMobile();
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -111,150 +118,129 @@ const LeadAssessmentForm = () => {
   
   const totalSteps = getTotalSteps();
   
-  // Service selection options
+  // Service selection options with icons
   const serviceOptions = [
-    { value: "Lead Generation", label: "Lead Generation" },
-    { value: "Business Automation", label: "Business Automation" },
-    { value: "Both", label: "Both" },
-    { value: "Not Sure Yet", label: "Not Sure Yet" },
+    { value: "Lead Generation", label: "Lead Generation", icon: <Target className="h-5 w-5 mr-2" /> },
+    { value: "Business Automation", label: "Business Automation", icon: <Settings className="h-5 w-5 mr-2" /> },
+    { value: "Both", label: "Both", icon: <Zap className="h-5 w-5 mr-2" /> },
+    { value: "Not Sure Yet", label: "Not Sure Yet", icon: <CheckCircle className="h-5 w-5 mr-2" /> },
   ];
   
-  // Business type options
+  // Business type options with icons
   const businessTypeOptions = [
-    { value: "B2B Services", label: "B2B Services" },
-    { value: "B2B Products", label: "B2B Products" },
-    { value: "Agency", label: "Agency/Consulting" },
-    { value: "Healthcare", label: "Healthcare" },
-    { value: "Other", label: "Other" }
+    { value: "B2B Services", label: "B2B Services", icon: <Briefcase className="h-4 w-4 mr-2" /> },
+    { value: "B2B Products", label: "B2B Products", icon: <Package className="h-4 w-4 mr-2" /> },
+    { value: "Agency", label: "Agency/Consulting", icon: <Users className="h-4 w-4 mr-2" /> },
+    { value: "Healthcare", label: "Healthcare", icon: <Activity className="h-4 w-4 mr-2" /> },
+    { value: "Other", label: "Other", icon: <Globe className="h-4 w-4 mr-2" /> }
   ];
   
   // Revenue options
   const revenueOptions = [
-    { value: "Less than $100K", label: "Less than $100K" },
-    { value: "$100K - $500K", label: "$100K - $500K" },
-    { value: "$500K - $1M", label: "$500K - $1M" },
-    { value: "$1M - $5M", label: "$1M - $5M" },
-    { value: "$5M - $10M", label: "$5M - $10M" },
-    { value: "$10M+", label: "$10M+" }
+    { value: "Less than $100K", label: "Less than $100K", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { value: "$100K - $500K", label: "$100K - $500K", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { value: "$500K - $1M", label: "$500K - $1M", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { value: "$1M - $5M", label: "$1M - $5M", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { value: "$5M - $10M", label: "$5M - $10M", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { value: "$10M+", label: "$10M+", icon: <BarChart className="h-4 w-4 mr-2" /> }
   ];
   
-  // Lead Gen Challenges options
+  // Lead Gen Challenges options with icons
   const leadGenChallengesOptions = [
-    { id: "not_enough_leads", label: "Not generating enough leads" },
-    { id: "poor_quality", label: "Poor quality leads" },
-    { id: "low_conversion", label: "Low sales conversion rates" },
-    { id: "poor_roi", label: "Poor marketing ROI" },
-    { id: "scaling_outbound", label: "Difficulty scaling outbound" },
-    { id: "inconsistent_followup", label: "Inconsistent follow-up" },
-    { id: "disconnected_tracking", label: "Disconnected lead tracking" }
+    { id: "not_enough_leads", label: "Not generating enough leads", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { id: "poor_quality", label: "Poor quality leads", icon: <Target className="h-4 w-4 mr-2" /> },
+    { id: "low_conversion", label: "Low sales conversion rates", icon: <ArrowUpRight className="h-4 w-4 mr-2" /> },
+    { id: "poor_roi", label: "Poor marketing ROI", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { id: "scaling_outbound", label: "Difficulty scaling outbound", icon: <ArrowUpRight className="h-4 w-4 mr-2" /> },
+    { id: "inconsistent_followup", label: "Inconsistent follow-up", icon: <Clock className="h-4 w-4 mr-2" /> },
+    { id: "disconnected_tracking", label: "Disconnected lead tracking", icon: <FileSpreadsheet className="h-4 w-4 mr-2" /> }
   ];
   
-  // Outreach channels options
+  // Outreach channels options with icons
   const outreachChannelsOptions = [
-    { id: "referrals", label: "Referrals" },
-    { id: "linkedin_dms", label: "LinkedIn DMs" },
-    { id: "cold_email", label: "Cold Email" },
-    { id: "cold_calling", label: "Cold Calling" },
-    { id: "webinars", label: "Webinars or Events" },
-    { id: "booking_links", label: "Booking Links (e.g. Calendly)" },
-    { id: "inbound_content", label: "Inbound Content (SEO, YouTube, etc.)" },
-    { id: "paid_ads", label: "Paid Ads (Google, Facebook, etc.)" }
+    { id: "referrals", label: "Referrals", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "linkedin_dms", label: "LinkedIn DMs", icon: <Mail className="h-4 w-4 mr-2" /> },
+    { id: "cold_email", label: "Cold Email", icon: <Mail className="h-4 w-4 mr-2" /> },
+    { id: "cold_calling", label: "Cold Calling", icon: <Phone className="h-4 w-4 mr-2" /> },
+    { id: "webinars", label: "Webinars or Events", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "booking_links", label: "Booking Links (e.g. Calendly)", icon: <Calendar className="h-4 w-4 mr-2" /> },
+    { id: "inbound_content", label: "Inbound Content (SEO, YouTube, etc.)", icon: <Globe className="h-4 w-4 mr-2" /> },
+    { id: "paid_ads", label: "Paid Ads (Google, Facebook, etc.)", icon: <Target className="h-4 w-4 mr-2" /> }
   ];
   
-  // Lead tools options
+  // Lead tools options with icons
   const leadToolsOptions = [
-    { id: "smartlead", label: "Smartlead" },
-    { id: "instantly", label: "Instantly" },
-    { id: "apollo", label: "Apollo / Clay / Wiza" },
-    { id: "phantombuster", label: "PhantomBuster / Linked Helper" },
-    { id: "spreadsheets", label: "Google Sheets or Excel" },
-    { id: "crm", label: "HubSpot / Pipedrive / Close" },
-    { id: "no_tools", label: "No tools yet" }
+    { id: "smartlead", label: "Smartlead", icon: <Mail className="h-4 w-4 mr-2" /> },
+    { id: "instantly", label: "Instantly", icon: <Mail className="h-4 w-4 mr-2" /> },
+    { id: "apollo", label: "Apollo / Clay / Wiza", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "phantombuster", label: "PhantomBuster / Linked Helper", icon: <Settings className="h-4 w-4 mr-2" /> },
+    { id: "spreadsheets", label: "Google Sheets or Excel", icon: <FileSpreadsheet className="h-4 w-4 mr-2" /> },
+    { id: "crm", label: "HubSpot / Pipedrive / Close", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "no_tools", label: "No tools yet", icon: <X className="h-4 w-4 mr-2" /> }
   ];
   
-  // Automation challenges options
+  // Automation challenges options with icons
   const automationChallengesOptions = [
-    { id: "manual_processes", label: "Too many manual processes" },
-    { id: "bottlenecks", label: "Revenue is limited by bottlenecks" },
-    { id: "onboarding", label: "No streamlined onboarding or follow-up" },
-    { id: "inconsistent", label: "Inconsistent task execution" },
-    { id: "disconnected", label: "Disconnected systems or data" },
-    { id: "scaling", label: "Difficulty scaling operations" },
-    { id: "dont_know", label: "Don't know what to automate" },
-    { id: "no_time", label: "No time to focus on operations" }
+    { id: "manual_processes", label: "Too many manual processes", icon: <FileSpreadsheet className="h-4 w-4 mr-2" /> },
+    { id: "bottlenecks", label: "Revenue is limited by bottlenecks", icon: <BarChart className="h-4 w-4 mr-2" /> },
+    { id: "onboarding", label: "No streamlined onboarding or follow-up", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "inconsistent", label: "Inconsistent task execution", icon: <Clock className="h-4 w-4 mr-2" /> },
+    { id: "disconnected", label: "Disconnected systems or data", icon: <Settings className="h-4 w-4 mr-2" /> },
+    { id: "scaling", label: "Difficulty scaling operations", icon: <ArrowUpRight className="h-4 w-4 mr-2" /> },
+    { id: "dont_know", label: "Don't know what to automate", icon: <HelpCircle className="h-4 w-4 mr-2" /> },
+    { id: "no_time", label: "No time to focus on operations", icon: <Clock className="h-4 w-4 mr-2" /> }
   ];
   
-  // Current systems options
+  // Current systems options with icons
   const currentSystemsOptions = [
-    { id: "crm", label: "CRM (HubSpot, Close, etc.)" },
-    { id: "project_management", label: "Project Management (Notion, ClickUp, Trello, etc.)" },
-    { id: "onboarding", label: "Client Onboarding Tools (Dubsado, HoneyBook)" },
-    { id: "accounting", label: "Accounting Software (QuickBooks, Xero, etc.)" },
-    { id: "zapier", label: "Zapier / Make" },
-    { id: "airtable", label: "Airtable / Google Sheets" },
-    { id: "email_automation", label: "Email Automation (ActiveCampaign, Mailchimp)" },
-    { id: "no_systems", label: "No systems in place" }
+    { id: "crm", label: "CRM (HubSpot, Close, etc.)", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "project_management", label: "Project Management (Notion, ClickUp, Trello, etc.)", icon: <Clipboard className="h-4 w-4 mr-2" /> },
+    { id: "onboarding", label: "Client Onboarding Tools (Dubsado, HoneyBook)", icon: <LogIn className="h-4 w-4 mr-2" /> },
+    { id: "accounting", label: "Accounting Software (QuickBooks, Xero, etc.)", icon: <DollarSign className="h-4 w-4 mr-2" /> },
+    { id: "zapier", label: "Zapier / Make", icon: <Zap className="h-4 w-4 mr-2" /> },
+    { id: "airtable", label: "Airtable / Google Sheets", icon: <FileSpreadsheet className="h-4 w-4 mr-2" /> },
+    { id: "email_automation", label: "Email Automation (ActiveCampaign, Mailchimp)", icon: <Mail className="h-4 w-4 mr-2" /> },
+    { id: "no_systems", label: "No systems in place", icon: <X className="h-4 w-4 mr-2" /> }
   ];
   
-  // Automation needs options
+  // Automation needs options with icons
   const automationNeedsOptions = [
-    { id: "lead_assignment", label: "Lead assignment" },
-    { id: "cold_email", label: "Cold email follow-up" },
-    { id: "client_onboarding", label: "Client onboarding" },
-    { id: "proposal", label: "Proposal and contract generation" },
-    { id: "task_creation", label: "Task creation and internal reminders" },
-    { id: "billing", label: "Billing and payment tracking" },
-    { id: "other", label: "Other" }
+    { id: "lead_assignment", label: "Lead assignment", icon: <Users className="h-4 w-4 mr-2" /> },
+    { id: "cold_email", label: "Cold email follow-up", icon: <Mail className="h-4 w-4 mr-2" /> },
+    { id: "client_onboarding", label: "Client onboarding", icon: <LogIn className="h-4 w-4 mr-2" /> },
+    { id: "proposal", label: "Proposal and contract generation", icon: <FileText className="h-4 w-4 mr-2" /> },
+    { id: "task_creation", label: "Task creation and internal reminders", icon: <CheckSquare className="h-4 w-4 mr-2" /> },
+    { id: "billing", label: "Billing and payment tracking", icon: <DollarSign className="h-4 w-4 mr-2" /> },
+    { id: "other", label: "Other", icon: <Plus className="h-4 w-4 mr-2" /> }
   ];
   
-  // Timeline options
+  // Timeline options with icons
   const timelineOptions = [
-    { value: "Immediate", label: "Immediate" },
-    { value: "1-3 months", label: "1–3 months" },
-    { value: "3-6 months", label: "3–6 months" },
-    { value: "6+ months", label: "6+ months" },
-    { value: "Researching", label: "Just researching options" }
+    { value: "Immediate", label: "Immediate", icon: <Clock className="h-4 w-4 mr-2" /> },
+    { value: "1-3 months", label: "1–3 months", icon: <Calendar className="h-4 w-4 mr-2" /> },
+    { value: "3-6 months", label: "3–6 months", icon: <Calendar className="h-4 w-4 mr-2" /> },
+    { value: "6+ months", label: "6+ months", icon: <Calendar className="h-4 w-4 mr-2" /> },
+    { value: "Researching", label: "Just researching options", icon: <Search className="h-4 w-4 mr-2" /> }
   ];
   
-  // Validate fields based on current step and path
+  // Simplified validation for current step
   const validateCurrentStep = async () => {
     setValidationErrors([]);
     let fieldsToValidate: string[] = [];
     
-    // Determine which fields to validate based on the current step and form path
+    // Only validate key fields for each step
     if (currentStep === 1) {
       fieldsToValidate = ["service_selection"];
     } 
     else if (currentStep === 2) {
-      fieldsToValidate = ["fullName", "email", "companyName", "website", "businessType", "annualRevenue"];
+      fieldsToValidate = ["fullName", "email"];
     }
-    else if (currentStep === 3) {
-      // Challenges step
-      if (formPath === "lead_gen") {
-        fieldsToValidate = ["leadGenChallenges"];
-      } 
-      else if (formPath === "automation") {
-        fieldsToValidate = ["automationChallenges"];
-      }
-      // For combined path, these are optional
-    }
-    // Steps 4 and 5 have mostly optional fields, so we don't validate them
     else if (currentStep === 6) {
-      // Final step - timeline is always required
       fieldsToValidate = ["timeline"];
-      
-      // Other required fields based on path
-      if (formPath === "lead_gen") {
-        fieldsToValidate.push("idealLeadResults");
-      } 
-      else if (formPath === "automation") {
-        fieldsToValidate.push("idealSystem");
-      }
     }
     
     // Only validate required fields for the current step
     const results = await form.trigger(fieldsToValidate as any);
-    
     return results;
   };
   
@@ -353,7 +339,7 @@ const LeadAssessmentForm = () => {
     values,
     onChange,
   }: {
-    options: { id: string; label: string }[];
+    options: { id: string; label: string; icon?: React.ReactNode }[];
     values: string[];
     onChange: (values: string[]) => void;
   }) => {
@@ -388,7 +374,10 @@ const LeadAssessmentForm = () => {
                 <Check className="w-3 h-3 text-white" />
               )}
             </div>
-            <span className="text-gray-800">{option.label}</span>
+            <span className="flex items-center text-gray-800">
+              {option.icon}
+              {option.label}
+            </span>
           </div>
         ))}
       </div>
@@ -447,8 +436,9 @@ const LeadAssessmentForm = () => {
                                         className="sr-only"
                                       />
                                     </FormControl>
-                                    <div>
-                                      <div className="font-bold text-gray-800 mb-1">{option.label}</div>
+                                    <div className="flex items-center">
+                                      {option.icon}
+                                      <div className="font-bold text-gray-800">{option.label}</div>
                                     </div>
                                   </FormItem>
                                 ))}
@@ -585,7 +575,10 @@ const LeadAssessmentForm = () => {
                                         className="sr-only"
                                       />
                                     </FormControl>
-                                    <span className="text-gray-800">{option.label}</span>
+                                    <span className="flex items-center text-gray-800">
+                                      {option.icon}
+                                      {option.label}
+                                    </span>
                                   </FormItem>
                                 ))}
                               </RadioGroup>
@@ -623,7 +616,10 @@ const LeadAssessmentForm = () => {
                                         className="sr-only"
                                       />
                                     </FormControl>
-                                    <span className="text-gray-800">{option.label}</span>
+                                    <span className="flex items-center text-gray-800">
+                                      {option.icon}
+                                      {option.label}
+                                    </span>
                                   </FormItem>
                                 ))}
                               </RadioGroup>
@@ -1131,7 +1127,10 @@ const LeadAssessmentForm = () => {
                                         className="sr-only"
                                       />
                                     </FormControl>
-                                    <span className="text-gray-800">{option.label}</span>
+                                    <span className="flex items-center text-gray-800">
+                                      {option.icon}
+                                      {option.label}
+                                    </span>
                                   </FormItem>
                                 ))}
                               </RadioGroup>
@@ -1151,7 +1150,9 @@ const LeadAssessmentForm = () => {
                         variant="outline"
                         onClick={handlePreviousStep}
                         disabled={isSubmitting}
+                        className="flex items-center"
                       >
+                        <ChevronDown className="mr-2 h-4 w-4 rotate-90" />
                         Back
                       </Button>
                     ) : (
