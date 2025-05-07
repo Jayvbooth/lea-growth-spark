@@ -55,7 +55,7 @@ const WhatWeDeliver = () => {
   const [activeStep, setActiveStep] = useState<number | null>(null);
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden">
+    <section id="what-we-deliver" className="py-20 bg-white relative overflow-hidden">
       <div className="container mx-auto container-padding">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <span className="text-green-600 font-medium mb-2 block">OUR APPROACH</span>

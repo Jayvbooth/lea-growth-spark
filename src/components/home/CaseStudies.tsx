@@ -39,7 +39,7 @@ const CaseStudies = () => {
             Success Stories
           </h2>
           <p className="text-lg text-leadea-navy opacity-80">
-            Real results for businesses like yours.
+            Real results for businesses like yours. Updated weekly.
           </p>
         </div>
         
@@ -81,7 +81,7 @@ const CaseStudies = () => {
                 </div>
                 
                 <Link 
-                  to="/case-studies" 
+                  to="/case-studies#top" 
                   className="text-leadea-green font-medium hover:text-leadea-teal transition-colors flex items-center"
                 >
                   Read More
@@ -96,7 +96,7 @@ const CaseStudies = () => {
         
         <div className="text-center">
           <Button asChild>
-            <Link to="/case-studies">Explore All Case Studies</Link>
+            <Link to="/case-studies#top">Explore All Case Studies</Link>
           </Button>
         </div>
       </div>

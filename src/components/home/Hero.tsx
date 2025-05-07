@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import AnimatedBeam from "@/components/ui/AnimatedBeam";
@@ -7,6 +8,13 @@ import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/h
 import { Card, CardContent } from "@/components/ui/card";
 
 const Hero = () => {
+  const scrollToWhatWeDeliver = () => {
+    const section = document.getElementById('what-we-deliver');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       <div className="container mx-auto container-padding">
@@ -44,7 +52,11 @@ const Hero = () => {
                 </Link>
               </Button>
               
-              <Button variant="outline" className="border-2 border-monochrome-800 text-monochrome-800 hover:bg-monochrome-800 hover:text-white px-6 py-6 rounded-lg font-medium transition-all text-lg">
+              <Button 
+                variant="outline" 
+                className="border-2 border-monochrome-800 text-monochrome-800 hover:bg-monochrome-800 hover:text-white px-6 py-6 rounded-lg font-medium transition-all text-lg"
+                onClick={scrollToWhatWeDeliver}
+              >
                 See How It Works
               </Button>
             </div>

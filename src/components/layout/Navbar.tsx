@@ -23,8 +23,8 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link to="/" className="mr-8">
             <div className="flex items-center">
-              <span className="font-bold text-xl text-green-600 mr-1">GrowthSystems</span>
-              <span className="text-monochrome-800 font-medium">.ai</span>
+              <span className="font-bold text-xl text-green-600 mr-1">Leadea</span>
+              <span className="text-monochrome-800 font-medium">Growth Partners</span>
             </div>
           </Link>
           
@@ -48,7 +48,7 @@ const Navbar = () => {
           <AuthButtons />
           
           <Button asChild className="hidden md:flex">
-            <Link to="/assessment">Book Free Assessment</Link>
+            <Link to="/assessment">Apply to Work With Us</Link>
           </Button>
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -90,7 +90,7 @@ const Navbar = () => {
                 </Link>
                 <Button asChild className="mt-4">
                   <Link to="/assessment" onClick={closeMenu}>
-                    Book Free Assessment
+                    Apply to Work With Us
                   </Link>
                 </Button>
               </nav>

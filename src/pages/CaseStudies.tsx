@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CaseStudyCard from '@/components/case-studies/CaseStudyCard';
@@ -8,8 +8,16 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { caseStudies } from '@/data/caseStudiesData';
 import { Helmet } from 'react-helmet';
+import { useLocation } from 'react-router-dom';
 
 const CaseStudiesPage: React.FC = () => {
+  const location = useLocation();
+  
+  // Scroll to top on page load, especially for hash links
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+
   // Filter categories
   const leadGenStudies = caseStudies.filter(study => 
     study.serviceValues.includes('lead-generation')
@@ -20,7 +28,7 @@ const CaseStudiesPage: React.FC = () => {
   );
   
   return (
-    <div className="bg-monochrome-50 min-h-screen">
+    <div id="top" className="bg-monochrome-50 min-h-screen">
       <Helmet>
         <title>Case Studies | Success Stories and Client Results</title>
         <meta name="description" content="Browse our collection of client success stories across various industries. See real results, metrics, and ROI from our automation and lead generation solutions." />

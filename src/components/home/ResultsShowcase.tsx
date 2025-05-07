@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -262,9 +263,8 @@ const ResultsShowcase = () => {
           <Button 
             variant="outline" 
             className="border-green-600 text-green-600 hover:bg-green-600 hover:text-white"
-            asChild
           >
-            <Link to="/case-studies">
+            <Link to="/case-studies#top">
               View All Case Studies <ArrowRight className="h-4 w-4 ml-1" />
             </Link>
           </Button>
