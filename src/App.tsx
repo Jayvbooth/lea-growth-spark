@@ -17,6 +17,8 @@ import BlogPost from "./pages/BlogPost";
 import BlogManagement from "./pages/BlogManagement";
 import BlogEditor from "./pages/BlogEditor";
 import Auth from "./pages/Auth";
+import AssessmentPage from "./pages/AssessmentPage";
+import PreCallPage from "./pages/PreCallPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +41,8 @@ const App = () => (
             <Route path="/blog/category/:categorySlug" element={<Blog />} />
             <Route path="/blog/tag/:tagSlug" element={<Blog />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/assessment" element={<AssessmentPage />} />
+            <Route path="/pre-call" element={<PreCallPage />} />
             <Route path="/blog-management" element={
               <ProtectedRoute>
                 <BlogManagement />

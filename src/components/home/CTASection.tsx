@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const CTASection = () => {
   return (
@@ -26,9 +27,11 @@ const CTASection = () => {
             Get a personalized plan that combines powerful lead generation with efficient automation. Book your strategy session today.
           </p>
           
-          <Button className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 rounded-lg text-lg font-medium shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all animate-fade-in flex items-center mx-auto" style={{ animationDelay: "200ms" }}>
-            Book Your Strategy Session
-            <ArrowRight className="ml-2 h-5 w-5" />
+          <Button asChild className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 rounded-lg text-lg font-medium shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all animate-fade-in flex items-center mx-auto" style={{ animationDelay: "200ms" }}>
+            <Link to="/assessment">
+              Book Your Strategy Session
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
           
           <p className="mt-8 flex items-center justify-center animate-fade-in" style={{ animationDelay: "300ms" }}>
