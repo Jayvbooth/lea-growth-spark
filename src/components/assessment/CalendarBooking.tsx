@@ -53,9 +53,9 @@ Timeline: ${leadData.timeline || 'N/A'}`
             overflow: "scroll"
           }}
           config={{
-            layout: "month_view"
+            layout: "month_view",
+            prefill: prefillData
           }}
-          prefill={prefillData}
         />
       </div>
     </div>
