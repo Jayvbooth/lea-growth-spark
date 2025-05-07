@@ -22,7 +22,10 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="mr-8">
-            <img src="/logo.svg" alt="Leadea" className="h-8" />
+            <div className="flex items-center">
+              <span className="font-bold text-xl text-green-600 mr-1">GrowthSystems</span>
+              <span className="text-monochrome-800 font-medium">.ai</span>
+            </div>
           </Link>
           
           <nav className="hidden lg:flex items-center space-x-1">

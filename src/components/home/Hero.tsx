@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import AnimatedBeam from "@/components/ui/AnimatedBeam";
-import { ArrowRight, BarChart2, Zap, Rocket } from 'lucide-react';
+import { ArrowRight, BarChart2, Zap, Rocket, Database, BrainCircuit, LineChart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
+import { Card, CardContent } from "@/components/ui/card";
 
 const Hero = () => {
   return (
@@ -98,64 +98,52 @@ const Hero = () => {
             </div>
           </div>
           
-          {/* Right Content - Data Flow Visualization */}
+          {/* Right Content - B2B Growth Systems Visualization */}
           <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-monochrome-50 to-green-50 border border-monochrome-100 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.1)] animate-fade-in" style={{ animationDelay: "400ms" }}>
             <AnimatedBeam />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative z-10 grid grid-cols-3 gap-5 p-6">
-                {/* Connection nodes */}
-                <div className="bg-white rounded-xl p-4 card-elevated animate-float">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-monochrome-800">Lead Gen</h3>
+              <div className="relative z-10 w-full max-w-lg px-8">
+                <h3 className="text-center font-semibold text-xl text-monochrome-800 mb-8">Integrated B2B Growth Systems</h3>
+                
+                <div className="grid grid-cols-3 gap-6">
+                  <Card className="bg-white/80 backdrop-blur-sm border border-monochrome-100 shadow-lg hover:shadow-xl transition-all animate-float">
+                    <CardContent className="p-4 flex flex-col items-center">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                        <BrainCircuit className="h-6 w-6 text-green-600" />
+                      </div>
+                      <h4 className="font-semibold text-sm text-monochrome-800">AI Lead Generation</h4>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-white/80 backdrop-blur-sm border border-monochrome-100 shadow-lg hover:shadow-xl transition-all animate-float" style={{ animationDelay: '0.2s' }}>
+                    <CardContent className="p-4 flex flex-col items-center">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                        <Database className="h-6 w-6 text-green-600" />
+                      </div>
+                      <h4 className="font-semibold text-sm text-monochrome-800">Workflow Automation</h4>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="bg-white/80 backdrop-blur-sm border border-monochrome-100 shadow-lg hover:shadow-xl transition-all animate-float" style={{ animationDelay: '0.4s' }}>
+                    <CardContent className="p-4 flex flex-col items-center">
+                      <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-3">
+                        <LineChart className="h-6 w-6 text-green-600" />
+                      </div>
+                      <h4 className="font-semibold text-sm text-monochrome-800">Data-Driven Growth</h4>
+                    </CardContent>
+                  </Card>
                 </div>
                 
-                <div className="bg-white rounded-xl p-4 card-elevated animate-float" style={{ animationDelay: '0.2s' }}>
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <div className="flex justify-center mt-8">
+                  <div className="relative">
+                    <svg width="280" height="70" viewBox="0 0 280 70" className="opacity-80">
+                      <path d="M10,35 C50,0 230,0 270,35 C230,70 50,70 10,35" fill="none" stroke="rgba(34, 197, 94, 0.3)" strokeWidth="1" strokeDasharray="5,5" />
+                      <path d="M10,35 C50,0 230,0 270,35 C230,70 50,70 10,35" fill="none" stroke="rgba(34, 197, 94, 0.8)" strokeWidth="2" strokeDasharray="0" strokeDashoffset="1000" className="animate-[dash_3s_ease-in-out_forwards]" />
                     </svg>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm font-medium">
+                      Continuous Optimization
+                    </div>
                   </div>
-                  <h3 className="font-medium text-monochrome-800">Analytics</h3>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 card-elevated animate-float" style={{ animationDelay: '0.4s' }}>
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-monochrome-800">Calendar</h3>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 card-elevated animate-float" style={{ animationDelay: '0.3s' }}>
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-monochrome-800">Email</h3>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 card-elevated animate-float" style={{ animationDelay: '0.5s' }}>
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-monochrome-800">CRM</h3>
-                </div>
-                
-                <div className="bg-white rounded-xl p-4 card-elevated animate-float" style={{ animationDelay: '0.6s' }}>
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mb-2 shadow-sm">
-                    <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                    </svg>
-                  </div>
-                  <h3 className="font-medium text-monochrome-800">Results</h3>
                 </div>
               </div>
             </div>
