@@ -71,42 +71,88 @@ export const caseStudiesData: CaseStudyDetail[] = [
   }
 ];
 
+// Define an interface for the metrics data to properly type the icon
+export interface MetricItem {
+  value: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+// Import React since we're using React.ReactNode type
+import React from 'react';
+
 export const metricsData = [
   {
     value: "78%",
     label: "Higher Quality Leads",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 8l-6-6-6 6m0 0v12m12-12v12" />
-      </svg>
-    )
+    icon: React.createElement("svg", {
+      width: 24,
+      height: 24,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 2,
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, React.createElement("path", {
+      d: "M18 8l-6-6-6 6m0 0v12m12-12v12"
+    }))
   },
   {
     value: "20+",
     label: "Hours Saved Weekly",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 8v4l3 3" />
-      </svg>
-    )
+    icon: React.createElement("svg", {
+      width: 24,
+      height: 24,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 2,
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, [
+      React.createElement("circle", {
+        key: "circle",
+        cx: 12,
+        cy: 12,
+        r: 9
+      }),
+      React.createElement("path", {
+        key: "path",
+        d: "M12 8v4l3 3"
+      })
+    ])
   },
   {
     value: "3.5x",
     label: "Average ROI",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    )
+    icon: React.createElement("svg", {
+      width: 24,
+      height: 24,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 2,
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, React.createElement("path", {
+      d: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+    }))
   },
   {
     value: "42%",
     label: "Increased Conversion Rate",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-      </svg>
-    )
+    icon: React.createElement("svg", {
+      width: 24,
+      height: 24,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 2,
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, React.createElement("path", {
+      d: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+    }))
   }
 ];
