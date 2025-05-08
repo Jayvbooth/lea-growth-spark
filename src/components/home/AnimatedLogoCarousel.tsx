@@ -68,7 +68,7 @@ const AnimatedLogoCarousel = () => {
             Companies That <span className="text-fancy">Trust</span> LEADEA
           </h2>
           <p className="text-lg text-monochrome-700">
-            We've helped businesses across multiple industries achieve predictable growth.
+            Trusted by 20+ B2B companies across multiple industries.
           </p>
         </div>
       </div>
@@ -84,15 +84,15 @@ const AnimatedLogoCarousel = () => {
             {duplicatedLogos.map((company, index) => (
               <div 
                 key={`row1-${index}`} 
-                className="flex-shrink-0 w-[250px] mx-6"
+                className="flex-shrink-0 w-[220px] mx-4"
               >
                 <div className="group flex items-center gap-4 p-4 rounded-xl hover:bg-monochrome-50 transition-all duration-300">
                   <div className="w-12 h-12 flex items-center justify-center text-3xl bg-monochrome-50 rounded-lg group-hover:bg-white transition-colors">
                     {company.logo}
                   </div>
                   <div>
-                    <p className="font-bold text-monochrome-800">{company.name}</p>
-                    <p className="text-xs text-monochrome-500">{company.industry}</p>
+                    <p className="font-bold text-monochrome-900">{company.name}</p>
+                    <p className="text-xs text-monochrome-700">{company.industry}</p>
                   </div>
                 </div>
               </div>
@@ -106,34 +106,20 @@ const AnimatedLogoCarousel = () => {
             {[...duplicatedLogos].reverse().map((company, index) => (
               <div 
                 key={`row2-${index}`} 
-                className="flex-shrink-0 w-[250px] mx-6"
+                className="flex-shrink-0 w-[220px] mx-4"
               >
                 <div className="group flex items-center gap-4 p-4 rounded-xl hover:bg-monochrome-50 transition-all duration-300">
                   <div className="w-12 h-12 flex items-center justify-center text-3xl bg-monochrome-50 rounded-lg group-hover:bg-white transition-colors">
                     {company.logo}
                   </div>
                   <div>
-                    <p className="font-bold text-monochrome-800">{company.name}</p>
-                    <p className="text-xs text-monochrome-500">{company.industry}</p>
+                    <p className="font-bold text-monochrome-900">{company.name}</p>
+                    <p className="text-xs text-monochrome-700">{company.industry}</p>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-      
-      <div className="container mx-auto container-padding mt-10">
-        <div className="text-center">
-          <a 
-            href="#" 
-            className="inline-flex items-center text-green-600 font-medium hover:text-green-700 transition-colors"
-          >
-            View our case studies
-            <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </a>
         </div>
       </div>
     </section>

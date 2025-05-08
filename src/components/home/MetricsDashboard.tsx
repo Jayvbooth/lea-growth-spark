@@ -108,7 +108,7 @@ const MetricsDashboard = () => {
         
         <div className="text-center mt-8">
           <p className="text-sm text-monochrome-500">
-            Live data refreshes every 2 hours. View detailed reports in your client dashboard.
+            Data updated weekly. View detailed reports in your client dashboard.
           </p>
         </div>
       </div>

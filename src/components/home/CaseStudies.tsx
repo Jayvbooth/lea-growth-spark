@@ -81,7 +81,7 @@ const CaseStudies = () => {
                 </div>
                 
                 <Link 
-                  to="/case-studies#top" 
+                  to="/case-studies" 
                   className="text-leadea-green font-medium hover:text-leadea-teal transition-colors flex items-center"
                 >
                   Read More
@@ -96,7 +96,7 @@ const CaseStudies = () => {
         
         <div className="text-center">
           <Button asChild>
-            <Link to="/case-studies#top">Explore All Case Studies</Link>
+            <Link to="/case-studies">Explore All Case Studies</Link>
           </Button>
         </div>
       </div>

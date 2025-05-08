@@ -2,37 +2,26 @@
 import React, { useState } from 'react';
 import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
-const strategicProcess = [
+const systemCards = [
   {
-    title: "Discovery & Analysis",
-    description: "In-depth research analyzing your business, industry landscape, competitive positioning, and unique selling points.",
-    icon: "🔍"
+    number: 1,
+    title: "Integrated",
+    description: "No hand-offs—leads auto-flow into your CRM.",
+    icon: "🔄"
   },
   {
-    title: "Strategic Planning",
-    description: "Based on our findings, we develop a comprehensive roadmap designed to capitalize on your unique strengths.",
+    number: 2,
+    title: "Scalable",
+    description: "Add new automations as you win more deals.",
     icon: "📈"
   },
   {
-    title: "Positioning & Messaging",
-    description: "We craft compelling messaging frameworks that elevate your brand and resonate with your ideal clients.",
-    icon: "💬"
-  },
-  {
-    title: "Implementation",
-    description: "Our team executes the strategy with precision, implementing systems designed to convert opportunities.",
-    icon: "⚙️"
-  },
-  {
-    title: "Optimization",
-    description: "Through continuous data collection and testing, we optimize every element to maximize performance.",
-    icon: "📊"
-  },
-  {
-    title: "Scale & Dominate",
-    description: "With proven systems in place, we focus on scaling your success to establish market leadership.",
-    icon: "🚀"
+    number: 3,
+    title: "Predictable",
+    description: "Model ROI up front—no surprises.",
+    icon: "🔮"
   }
 ];
 
@@ -68,52 +57,91 @@ const WhatWeDeliver = () => {
           </p>
         </div>
 
+        {/* System Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          {systemCards.map((card) => (
+            <div key={card.number} className="bg-white rounded-xl p-6 shadow-soft hover:shadow-lg transition-all duration-300 border border-monochrome-100">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm mr-3">
+                  {card.number}
+                </div>
+                <h3 className="text-xl font-bold text-monochrome-800">{card.title}</h3>
+                <div className="ml-auto text-2xl">{card.icon}</div>
+              </div>
+              <p className="text-monochrome-600">{card.description}</p>
+            </div>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Interactive Process Description */}
           <div>
+            <h3 className="text-2xl font-bold mb-6">Our Strategic Process</h3>
+            
             <div className="space-y-6">
-              {strategicProcess.map((step, index) => (
-                <div 
-                  key={index} 
-                  className={`flex gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer ${
-                    activeStep === index ? 'bg-green-50 shadow-soft' : 'hover:bg-monochrome-50'
-                  }`}
-                  onClick={() => setActiveStep(activeStep === index ? null : index)}
-                >
-                  <div className="flex-shrink-0 mt-1">
-                    <div className={`w-12 h-12 rounded-full ${
-                      activeStep === index ? 'bg-green-100' : 'bg-green-50'
-                    } flex items-center justify-center text-2xl shadow-soft transition-all duration-300`}>
-                      {step.icon}
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-monochrome-800 mb-2 flex items-center">
-                      {step.title}
-                      <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700 font-medium">
-                        STEP {index + 1}
-                      </span>
-                    </h3>
-                    <p className={`text-monochrome-600 transition-all duration-300 ${
-                      activeStep === index ? 'max-h-40 opacity-100' : 'max-h-20 sm:max-h-12 overflow-hidden'
-                    }`}>
-                      {step.description}
-                    </p>
-                    {activeStep === index && (
-                      <div className="mt-2 animate-fade-in">
-                        <span className="text-green-600 flex items-center text-sm font-medium">
-                          Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                        </span>
-                      </div>
-                    )}
+              <div className="flex gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer bg-green-50 shadow-soft">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-2xl shadow-soft transition-all duration-300">
+                    🔍
                   </div>
                 </div>
-              ))}
+                <div>
+                  <h3 className="text-xl font-bold text-monochrome-800 mb-2 flex items-center">
+                    Discovery & Analysis
+                    <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+                      STEP 1
+                    </span>
+                  </h3>
+                  <p className="text-monochrome-600">
+                    In-depth research analyzing your business, industry landscape, competitive positioning, and unique selling points.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer hover:bg-monochrome-50">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl shadow-soft transition-all duration-300">
+                    ⚙️
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-monochrome-800 mb-2 flex items-center">
+                    Implementation
+                    <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+                      STEP 2
+                    </span>
+                  </h3>
+                  <p className="text-monochrome-600 max-h-12 overflow-hidden">
+                    Our team executes the strategy with precision, implementing systems designed to convert opportunities.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-4 p-4 rounded-xl transition-all duration-300 cursor-pointer hover:bg-monochrome-50">
+                <div className="flex-shrink-0 mt-1">
+                  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl shadow-soft transition-all duration-300">
+                    🚀
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-monochrome-800 mb-2 flex items-center">
+                    Scale & Dominate
+                    <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+                      STEP 3
+                    </span>
+                  </h3>
+                  <p className="text-monochrome-600 max-h-12 overflow-hidden">
+                    With proven systems in place, we focus on scaling your success to establish market leadership.
+                  </p>
+                </div>
+              </div>
             </div>
             
             <div className="mt-10">
-              <Button className="btn-primary">
-                Book Your Strategy Session
+              <Button asChild className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium">
+                <Link to="/assessment">
+                  Get My Growth Plan
+                </Link>
               </Button>
             </div>
           </div>

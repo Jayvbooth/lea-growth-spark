@@ -21,7 +21,7 @@ const CTASection = () => {
       <div className="container mx-auto container-padding relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 animate-slide-up">
-            Ready to <span className="text-fancy text-green-400">Transform</span> Your Growth Strategy?
+            Ready for <span className="text-fancy text-green-400">2–5</span> meetings/mo + <span className="text-fancy text-green-400">10+</span> hrs freed?
           </h2>
           <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "100ms" }}>
             Get a personalized plan that combines powerful lead generation with efficient automation. Book your strategy session today.
@@ -29,7 +29,7 @@ const CTASection = () => {
           
           <Button asChild className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 rounded-lg text-lg font-medium shadow-lg hover:shadow-xl hover:translate-y-[-2px] transition-all animate-fade-in flex items-center mx-auto" style={{ animationDelay: "200ms" }}>
             <Link to="/assessment">
-              Book Your Strategy Session
+              Get My Growth Plan
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>

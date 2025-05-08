@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import AnimatedBeam from "@/components/ui/AnimatedBeam";
-import { ArrowRight, BarChart2, Zap, Rocket, Database, BrainCircuit, LineChart } from 'lucide-react';
+import { ArrowRight, Zap, BarChart2, Rocket, Database, BrainCircuit, LineChart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,24 +30,27 @@ const Hero = () => {
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight animate-slide-up" style={{ animationDelay: "100ms" }}>
               <span className="block">
-                Scalable <span className="text-fancy text-green-600">Growth</span>
+                AI-Driven <span className="text-fancy text-green-600">Lead Gen</span> &
               </span>
               <span className="block">
-                Through <span className="text-fancy text-green-600">AI</span> and
+                <span className="text-fancy text-green-600">Workflow</span>
               </span>
               <span className="block">
-                <span className="text-fancy text-green-600">Automation</span>
+                Automations—2–5
+              </span>
+              <span className="block">
+                Meetings/mo + 10+ hrs Saved
               </span>
             </h1>
             
             <p className="text-lg md:text-xl text-monochrome-700 mb-8 max-w-lg animate-slide-up" style={{ animationDelay: "200ms" }}>
-              Integrate data-driven lead generation with powerful business automation to accelerate growth while saving valuable time.
+              Fill your calendar with qualified B2B meetings while automating busywork.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: "300ms" }}>
               <Button asChild className="bg-green-600 text-white hover:bg-green-700 px-6 py-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg hover:translate-y-[-2px] flex items-center text-lg">
                 <Link to="/assessment">
-                  Apply to Work With Us
+                  Get My Growth Plan
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

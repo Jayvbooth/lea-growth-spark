@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom';
 
 const serviceFeatures = {
   leadGeneration: [
-    "AI-powered prospecting that finds your ideal customers",
+    "Score 100k+ prospects/month for true decision-makers",
     "Multi-channel outreach (email, LinkedIn, phone)",
     "Performance-based pricing with guaranteed results",
     "Full transparency with real-time analytics dashboard",
     "Continuous optimization based on data insights"
   ],
   automation: [
-    "Custom workflow automation tailored to your business",
+    "Auto-route deals & invoices without dev work",
     "Integration with your existing tech stack",
     "Automated lead nurturing and follow-up sequences",
     "Data synchronization across all platforms",
@@ -64,16 +64,16 @@ const ServicesShowcase = () => {
 
         {/* Lead Generation Content */}
         <div className={`transition-all duration-500 ${activeTab === 'leadGeneration' ? 'opacity-100' : 'opacity-0 hidden'}`}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="text-2xl md:text-3xl font-bold mb-6 gradient-text">
                 AI-Powered Lead Generation That Delivers Results
               </h3>
-              <p className="text-lg text-leadea-navy opacity-80 mb-8">
+              <p className="text-lg text-leadea-navy opacity-80 mb-6">
                 Stop wasting time on low-quality leads. Our performance-based approach guarantees a steady flow of qualified appointments with decision-makers.
               </p>
               
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 mb-6">
                 {serviceFeatures.leadGeneration.map((feature, index) => (
                   <li key={index} className="flex items-start">
                     <svg 
@@ -106,7 +106,7 @@ const ServicesShowcase = () => {
 
               <Link to="/lead-generation">
                 <Button variant="default" className="btn-primary">
-                  Learn More
+                  Explore Lead Gen
                 </Button>
               </Link>
             </div>
@@ -168,16 +168,16 @@ const ServicesShowcase = () => {
 
         {/* Automation Content */}
         <div className={`transition-all duration-500 ${activeTab === 'automation' ? 'opacity-100' : 'opacity-0 hidden'}`}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="text-2xl md:text-3xl font-bold mb-6 gradient-text">
                 Custom Automation That Saves Time & Drives Growth
               </h3>
-              <p className="text-lg text-leadea-navy opacity-80 mb-8">
+              <p className="text-lg text-leadea-navy opacity-80 mb-6">
                 Eliminate manual tasks and connect your business systems. Our custom automation solutions reduce busy work and help you scale efficiently.
               </p>
               
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-3 mb-6">
                 {serviceFeatures.automation.map((feature, index) => (
                   <li key={index} className="flex items-start">
                     <svg 
@@ -210,7 +210,7 @@ const ServicesShowcase = () => {
 
               <Link to="/business-automation">
                 <Button variant="default" className="btn-primary">
-                  Learn More
+                  Explore Automation
                 </Button>
               </Link>
             </div>
