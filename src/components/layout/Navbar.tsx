@@ -22,11 +22,10 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link to="/" className="mr-8">
             <div className="flex items-center">
-              {/* Add the logo image here */}
               <img 
-                src="/leadea-logo.png" 
+                src="/lovable-uploads/571b3290-42af-473a-9d0c-f00e31c3a8c1.png" 
                 alt="Leadea Logo" 
-                className="h-7 mr-2" 
+                className="h-8 mr-2" 
               />
               <span className="font-bold text-xl text-green-600 mr-1">Leadea</span>
               <span className="text-monochrome-800 font-medium">Growth Partners</span>
