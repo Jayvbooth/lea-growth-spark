@@ -11,6 +11,7 @@ import LeadGenSolutions from '@/components/lead-generation/LeadGenSolutions';
 import ClientLogoCarousel from '@/components/home/ClientLogoCarousel';
 import CTASection from '@/components/home/CTASection';
 import CaseStudySelector from '@/components/lead-generation/results/CaseStudySelector';
+import CaseStudyCard from '@/components/lead-generation/results/CaseStudyCard';
 import { caseStudiesData } from '@/components/lead-generation/results/caseStudiesData';
 
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,9 @@ const LeadGeneration = () => {
     { label: "Satisfaction Guarantee", value: "100%" },
     { label: "Meetings per Month", value: "25+" },
   ];
+
+  // Find the current case study based on the active ID
+  const currentCaseStudy = caseStudiesData.find(cs => cs.id === activeCaseStudy) || caseStudiesData[0];
 
   return (
     <div className="min-h-screen bg-white">
@@ -297,6 +301,9 @@ const LeadGeneration = () => {
               activeCaseStudy={activeCaseStudy} 
               setActiveCaseStudy={setActiveCaseStudy}
             />
+            
+            {/* Add the CaseStudyCard component to display the selected case study */}
+            <CaseStudyCard caseStudy={currentCaseStudy} />
           </div>
         </section>
         
