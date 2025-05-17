@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -16,6 +15,9 @@ import AnimatedLogoCarousel from '@/components/home/AnimatedLogoCarousel';
 import WhatWeDeliver from '@/components/home/WhatWeDeliver';
 import MetricsDashboard from '@/components/home/MetricsDashboard';
 import TrustpilotWidget from '@/components/home/TrustpilotWidget';
+
+// Make sure the logo image is available to the application
+// The image should be placed in the public directory
 
 const Index = () => {
   return (
