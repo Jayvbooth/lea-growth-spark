@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 interface BeforeAfterSliderProps {
@@ -12,6 +12,7 @@ interface BeforeAfterSliderProps {
     label: string;
     value: string;
   }[];
+  autoAnimate?: boolean;
 }
 
 const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
@@ -20,9 +21,31 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   afterTitle,
   beforeDescription,
   afterDescription,
-  stats
+  stats,
+  autoAnimate = true
 }) => {
   const [position, setPosition] = useState(50);
+  const [direction, setDirection] = useState<'left' | 'right'>('left');
+
+  // Auto-animation effect
+  useEffect(() => {
+    if (!autoAnimate) return;
+    
+    const interval = setInterval(() => {
+      setPosition(prev => {
+        if (prev >= 80) {
+          setDirection('right');
+          return 79;
+        } else if (prev <= 20) {
+          setDirection('left');
+          return 21;
+        }
+        return direction === 'left' ? prev + 1 : prev - 1;
+      });
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, [autoAnimate, direction]);
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPosition(parseInt(e.target.value));
@@ -160,12 +183,12 @@ const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
       </div>
       
       {/* Stats Overlay */}
-      <div className="flex justify-center mt-6 gap-6">
+      <div className="flex flex-wrap justify-center mt-6 gap-3 md:gap-6">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white px-4 py-2 rounded-full shadow-md border border-monochrome-100">
-            <span className="font-bold text-green-600">{stat.label}</span>
+          <div key={index} className="bg-white px-3 py-2 md:px-4 md:py-2 rounded-full shadow-md border border-monochrome-100">
+            <span className="font-bold text-green-600 text-sm md:text-base">{stat.label}</span>
             <span className="mx-1 text-monochrome-600">•</span>
-            <span>{stat.value}</span>
+            <span className="text-sm md:text-base">{stat.value}</span>
           </div>
         ))}
       </div>

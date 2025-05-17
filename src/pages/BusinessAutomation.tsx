@@ -5,7 +5,6 @@ import Footer from '@/components/layout/Footer';
 import { Button } from "@/components/ui/button";
 import AnimatedBeam from "@/components/ui/AnimatedBeam";
 import CTASection from '@/components/home/CTASection';
-import LogoCarousel from '@/components/lead-generation/LogoCarousel';
 import PainPromiseSection from '@/components/business-automation/PainPromiseSection';
 import BeforeAfterSlider from '@/components/business-automation/BeforeAfterSlider';
 import ServiceCard from '@/components/business-automation/ServiceCard';
@@ -436,13 +435,6 @@ const BusinessAutomation = () => {
           <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-gradient-to-t from-green-50 to-transparent rounded-full blur-3xl opacity-30 animate-float"></div>
         </section>
 
-        {/* Trust Bar */}
-        <section className="py-10 bg-monochrome-50">
-          <div className="container mx-auto container-padding">
-            <LogoCarousel title="Trusted by 50+ B2B Leaders" />
-          </div>
-        </section>
-
         {/* Pain → Promise Section */}
         <section className="py-20">
           <div className="container mx-auto container-padding">
@@ -484,6 +476,7 @@ const BusinessAutomation = () => {
               beforeDescription="Time-consuming, error-prone, limited"
               afterDescription="Efficient, accurate, scalable"
               stats={roiStats}
+              autoAnimate={true}
             />
           </div>
         </section>
@@ -634,25 +627,6 @@ const BusinessAutomation = () => {
             
             <div className="max-w-3xl mx-auto">
               <FAQAccordion items={faqItems} />
-            </div>
-          </div>
-        </section>
-        
-        {/* Final CTA */}
-        <section className="py-20 bg-gradient-to-br from-green-700 to-green-800 text-white">
-          <div className="container mx-auto container-padding">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Ready to Automate Your Growth?
-              </h2>
-              <p className="text-xl mb-10 text-white/90">
-                Book a free strategy call to see how we can save you 20+ hours every week.
-              </p>
-              
-              <Button className="bg-white text-green-700 hover:bg-green-50 px-8 py-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg text-lg">
-                Book Your Strategy Session
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
             </div>
           </div>
         </section>

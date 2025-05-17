@@ -59,55 +59,68 @@ const Navbar = () => {
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="lg:hidden">
+              <Button variant="outline" size="icon" className="lg:hidden flex-shrink-0">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
-              <nav className="flex flex-col gap-4 mt-8">
-                <Link 
-                  to="/" 
-                  className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors flex items-center"
-                  onClick={closeMenu}
-                >
-                  <Home size={16} className="mr-1" />
-                  Home
+            <SheetContent side="right" className="w-[75vw] sm:w-[350px]">
+              <div className="py-4">
+                <Link to="/" className="flex items-center mb-6" onClick={closeMenu}>
+                  <img 
+                    src="/lovable-uploads/571b3290-42af-473a-9d0c-f00e31c3a8c1.png" 
+                    alt="Leadea Logo" 
+                    className="h-8 mr-2" 
+                  />
+                  <span className="font-bold text-xl text-green-600 mr-1">Leadea</span>
+                  <span className="text-monochrome-800 font-medium">Growth Partners</span>
                 </Link>
-                <Link 
-                  to="/lead-generation" 
-                  className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors"
-                  onClick={closeMenu}
-                >
-                  Lead Generation
-                </Link>
-                <Link 
-                  to="/business-automation" 
-                  className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors"
-                  onClick={closeMenu}
-                >
-                  Business Automation
-                </Link>
-                <Link 
-                  to="/case-studies" 
-                  className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors"
-                  onClick={closeMenu}
-                >
-                  Case Studies
-                </Link>
-                <Link 
-                  to="/blog" 
-                  className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors"
-                  onClick={closeMenu}
-                >
-                  Blog
-                </Link>
-                <Button asChild className="mt-4">
-                  <Link to="/assessment" onClick={closeMenu}>
-                    Apply to Work With Us
+                <nav className="flex flex-col gap-1 mt-8">
+                  <Link 
+                    to="/" 
+                    className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors flex items-center rounded-md hover:bg-gray-100"
+                    onClick={closeMenu}
+                  >
+                    <Home size={16} className="mr-2" />
+                    Home
                   </Link>
-                </Button>
-              </nav>
+                  <Link 
+                    to="/lead-generation" 
+                    className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors rounded-md hover:bg-gray-100"
+                    onClick={closeMenu}
+                  >
+                    Lead Generation
+                  </Link>
+                  <Link 
+                    to="/business-automation" 
+                    className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors rounded-md hover:bg-gray-100"
+                    onClick={closeMenu}
+                  >
+                    Business Automation
+                  </Link>
+                  <Link 
+                    to="/case-studies" 
+                    className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors rounded-md hover:bg-gray-100"
+                    onClick={closeMenu}
+                  >
+                    Case Studies
+                  </Link>
+                  <Link 
+                    to="/blog" 
+                    className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors rounded-md hover:bg-gray-100"
+                    onClick={closeMenu}
+                  >
+                    Blog
+                  </Link>
+                  <div className="pt-4">
+                    <Button asChild className="w-full">
+                      <Link to="/assessment" onClick={closeMenu}>
+                        Apply to Work With Us
+                      </Link>
+                    </Button>
+                  </div>
+                </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

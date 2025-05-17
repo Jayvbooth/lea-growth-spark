@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -14,10 +15,7 @@ import CTASection from '@/components/home/CTASection';
 import AnimatedLogoCarousel from '@/components/home/AnimatedLogoCarousel';
 import WhatWeDeliver from '@/components/home/WhatWeDeliver';
 import MetricsDashboard from '@/components/home/MetricsDashboard';
-import TrustpilotWidget from '@/components/home/TrustpilotWidget';
-
-// Make sure the logo image is available to the application
-// The image should be placed in the public directory
+import ClientLogoCarousel from '@/components/home/ClientLogoCarousel';
 
 const Index = () => {
   return (
@@ -31,6 +29,11 @@ const Index = () => {
         <div className="relative">
           <AnimatedLogoCarousel />
           <div className="absolute inset-0 gradient-overlay pointer-events-none"></div>
+        </div>
+        
+        {/* Client logos */}
+        <div className="relative py-10">
+          <ClientLogoCarousel title="Trusted By Leading Companies" />
         </div>
         
         {/* Main content sections */}
@@ -61,7 +64,6 @@ const Index = () => {
           <Testimonials />
         </div>
         
-        <TrustpilotWidget />
         <Assessment />
         <CaseStudies />
         <FAQ />

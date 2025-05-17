@@ -1,192 +1,200 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Twitter, Mail, Phone, Globe, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { ArrowRight, Mail, Phone, MapPin } from 'lucide-react';
+
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  
   return (
-    <footer className="bg-gradient-to-b from-green-900/90 to-[#0c1624] text-white pt-16 pb-8">
-      <div className="container mx-auto px-4 md:px-6">
-        {/* Top Section with Logo, Description and Newsletter */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-          {/* Logo and Company Info */}
-          <div className="lg:col-span-5">
-            <div className="flex items-center mb-5">
-              <span className="text-3xl font-bold bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent">LEADEA</span>
-              <span className="ml-2 text-white/80 font-medium">Growth Partners</span>
+    <footer className="bg-monochrome-900 text-white pt-20">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Company Info */}
+          <div>
+            <div className="flex items-center mb-6">
+              <img 
+                src="/lovable-uploads/571b3290-42af-473a-9d0c-f00e31c3a8c1.png" 
+                alt="Leadea Logo" 
+                className="h-8 mr-2 brightness-0 invert" 
+              />
+              <span className="font-bold text-xl text-white">Leadea</span>
             </div>
-            <p className="text-white/70 mb-6 max-w-md leading-relaxed">
-              We help forward-thinking B2B companies generate high-quality leads and automate 
-              business processes to accelerate growth and maximize operational efficiency.
+            <p className="text-monochrome-300 mb-6">
+              We help B2B companies generate qualified leads and automate their business processes for scalable growth.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
-                <Facebook size={18} className="text-white" />
-              </a>
-              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
-                <Twitter size={18} className="text-white" />
-              </a>
-              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
-                <Instagram size={18} className="text-white" />
-              </a>
-              <a href="#" className="bg-white/10 hover:bg-green-600 p-2.5 rounded-full transition-all duration-300">
-                <Linkedin size={18} className="text-white" />
-              </a>
+            <div className="space-y-3">
+              <div className="flex items-center">
+                <MapPin className="h-5 w-5 text-green-400 mr-3" />
+                <span className="text-monochrome-300">123 Business Ave, Suite 200<br />New York, NY 10001</span>
+              </div>
+              <div className="flex items-center">
+                <Mail className="h-5 w-5 text-green-400 mr-3" />
+                <a href="mailto:hello@leadea.com" className="text-monochrome-300 hover:text-white transition-colors">
+                  hello@leadea.com
+                </a>
+              </div>
+              <div className="flex items-center">
+                <Phone className="h-5 w-5 text-green-400 mr-3" />
+                <a href="tel:+1234567890" className="text-monochrome-300 hover:text-white transition-colors">
+                  +1 (234) 567-890
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Navigation and Links */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-8">
-            {/* Quick Links */}
-            <div>
-              <h3 className="text-white font-semibold mb-5">Company</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/about" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/lead-generation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    Lead Generation
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/business-automation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    Business Automation
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-bold mb-6">Quick Links</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  to="/" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/lead-generation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Lead Generation
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/business-automation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Business Automation
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/case-studies" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Case Studies
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/blog" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            {/* Resources */}
-            <div>
-              <h3 className="text-white font-semibold mb-5">Resources</h3>
-              <ul className="space-y-3">
-                <li>
-                  <Link to="/case-studies" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    Case Studies
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/blog" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    Tools
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
-                    <ArrowRight size={14} className="mr-2" />
-                    FAQ
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Services */}
+          <div>
+            <h3 className="text-lg font-bold mb-6">Our Services</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  to="/lead-generation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  B2B Lead Generation
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/lead-generation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Account-Based Marketing
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/business-automation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  CRM Automation
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/business-automation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Business Process Automation
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/business-automation" 
+                  className="text-monochrome-300 hover:text-white transition-colors"
+                  onClick={scrollToTop}
+                >
+                  Workflow Optimization
+                </Link>
+              </li>
+            </ul>
           </div>
 
           {/* Newsletter */}
-          <div className="lg:col-span-3">
-            <h3 className="text-white font-semibold mb-5">Stay Updated</h3>
-            <p className="text-white/70 mb-4 text-sm">
-              Subscribe for insights on growth, automation, and market trends.
+          <div>
+            <h3 className="text-lg font-bold mb-6">Join Our Newsletter</h3>
+            <p className="text-monochrome-300 mb-4">
+              Stay updated with the latest in B2B growth strategies.
             </p>
-            <form className="space-y-3">
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  required
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 text-white"
-              >
-                Subscribe
+            <div className="flex">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="py-2 px-4 bg-monochrome-800 border border-monochrome-700 rounded-l-md focus:outline-none focus:ring-1 focus:ring-green-500 w-full"
+              />
+              <Button className="rounded-l-none bg-green-600 hover:bg-green-700">
+                <ArrowRight className="h-4 w-4" />
               </Button>
-            </form>
-          </div>
-        </div>
-
-        <Separator className="bg-white/10 my-8" />
-
-        {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="flex items-start space-x-3">
-            <div className="bg-white/10 p-2 rounded-lg mt-1">
-              <Globe size={18} className="text-green-400" />
             </div>
-            <div>
-              <h4 className="text-white font-medium mb-1">Our Location</h4>
-              <p className="text-white/70 text-sm">
-                7200 Aloma Ave<br />
-                Winter Park, Florida
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start space-x-3">
-            <div className="bg-white/10 p-2 rounded-lg mt-1">
-              <Mail size={18} className="text-green-400" />
-            </div>
-            <div>
-              <h4 className="text-white font-medium mb-1">Email Us</h4>
-              <a href="mailto:contact@leadea.co" className="text-white/70 hover:text-green-400 transition-colors text-sm">
-                contact@leadea.co
-              </a>
-            </div>
-          </div>
-
-          <div className="flex items-start space-x-3">
-            <div className="bg-white/10 p-2 rounded-lg mt-1">
-              <Phone size={18} className="text-green-400" />
-            </div>
-            <div>
-              <h4 className="text-white font-medium mb-1">Call Us</h4>
-              <a href="tel:(321)209-3073" className="text-white/70 hover:text-green-400 transition-colors text-sm">
-                (321) 209-3073
-              </a>
+            <div className="mt-6">
+              <Button asChild variant="outline" className="border-green-600 text-green-400 hover:bg-green-900/20 w-full">
+                <Link to="/assessment" onClick={scrollToTop}>
+                  Schedule a Consultation
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
 
-        {/* Bottom Section with Copyright and Legal Links */}
-        <div className="pt-4 border-t border-white/10">
+        <div className="border-t border-monochrome-700 mt-12 pt-6 pb-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-white/60 mb-4 md:mb-0">
-              &copy; {currentYear} LEADEA Growth Partners. All rights reserved.
+            <p className="text-monochrome-400 text-sm">
+              © {new Date().getFullYear()} Leadea Growth Partners. All rights reserved.
             </p>
-            <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6">
-              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors" onClick={() => window.scrollTo(0, 0)}>
+            <div className="flex space-x-6 mt-4 md:mt-0">
+              <a href="#" className="text-monochrome-400 hover:text-white transition-colors">
                 Privacy Policy
-              </Link>
-              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors" onClick={() => window.scrollTo(0, 0)}>
+              </a>
+              <a href="#" className="text-monochrome-400 hover:text-white transition-colors">
                 Terms of Service
-              </Link>
-              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors" onClick={() => window.scrollTo(0, 0)}>
-                Cookie Policy
-              </Link>
+              </a>
+              <a href="#" className="text-monochrome-400 hover:text-white transition-colors">
+                Sitemap
+              </a>
             </div>
           </div>
         </div>
