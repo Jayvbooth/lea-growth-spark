@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -11,12 +11,14 @@ import LeadGenSolutions from '@/components/lead-generation/LeadGenSolutions';
 import ClientLogoCarousel from '@/components/home/ClientLogoCarousel';
 import CTASection from '@/components/home/CTASection';
 import CaseStudySelector from '@/components/lead-generation/results/CaseStudySelector';
+import { caseStudiesData } from '@/components/lead-generation/results/caseStudiesData';
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
 
 const LeadGeneration = () => {
   const navigate = useNavigate();
+  const [activeCaseStudy, setActiveCaseStudy] = useState(caseStudiesData[0].id);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -290,7 +292,11 @@ const LeadGeneration = () => {
               </p>
             </div>
             
-            <CaseStudySelector />
+            <CaseStudySelector 
+              caseStudies={caseStudiesData} 
+              activeCaseStudy={activeCaseStudy} 
+              setActiveCaseStudy={setActiveCaseStudy}
+            />
           </div>
         </section>
         
