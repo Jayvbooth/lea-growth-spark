@@ -46,25 +46,25 @@ const Footer = () => {
               <h3 className="text-white font-semibold mb-5">Company</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="/" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="/" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     Home
                   </Link>
                 </li>
                 <li>
-                  <Link to="/about" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="/about" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link to="/lead-generation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="/lead-generation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     Lead Generation
                   </Link>
                 </li>
                 <li>
-                  <Link to="/business-automation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="/business-automation" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     Business Automation
                   </Link>
@@ -77,25 +77,25 @@ const Footer = () => {
               <h3 className="text-white font-semibold mb-5">Resources</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="/case-studies" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     Case Studies
                   </Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="/blog" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     Blog
                   </Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     Tools
                   </Link>
                 </li>
                 <li>
-                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center">
+                  <Link to="#" className="text-white/70 hover:text-green-400 transition-colors inline-flex items-center" onClick={() => window.scrollTo(0, 0)}>
                     <ArrowRight size={14} className="mr-2" />
                     FAQ
                   </Link>
@@ -140,8 +140,8 @@ const Footer = () => {
             <div>
               <h4 className="text-white font-medium mb-1">Our Location</h4>
               <p className="text-white/70 text-sm">
-                123 Growth Avenue, Suite 500<br />
-                San Francisco, CA 94103
+                7200 Aloma Ave<br />
+                Winter Park, Florida
               </p>
             </div>
           </div>
@@ -152,8 +152,8 @@ const Footer = () => {
             </div>
             <div>
               <h4 className="text-white font-medium mb-1">Email Us</h4>
-              <a href="mailto:info@leadeagrowth.com" className="text-white/70 hover:text-green-400 transition-colors text-sm">
-                info@leadeagrowth.com
+              <a href="mailto:contact@leadea.co" className="text-white/70 hover:text-green-400 transition-colors text-sm">
+                contact@leadea.co
               </a>
             </div>
           </div>
@@ -164,8 +164,8 @@ const Footer = () => {
             </div>
             <div>
               <h4 className="text-white font-medium mb-1">Call Us</h4>
-              <a href="tel:(555)123-4567" className="text-white/70 hover:text-green-400 transition-colors text-sm">
-                (555) 123-4567
+              <a href="tel:(321)209-3073" className="text-white/70 hover:text-green-400 transition-colors text-sm">
+                (321) 209-3073
               </a>
             </div>
           </div>
@@ -178,13 +178,13 @@ const Footer = () => {
               &copy; {currentYear} LEADEA Growth Partners. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6">
-              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors">
+              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors" onClick={() => window.scrollTo(0, 0)}>
                 Privacy Policy
               </Link>
-              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors">
+              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors" onClick={() => window.scrollTo(0, 0)}>
                 Terms of Service
               </Link>
-              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors">
+              <Link to="#" className="text-sm text-white/60 hover:text-green-400 transition-colors" onClick={() => window.scrollTo(0, 0)}>
                 Cookie Policy
               </Link>
             </div>

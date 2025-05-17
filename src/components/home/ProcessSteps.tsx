@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const steps = [
   {
@@ -81,9 +82,11 @@ const ProcessSteps = () => {
         </div>
         
         <div className="mt-12 text-center animate-fade-in" style={{ animationDelay: "800ms" }}>
-          <Button className="bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg hover:translate-y-[-2px] transition-all px-6 py-3 rounded-lg flex items-center mx-auto">
-            Learn About Our Process
-            <ArrowRight className="ml-2 h-4 w-4" />
+          <Button asChild className="bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg hover:translate-y-[-2px] transition-all px-6 py-3 rounded-lg flex items-center mx-auto">
+            <Link to="/assessment">
+              Learn About Our Process
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
       </div>

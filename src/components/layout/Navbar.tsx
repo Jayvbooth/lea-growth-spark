@@ -7,8 +7,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
-import AuthButtons from "./AuthButtons";
+import { Menu, Home } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +28,10 @@ const Navbar = () => {
           </Link>
           
           <nav className="hidden lg:flex items-center space-x-1">
+            <Link to="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-green-600 transition-colors flex items-center">
+              <Home size={16} className="mr-1" />
+              Home
+            </Link>
             <Link to="/lead-generation" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-green-600 transition-colors">
               Lead Generation
             </Link>
@@ -45,8 +48,6 @@ const Navbar = () => {
         </div>
         
         <div className="flex items-center gap-4">
-          <AuthButtons />
-          
           <Button asChild className="hidden md:flex">
             <Link to="/assessment">Apply to Work With Us</Link>
           </Button>
@@ -60,6 +61,14 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right">
               <nav className="flex flex-col gap-4 mt-8">
+                <Link 
+                  to="/" 
+                  className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors flex items-center"
+                  onClick={closeMenu}
+                >
+                  <Home size={16} className="mr-1" />
+                  Home
+                </Link>
                 <Link 
                   to="/lead-generation" 
                   className="px-3 py-2 text-base font-medium text-gray-700 hover:text-green-600 transition-colors"
