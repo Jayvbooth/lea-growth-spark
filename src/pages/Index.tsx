@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -22,7 +21,7 @@ const Index = () => {
     <div className="min-h-screen bg-[#FAFBFC]">
       <Navbar />
       <main>
-        {/* Hero with floating elements */}
+        {/* Updated Hero component */}
         <Hero />
         
         {/* Trust indicators */}
@@ -31,7 +30,7 @@ const Index = () => {
           <div className="absolute inset-0 gradient-overlay pointer-events-none"></div>
         </div>
         
-        {/* Main content sections with enhanced depth and animations */}
+        {/* Main content sections */}
         <PainPoints />
         
         <div className="relative overflow-hidden">
