@@ -1,7 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Zap, BarChart4 } from 'lucide-react';
+import { ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Typed from 'typed.js';
 
@@ -46,32 +46,15 @@ const Hero = () => {
 
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
-      {/* Enhanced background elements */}
+      {/* Enhanced background elements with more gradients */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-green-50/20 to-white"></div>
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-green-50 blur-3xl opacity-50 -z-10"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full bg-gradient-to-br from-green-50/70 to-blue-50/30 blur-3xl opacity-60 -z-10"></div>
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-tl from-blue-50/40 to-green-50/30 blur-3xl opacity-50 -z-10"></div>
       
       {/* Creative floating elements */}
-      <div className="absolute top-20 left-1/4 w-16 h-16 bg-green-300/30 rounded-full blur-xl animate-float"></div>
-      <div className="absolute bottom-20 right-1/4 w-20 h-20 bg-blue-300/20 rounded-full blur-xl animate-float-delay-1"></div>
-      <div className="absolute top-1/3 right-1/5 w-8 h-8 bg-yellow-200/30 rounded-full blur-md animate-float-delay-2"></div>
-      
-      {/* Abstract automation graph elements */}
-      <div className="absolute top-40 right-[15%] hidden md:block">
-        <div className="relative w-32 h-32">
-          <div className="absolute top-0 left-0 w-full h-1 bg-green-400 rounded animate-pulse"></div>
-          <div className="absolute top-8 left-0 w-3/4 h-1 bg-green-500 rounded animate-pulse" style={{ animationDelay: "0.5s" }}></div>
-          <div className="absolute top-16 left-0 w-5/6 h-1 bg-green-600 rounded animate-pulse" style={{ animationDelay: "0.7s" }}></div>
-          <div className="absolute top-24 left-0 w-2/3 h-1 bg-green-700 rounded animate-pulse" style={{ animationDelay: "0.9s" }}></div>
-        </div>
-      </div>
-      
-      <div className="absolute bottom-40 left-[15%] hidden md:block">
-        <div className="relative w-24 h-24">
-          <div className="absolute w-4 h-4 bg-blue-400 rounded-full animate-ping"></div>
-          <div className="absolute w-8 h-8 bg-blue-300/50 rounded-full animate-pulse" style={{ animationDelay: "1.2s" }}></div>
-          <div className="absolute w-12 h-12 bg-blue-200/30 rounded-full animate-pulse" style={{ animationDelay: "1.8s" }}></div>
-        </div>
-      </div>
+      <div className="absolute top-1/4 left-1/5 w-32 h-32 bg-gradient-to-br from-green-100/30 to-blue-100/20 rounded-full blur-xl animate-float"></div>
+      <div className="absolute bottom-1/4 right-1/5 w-40 h-40 bg-gradient-to-tl from-green-100/20 to-blue-100/10 rounded-full blur-xl animate-float-delay-1"></div>
+      <div className="absolute top-1/2 right-1/4 w-24 h-24 bg-gradient-to-r from-yellow-50/30 to-green-50/20 rounded-full blur-lg animate-float-delay-2"></div>
       
       {/* Main content */}
       <div className="container mx-auto container-padding">
@@ -80,7 +63,6 @@ const Hero = () => {
           <div className="relative">
             <span className="inline-block py-1 px-3 rounded-full bg-green-100 border border-green-200 text-green-700 font-medium text-sm mb-5 animate-fade-in">
               B2B GROWTH SYSTEMS
-              <span className="absolute -left-1 -right-1 top-0 bottom-0 border border-green-300 rounded-full animate-ping opacity-30"></span>
             </span>
           </div>
           
@@ -93,8 +75,6 @@ const Hero = () => {
               
               {/* Subtle decoration elements around typed text */}
               <Sparkles className="absolute -right-10 -top-10 text-green-400/70 w-6 h-6 animate-pulse" />
-              <Zap className="absolute -left-10 -top-8 text-green-500/70 w-5 h-5 animate-pulse" style={{ animationDelay: "0.8s" }} />
-              <BarChart4 className="absolute -right-8 -bottom-8 text-green-600/70 w-5 h-5 animate-pulse" style={{ animationDelay: "1.3s" }} />
             </div>
           </h1>
           
@@ -102,26 +82,29 @@ const Hero = () => {
             Automate your outbound engine. Book 2–5 qualified meetings per month. Save 10+ hours weekly with AI-driven workflows.
           </p>
           
-          {/* Stats visualization mini-card */}
+          {/* Stats visualization mini-card with trending arrows */}
           <div className="w-full max-w-md mx-auto mb-10 animate-fade-in" style={{ animationDelay: "300ms" }}>
             <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-green-100 shadow-sm">
               <div className="grid grid-cols-3 gap-2">
                 <div className="flex flex-col items-center">
                   <div className="flex items-center">
                     <span className="text-xl font-bold text-green-600">2-5</span>
-                    <div className="ml-2 w-3 h-3 bg-green-500 rounded-full animate-ping opacity-50"></div>
+                    <TrendingUp className="ml-2 h-4 w-4 text-green-500" />
                   </div>
                   <span className="text-xs text-monochrome-600">Weekly Meetings</span>
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="flex items-center">
                     <span className="text-xl font-bold text-green-600">10+</span>
-                    <div className="ml-2 w-3 h-3 bg-blue-500 rounded-full animate-ping opacity-50"></div>
+                    <TrendingUp className="ml-2 h-4 w-4 text-blue-500" />
                   </div>
                   <span className="text-xs text-monochrome-600">Hours Saved</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="text-xl font-bold text-green-600">100%</span>
+                  <div className="flex items-center">
+                    <span className="text-xl font-bold text-green-600">100%</span>
+                    <TrendingUp className="ml-2 h-4 w-4 text-green-600" />
+                  </div>
                   <span className="text-xs text-monochrome-600">Satisfaction</span>
                 </div>
               </div>
