@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -36,6 +36,17 @@ const LeadGeneration = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>B2B Lead Generation Services | Growth Spark</title>
+        <meta name="description" content="Generate qualified B2B appointments that close with our performance-based lead generation services. Combining AI and human expertise to deliver high-quality meetings." />
+        <meta name="keywords" content="b2b lead generation, qualified appointments, lead generation services, sales meetings, b2b sales, account-based marketing" />
+        <meta property="og:title" content="B2B Lead Generation Services | Growth Spark" />
+        <meta property="og:description" content="Generate qualified B2B appointments that close with our performance-based lead generation services." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="/lead-generation" />
+        <link rel="canonical" href="/lead-generation" />
+      </Helmet>
+
       <Navbar />
 
       <main>
