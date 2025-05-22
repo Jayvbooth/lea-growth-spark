@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { ArrowRight, ArrowLeft, Check, CheckCircle } from 'lucide-react';
 
 // Step 1: Current Situation
 const situationOptions = [
@@ -59,12 +60,14 @@ const Assessment = () => {
   const handleNextStep = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(prev => prev + 1);
+      window.scrollTo(0, 0);
     }
   };
   
   const handlePrevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(prev => prev - 1);
+      window.scrollTo(0, 0);
     }
   };
   
@@ -113,22 +116,27 @@ const Assessment = () => {
   };
   
   return (
-    <section className="py-20">
-      <div className="container mx-auto container-padding">
-        <div className="max-w-3xl mx-auto text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Discover Your Growth Opportunities
+    <section className="py-24 bg-gradient-to-br from-monochrome-50 to-monochrome-100 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-5 network-grid-bg"></div>
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-green-500/10 rounded-full blur-3xl opacity-30"></div>
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-green-500/10 rounded-full blur-3xl opacity-30"></div>
+      
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold mb-6 text-monochrome-900 animate-fade-in">
+            Discover Your <span className="text-fancy text-green-600">Growth Opportunities</span>
           </h2>
-          <p className="text-lg text-leadea-navy opacity-80">
-            Take our quick assessment to identify your biggest growth opportunities and receive a custom plan.
+          <p className="text-lg md:text-xl text-monochrome-700 max-w-3xl mx-auto animate-fade-in">
+            Complete this quick assessment to identify your biggest growth opportunities and receive a custom plan tailored to your business.
           </p>
         </div>
         
-        <div className="max-w-3xl mx-auto bg-white rounded-2xl card-shadow overflow-hidden border border-leadea-gray/30">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl card-shadow overflow-hidden border border-leadea-gray/30 animate-fade-in">
           {/* Progress Bar */}
           <div className="w-full bg-leadea-gray/30">
             <div 
-              className="bg-gradient-to-r from-leadea-green to-leadea-teal h-1.5 transition-all duration-500 ease-out"
+              className="bg-gradient-to-r from-green-600 to-green-400 h-1.5 transition-all duration-500 ease-out"
               style={{ width: `${(currentStep / totalSteps) * 100}%` }}
             ></div>
           </div>
@@ -136,19 +144,19 @@ const Assessment = () => {
           <div className="p-8 md:p-10">
             {/* Step Indicator */}
             <div className="flex items-center justify-between mb-8">
-              <p className="font-medium text-leadea-navy">
+              <p className="font-medium text-monochrome-800">
                 Step {currentStep} of {totalSteps}
               </p>
               <div className="flex space-x-2">
                 {Array.from({ length: totalSteps }).map((_, index) => (
                   <div 
                     key={index}
-                    className={`w-2.5 h-2.5 rounded-full ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       index + 1 === currentStep
-                        ? 'bg-leadea-green'
+                        ? 'bg-green-500 scale-110'
                         : index + 1 < currentStep
-                          ? 'bg-leadea-green/50'
-                          : 'bg-leadea-gray/50'
+                          ? 'bg-green-300'
+                          : 'bg-gray-200'
                     }`}
                   ></div>
                 ))}
@@ -158,7 +166,7 @@ const Assessment = () => {
             {/* Step 1: Current Situation */}
             {currentStep === 1 && (
               <div className="animate-fade-in">
-                <h3 className="text-xl md:text-2xl font-bold text-leadea-navy mb-6">
+                <h3 className="text-xl md:text-2xl font-bold text-monochrome-900 mb-6">
                   What's your biggest growth challenge?
                 </h3>
                 
@@ -166,18 +174,23 @@ const Assessment = () => {
                   {situationOptions.map((option, index) => (
                     <div 
                       key={index}
-                      className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 ${
+                      className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 relative ${
                         selectedSituation === index
-                          ? 'border-leadea-green/50 bg-leadea-green/5 shadow-md'
-                          : 'border-leadea-gray/30 hover:border-leadea-green/30 hover:shadow-sm'
+                          ? 'border-green-500 bg-green-50 shadow-md'
+                          : 'border-gray-200 hover:border-green-300 hover:shadow-sm'
                       }`}
                       onClick={() => handleSituationSelect(index)}
                     >
+                      {selectedSituation === index && (
+                        <div className="absolute top-3 right-3 text-green-500">
+                          <Check className="w-5 h-5" />
+                        </div>
+                      )}
                       <div className="flex items-start">
                         <div className="text-3xl mr-4">{option.icon}</div>
                         <div>
-                          <h4 className="font-bold text-leadea-navy mb-1">{option.title}</h4>
-                          <p className="text-sm text-leadea-navy/70">{option.description}</p>
+                          <h4 className="font-bold text-monochrome-900 mb-1">{option.title}</h4>
+                          <p className="text-sm text-monochrome-700">{option.description}</p>
                         </div>
                       </div>
                     </div>
@@ -189,10 +202,10 @@ const Assessment = () => {
             {/* Step 2: Goals */}
             {currentStep === 2 && (
               <div className="animate-fade-in">
-                <h3 className="text-xl md:text-2xl font-bold text-leadea-navy mb-6">
+                <h3 className="text-xl md:text-2xl font-bold text-monochrome-900 mb-6">
                   What are your primary growth goals?
                 </h3>
-                <p className="text-leadea-navy/70 mb-6">Select all that apply to your business.</p>
+                <p className="text-monochrome-700 mb-6">Select all that apply to your business.</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
                   {goalOptions.map(goal => (
@@ -200,25 +213,23 @@ const Assessment = () => {
                       key={goal.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
                         selectedGoals.includes(goal.id)
-                          ? 'border-leadea-green/50 bg-leadea-green/5 shadow-sm'
-                          : 'border-leadea-gray/30 hover:border-leadea-green/30'
+                          ? 'border-green-500 bg-green-50 shadow-sm'
+                          : 'border-gray-200 hover:border-green-300'
                       }`}
                       onClick={() => handleGoalToggle(goal.id)}
                     >
                       <div 
-                        className={`w-5 h-5 rounded border flex-shrink-0 mr-3 flex items-center justify-center ${
+                        className={`w-5 h-5 rounded-md border flex-shrink-0 mr-3 flex items-center justify-center ${
                           selectedGoals.includes(goal.id)
-                            ? 'bg-leadea-green border-leadea-green'
-                            : 'border-leadea-gray/50'
+                            ? 'bg-green-500 border-green-500'
+                            : 'border-gray-300'
                         }`}
                       >
                         {selectedGoals.includes(goal.id) && (
-                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                          </svg>
+                          <Check className="w-3 h-3 text-white" />
                         )}
                       </div>
-                      <span className="text-leadea-navy">{goal.label}</span>
+                      <span className="text-monochrome-900">{goal.label}</span>
                     </div>
                   ))}
                 </div>
@@ -228,10 +239,10 @@ const Assessment = () => {
             {/* Step 3: Current Tools */}
             {currentStep === 3 && (
               <div className="animate-fade-in">
-                <h3 className="text-xl md:text-2xl font-bold text-leadea-navy mb-6">
+                <h3 className="text-xl md:text-2xl font-bold text-monochrome-900 mb-6">
                   What tools are you currently using?
                 </h3>
-                <p className="text-leadea-navy/70 mb-6">Select all tools you use for your business operations.</p>
+                <p className="text-monochrome-700 mb-6">Select all tools you use for your business operations.</p>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
                   {toolOptions.map(tool => (
@@ -239,50 +250,51 @@ const Assessment = () => {
                       key={tool.id}
                       className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
                         selectedTools.includes(tool.id)
-                          ? 'border-leadea-green/50 bg-leadea-green/5 shadow-sm'
-                          : 'border-leadea-gray/30 hover:border-leadea-green/30'
+                          ? 'border-green-500 bg-green-50 shadow-sm'
+                          : 'border-gray-200 hover:border-green-300'
                       }`}
                       onClick={() => handleToolToggle(tool.id)}
                     >
                       <div 
-                        className={`w-5 h-5 rounded border flex-shrink-0 mr-3 flex items-center justify-center ${
+                        className={`w-5 h-5 rounded-md border flex-shrink-0 mr-3 flex items-center justify-center ${
                           selectedTools.includes(tool.id)
-                            ? 'bg-leadea-green border-leadea-green'
-                            : 'border-leadea-gray/50'
+                            ? 'bg-green-500 border-green-500'
+                            : 'border-gray-300'
                         }`}
                       >
                         {selectedTools.includes(tool.id) && (
-                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
-                          </svg>
+                          <Check className="w-3 h-3 text-white" />
                         )}
                       </div>
-                      <span className="text-leadea-navy">{tool.label}</span>
+                      <span className="text-monochrome-900">{tool.label}</span>
                     </div>
                   ))}
                 </div>
                 
-                {/* Preview */}
-                <div className="bg-leadea-gray/30 p-5 rounded-lg mb-8">
-                  <h4 className="font-bold text-leadea-navy mb-3">What You'll Receive:</h4>
-                  <ul className="space-y-2">
-                    <li className="flex items-center text-leadea-navy">
-                      <svg className="w-5 h-5 text-leadea-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      Custom Growth Strategy Report
+                {/* What You'll Receive Preview */}
+                <div className="bg-green-50 p-6 rounded-lg mb-8 border border-green-100">
+                  <h4 className="font-bold text-monochrome-900 mb-4 flex items-center">
+                    <span className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    </span>
+                    What You'll Receive:
+                  </h4>
+                  <ul className="space-y-3">
+                    <li className="flex items-center text-monochrome-800">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                      <span>Custom Growth Strategy Report</span>
                     </li>
-                    <li className="flex items-center text-leadea-navy">
-                      <svg className="w-5 h-5 text-leadea-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      Personalized Solutions Recommendation
+                    <li className="flex items-center text-monochrome-800">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                      <span>Personalized Solutions Recommendation</span>
                     </li>
-                    <li className="flex items-center text-leadea-navy">
-                      <svg className="w-5 h-5 text-leadea-green mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      ROI Calculator Based On Your Inputs
+                    <li className="flex items-center text-monochrome-800">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                      <span>ROI Calculator Based On Your Inputs</span>
+                    </li>
+                    <li className="flex items-center text-monochrome-800">
+                      <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
+                      <span>30-Minute Strategy Call With Our Team</span>
                     </li>
                   </ul>
                 </div>
@@ -294,12 +306,10 @@ const Assessment = () => {
               {currentStep > 1 ? (
                 <Button
                   variant="outline"
-                  className="border-leadea-navy/20 text-leadea-navy hover:bg-leadea-navy/5"
+                  className="border-gray-300 text-monochrome-800 hover:bg-gray-100 flex items-center"
                   onClick={handlePrevStep}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-                  </svg>
+                  <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
                 </Button>
               ) : (
@@ -308,21 +318,34 @@ const Assessment = () => {
               
               {currentStep < totalSteps ? (
                 <Button
-                  className="btn-primary"
+                  className="bg-green-600 hover:bg-green-700 text-white flex items-center"
                   onClick={handleNextStep}
                   disabled={isNextDisabled()}
                 >
                   Next
-                  <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                  </svg>
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               ) : (
-                <Button className="btn-primary" onClick={handleSubmit}>
+                <Button 
+                  className="bg-green-600 hover:bg-green-700 text-white flex items-center" 
+                  onClick={handleSubmit}
+                >
                   Get Your Custom Growth Plan
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               )}
             </div>
+          </div>
+        </div>
+        
+        {/* Trust indicators */}
+        <div className="max-w-3xl mx-auto mt-12 text-center">
+          <p className="text-sm text-monochrome-600 mb-6">Trusted by 200+ B2B companies</p>
+          <div className="flex flex-wrap justify-center gap-8 opacity-60">
+            <div className="w-24 h-12 bg-monochrome-300/30 rounded flex items-center justify-center">Logo 1</div>
+            <div className="w-24 h-12 bg-monochrome-300/30 rounded flex items-center justify-center">Logo 2</div>
+            <div className="w-24 h-12 bg-monochrome-300/30 rounded flex items-center justify-center">Logo 3</div>
+            <div className="w-24 h-12 bg-monochrome-300/30 rounded flex items-center justify-center">Logo 4</div>
           </div>
         </div>
       </div>
