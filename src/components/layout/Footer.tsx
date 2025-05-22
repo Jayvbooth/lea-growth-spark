@@ -21,10 +21,10 @@ const Footer = () => {
             <div className="flex items-center mb-6">
               <img 
                 src="/lovable-uploads/571b3290-42af-473a-9d0c-f00e31c3a8c1.png" 
-                alt="Leadea Logo" 
+                alt="Growth Spark Logo" 
                 className="h-8 mr-2 brightness-0 invert" 
               />
-              <span className="font-bold text-xl text-white">Leadea</span>
+              <span className="font-bold text-xl text-white">Growth Spark</span>
             </div>
             <p className="text-monochrome-300 mb-6">
               We help B2B companies generate qualified leads and automate their business processes for scalable growth.
@@ -32,18 +32,18 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center">
                 <MapPin className="h-5 w-5 text-green-400 mr-3" />
-                <span className="text-monochrome-300">123 Business Ave, Suite 200<br />New York, NY 10001</span>
+                <span className="text-monochrome-300">5360 Legacy Drive, Suite 230<br />Plano, TX 75024</span>
               </div>
               <div className="flex items-center">
                 <Mail className="h-5 w-5 text-green-400 mr-3" />
-                <a href="mailto:hello@leadea.com" className="text-monochrome-300 hover:text-white transition-colors">
-                  hello@leadea.com
+                <a href="mailto:contact@growthspark.io" className="text-monochrome-300 hover:text-white transition-colors">
+                  contact@growthspark.io
                 </a>
               </div>
               <div className="flex items-center">
                 <Phone className="h-5 w-5 text-green-400 mr-3" />
-                <a href="tel:+1234567890" className="text-monochrome-300 hover:text-white transition-colors">
-                  +1 (234) 567-890
+                <a href="tel:+14697688870" className="text-monochrome-300 hover:text-white transition-colors">
+                  (469) 768-8870
                 </a>
               </div>
             </div>
@@ -183,16 +183,16 @@ const Footer = () => {
         <div className="border-t border-monochrome-700 mt-12 pt-6 pb-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-monochrome-400 text-sm">
-              © {new Date().getFullYear()} Leadea Growth Partners. All rights reserved.
+              © {new Date().getFullYear()} Growth Spark. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-monochrome-400 hover:text-white transition-colors">
+              <a href="/privacy-policy" className="text-monochrome-400 hover:text-white transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-monochrome-400 hover:text-white transition-colors">
+              <a href="/terms-of-service" className="text-monochrome-400 hover:text-white transition-colors">
                 Terms of Service
               </a>
-              <a href="#" className="text-monochrome-400 hover:text-white transition-colors">
+              <a href="/sitemap.xml" className="text-monochrome-400 hover:text-white transition-colors">
                 Sitemap
               </a>
             </div>
