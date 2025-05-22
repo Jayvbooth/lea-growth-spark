@@ -9,17 +9,17 @@ interface IntegrationGridProps {
 
 const integrations = [
   { name: 'Gmail', logo: 'https://cdn.worldvectorlogo.com/logos/gmail-icon.svg' },
-  { name: 'Outlook', logo: 'https://cdn.worldvectorlogo.com/logos/microsoft-outlook-2019-present-.svg' },
+  { name: 'Outlook', logo: '/lovable-uploads/f93527f8-c179-427f-b33f-23a0e89395c4.png' },
   { name: 'LinkedIn', logo: 'https://cdn.worldvectorlogo.com/logos/linkedin-icon-2.svg' },
   { name: 'HubSpot', logo: 'https://cdn.worldvectorlogo.com/logos/hubspot.svg' },
   { name: 'Salesforce', logo: 'https://cdn.worldvectorlogo.com/logos/salesforce-2.svg' },
-  { name: 'Clay', logo: 'https://clayapp.io/favicon.ico' },
+  { name: 'Clay', logo: '/lovable-uploads/c49165ff-c5ae-4c3d-a596-189762e81140.png' },
   { name: 'Smartlead', logo: 'https://smartlead.ai/wp-content/uploads/2020/06/smartlead_favicon.png' },
-  { name: 'Instantly', logo: 'https://cdn.instantly.ai/icons/instantly-favicon.svg' },
+  { name: 'Instantly', logo: '/lovable-uploads/c59f6d87-8309-4682-9885-d8b36fc0d321.png' },
   { name: 'Zapier', logo: 'https://cdn.worldvectorlogo.com/logos/zapier-1.svg' },
-  { name: 'Make', logo: 'https://cdn.worldvectorlogo.com/logos/integromat.svg' },
-  { name: 'Mailchimp', logo: 'https://cdn.worldvectorlogo.com/logos/mailchimp-freddie-icon-2.svg' },
+  { name: 'Make', logo: '/lovable-uploads/5b87a8c2-45e5-477b-8dbb-b4ccab1d5036.png' },
   { name: 'Pipedrive', logo: 'https://cdn.worldvectorlogo.com/logos/pipedrive.svg' },
+  { name: 'Microsoft Teams', logo: '/lovable-uploads/bd84f938-f672-469c-8d46-fdb3dab50e04.png' },
 ];
 
 const IntegrationGrid: React.FC<IntegrationGridProps> = ({ 
