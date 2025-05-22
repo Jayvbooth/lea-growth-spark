@@ -1,61 +1,67 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, Check, CheckCircle } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check, CheckCircle, Building, Mail, User, Briefcase, Package, Users, Activity, Globe, BarChart } from 'lucide-react';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 
-// Step 1: Current Situation
-const situationOptions = [
+// Service selection options
+const serviceOptions = [
   {
-    icon: "⏱️",
-    title: "Manual Processes",
-    description: "Too much time spent on repetitive tasks"
-  },
-  {
+    value: "Lead Generation",
+    label: "Lead Generation",
     icon: "🎯",
-    title: "Lead Quality",
-    description: "Struggling to find qualified prospects"
+    description: "Generate qualified leads consistently"
   },
   {
-    icon: "🔄",
-    title: "Disconnected Systems",
-    description: "Using multiple tools that don't work together"
+    value: "Business Automation",
+    label: "Business Automation",
+    icon: "⚙️",
+    description: "Automate repetitive tasks and processes" 
   },
   {
-    icon: "📊",
-    title: "Growth Plateaued",
-    description: "Unable to scale predictably"
+    value: "Both",
+    label: "Both Services",
+    icon: "🚀",
+    description: "Comprehensive growth solution"
+  },
+  {
+    value: "Not Sure Yet",
+    label: "Not Sure Yet",
+    icon: "🤔",
+    description: "Get expert recommendations"
   }
 ];
 
-// Step 2: Goals
-const goalOptions = [
-  { id: 1, label: "Generate more qualified leads" },
-  { id: 2, label: "Automate repetitive tasks" },
-  { id: 3, label: "Integrate existing systems" },
-  { id: 4, label: "Improve conversion rates" },
-  { id: 5, label: "Reduce wasted time" },
-  { id: 6, label: "Scale predictable growth" }
-];
-
-// Step 3: Current Tools
-const toolOptions = [
-  { id: 1, label: "CRM (Salesforce, HubSpot, etc.)" },
-  { id: 2, label: "Marketing Automation" },
-  { id: 3, label: "Email Marketing" },
-  { id: 4, label: "Meeting Scheduler" },
-  { id: 5, label: "Social Media Tools" },
-  { id: 6, label: "Analytics Platform" },
-  { id: 7, label: "Project Management" },
-  { id: 8, label: "Communication Tools" }
+// Business type options
+const businessTypeOptions = [
+  { value: "B2B Services", label: "B2B Services", icon: <Briefcase className="h-4 w-4 mr-2" /> },
+  { value: "B2B Products", label: "B2B Products", icon: <Package className="h-4 w-4 mr-2" /> },
+  { value: "Agency", label: "Agency/Consulting", icon: <Users className="h-4 w-4 mr-2" /> },
+  { value: "Healthcare", label: "Healthcare", icon: <Activity className="h-4 w-4 mr-2" /> },
+  { value: "Other", label: "Other", icon: <Globe className="h-4 w-4 mr-2" /> }
 ];
 
 const Assessment = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedSituation, setSelectedSituation] = useState<number | null>(null);
-  const [selectedGoals, setSelectedGoals] = useState<number[]>([]);
-  const [selectedTools, setSelectedTools] = useState<number[]>([]);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [formValues, setFormValues] = useState({
+    fullName: '',
+    email: '',
+    companyName: '',
+    businessType: '',
+  });
   
-  const totalSteps = 3;
+  const totalSteps = 2;
   
   const handleNextStep = () => {
     if (currentStep < totalSteps) {
@@ -71,48 +77,21 @@ const Assessment = () => {
     }
   };
   
-  const handleSituationSelect = (index: number) => {
-    setSelectedSituation(index);
+  const handleServiceSelect = (service: string) => {
+    setSelectedService(service);
   };
-  
-  const handleGoalToggle = (id: number) => {
-    setSelectedGoals(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id) 
-        : [...prev, id]
-    );
-  };
-  
-  const handleToolToggle = (id: number) => {
-    setSelectedTools(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id) 
-        : [...prev, id]
-    );
+
+  const handleInputChange = (name: string, value: string) => {
+    setFormValues(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
   
   const isNextDisabled = () => {
-    if (currentStep === 1 && selectedSituation === null) return true;
-    if (currentStep === 2 && selectedGoals.length === 0) return true;
+    if (currentStep === 1 && !selectedService) return true;
+    if (currentStep === 2 && (!formValues.fullName || !formValues.email)) return true;
     return false;
-  };
-  
-  const handleSubmit = () => {
-    // Handle form submission - in a real app, this would send data to backend
-    console.log({
-      situation: selectedSituation !== null ? situationOptions[selectedSituation] : null,
-      goals: selectedGoals.map(id => goalOptions.find(goal => goal.id === id)),
-      tools: selectedTools.map(id => toolOptions.find(tool => tool.id === id))
-    });
-    
-    // Reset the form
-    setCurrentStep(1);
-    setSelectedSituation(null);
-    setSelectedGoals([]);
-    setSelectedTools([]);
-    
-    // Show success message or redirect
-    alert("Thanks for completing the assessment! We'll prepare your custom growth plan.");
   };
   
   return (
@@ -125,10 +104,10 @@ const Assessment = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold mb-6 text-monochrome-900 animate-fade-in">
-            Discover Your <span className="text-fancy text-green-600">Growth Opportunities</span>
+            Apply to <span className="text-fancy text-green-600">Work With Us</span>
           </h2>
           <p className="text-lg md:text-xl text-monochrome-700 max-w-3xl mx-auto animate-fade-in">
-            Complete this quick assessment to identify your biggest growth opportunities and receive a custom plan tailored to your business.
+            Complete this quick assessment to see if we're a good fit and receive a custom plan tailored to your business.
           </p>
         </div>
         
@@ -163,25 +142,25 @@ const Assessment = () => {
               </div>
             </div>
             
-            {/* Step 1: Current Situation */}
+            {/* Step 1: Service Selection */}
             {currentStep === 1 && (
               <div className="animate-fade-in">
                 <h3 className="text-xl md:text-2xl font-bold text-monochrome-900 mb-6">
-                  What's your biggest growth challenge?
+                  What can we help you with?
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                  {situationOptions.map((option, index) => (
+                  {serviceOptions.map((option, index) => (
                     <div 
                       key={index}
                       className={`p-5 border rounded-xl cursor-pointer transition-all duration-200 relative ${
-                        selectedSituation === index
+                        selectedService === option.value
                           ? 'border-green-500 bg-green-50 shadow-md'
                           : 'border-gray-200 hover:border-green-300 hover:shadow-sm'
                       }`}
-                      onClick={() => handleSituationSelect(index)}
+                      onClick={() => handleServiceSelect(option.value)}
                     >
-                      {selectedSituation === index && (
+                      {selectedService === option.value && (
                         <div className="absolute top-3 right-3 text-green-500">
                           <Check className="w-5 h-5" />
                         </div>
@@ -189,7 +168,7 @@ const Assessment = () => {
                       <div className="flex items-start">
                         <div className="text-3xl mr-4">{option.icon}</div>
                         <div>
-                          <h4 className="font-bold text-monochrome-900 mb-1">{option.title}</h4>
+                          <h4 className="font-bold text-monochrome-900 mb-1">{option.label}</h4>
                           <p className="text-sm text-monochrome-700">{option.description}</p>
                         </div>
                       </div>
@@ -199,80 +178,93 @@ const Assessment = () => {
               </div>
             )}
             
-            {/* Step 2: Goals */}
+            {/* Step 2: Basic Information */}
             {currentStep === 2 && (
-              <div className="animate-fade-in">
+              <div className="animate-fade-in space-y-6">
                 <h3 className="text-xl md:text-2xl font-bold text-monochrome-900 mb-6">
-                  What are your primary growth goals?
+                  Tell Us About Your Business
                 </h3>
-                <p className="text-monochrome-700 mb-6">Select all that apply to your business.</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                  {goalOptions.map(goal => (
-                    <div 
-                      key={goal.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
-                        selectedGoals.includes(goal.id)
-                          ? 'border-green-500 bg-green-50 shadow-sm'
-                          : 'border-gray-200 hover:border-green-300'
-                      }`}
-                      onClick={() => handleGoalToggle(goal.id)}
-                    >
-                      <div 
-                        className={`w-5 h-5 rounded-md border flex-shrink-0 mr-3 flex items-center justify-center ${
-                          selectedGoals.includes(goal.id)
-                            ? 'bg-green-500 border-green-500'
-                            : 'border-gray-300'
-                        }`}
-                      >
-                        {selectedGoals.includes(goal.id) && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
-                      </div>
-                      <span className="text-monochrome-900">{goal.label}</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label htmlFor="fullName" className="text-sm font-medium text-monochrome-800">Full Name</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        id="fullName"
+                        value={formValues.fullName}
+                        onChange={(e) => handleInputChange('fullName', e.target.value)}
+                        placeholder="Your full name" 
+                        className="pl-10"
+                      />
                     </div>
-                  ))}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-sm font-medium text-monochrome-800">Email Address</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        id="email"
+                        type="email" 
+                        value={formValues.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        placeholder="you@company.com" 
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {/* Step 3: Current Tools */}
-            {currentStep === 3 && (
-              <div className="animate-fade-in">
-                <h3 className="text-xl md:text-2xl font-bold text-monochrome-900 mb-6">
-                  What tools are you currently using?
-                </h3>
-                <p className="text-monochrome-700 mb-6">Select all tools you use for your business operations.</p>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
-                  {toolOptions.map(tool => (
-                    <div 
-                      key={tool.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
-                        selectedTools.includes(tool.id)
-                          ? 'border-green-500 bg-green-50 shadow-sm'
-                          : 'border-gray-200 hover:border-green-300'
-                      }`}
-                      onClick={() => handleToolToggle(tool.id)}
-                    >
+                <div className="space-y-2">
+                  <label htmlFor="companyName" className="text-sm font-medium text-monochrome-800">Company Name</label>
+                  <div className="relative">
+                    <Building className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Input 
+                      id="companyName"
+                      value={formValues.companyName}
+                      onChange={(e) => handleInputChange('companyName', e.target.value)}
+                      placeholder="Your company name" 
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-monochrome-800">What best describes your business?</label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {businessTypeOptions.map((option) => (
                       <div 
-                        className={`w-5 h-5 rounded-md border flex-shrink-0 mr-3 flex items-center justify-center ${
-                          selectedTools.includes(tool.id)
-                            ? 'bg-green-500 border-green-500'
-                            : 'border-gray-300'
+                        key={option.value}
+                        className={`p-4 border rounded-lg cursor-pointer transition-all duration-200 flex items-center ${
+                          formValues.businessType === option.value
+                            ? 'border-green-500 bg-green-50 shadow-sm'
+                            : 'border-gray-200 hover:border-green-300'
                         }`}
+                        onClick={() => handleInputChange('businessType', option.value)}
                       >
-                        {selectedTools.includes(tool.id) && (
-                          <Check className="w-3 h-3 text-white" />
-                        )}
+                        <div 
+                          className={`w-5 h-5 rounded-md border flex-shrink-0 mr-3 flex items-center justify-center ${
+                            formValues.businessType === option.value
+                              ? 'bg-green-500 border-green-500'
+                              : 'border-gray-300'
+                          }`}
+                        >
+                          {formValues.businessType === option.value && (
+                            <Check className="w-3 h-3 text-white" />
+                          )}
+                        </div>
+                        <span className="flex items-center text-monochrome-900">
+                          {option.icon}
+                          {option.label}
+                        </span>
                       </div>
-                      <span className="text-monochrome-900">{tool.label}</span>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
                 
                 {/* What You'll Receive Preview */}
-                <div className="bg-green-50 p-6 rounded-lg mb-8 border border-green-100">
+                <div className="bg-green-50 p-6 rounded-lg my-8 border border-green-100">
                   <h4 className="font-bold text-monochrome-900 mb-4 flex items-center">
                     <span className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
                       <CheckCircle className="w-5 h-5 text-green-600" />
@@ -328,10 +320,12 @@ const Assessment = () => {
               ) : (
                 <Button 
                   className="bg-green-600 hover:bg-green-700 text-white flex items-center" 
-                  onClick={handleSubmit}
+                  asChild
                 >
-                  Get Your Custom Growth Plan
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <Link to="/assessment">
+                    Continue Your Application
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
                 </Button>
               )}
             </div>
@@ -340,6 +334,12 @@ const Assessment = () => {
         
         {/* Trust indicators */}
         <div className="max-w-3xl mx-auto mt-12 text-center">
+          <div className="bg-white/60 p-4 rounded-lg backdrop-blur-sm inline-block mb-4">
+            <p className="text-sm text-monochrome-800 font-medium flex items-center justify-center">
+              <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+              100% Satisfaction Guarantee - We deliver results or you don't pay
+            </p>
+          </div>
           <p className="text-sm text-monochrome-600 mb-6">Trusted by 200+ B2B companies</p>
           <div className="flex flex-wrap justify-center gap-8 opacity-60">
             <div className="w-24 h-12 bg-monochrome-300/30 rounded flex items-center justify-center">Logo 1</div>
