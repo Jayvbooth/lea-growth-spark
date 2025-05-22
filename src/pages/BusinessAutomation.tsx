@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -18,8 +17,9 @@ import IntegrationGrid from '@/components/business-automation/IntegrationGrid';
 import FAQAccordion from '@/components/business-automation/FAQAccordion';
 import { 
   ArrowRight, Zap, Database, Calendar, FileText, ChartLine,
-  Bell, Mail, Rocket, Table, ListCheck, Link, Settings
+  Bell, Mail, Rocket, Table, ListCheck, Link as LinkIcon, Settings
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const BusinessAutomation = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -107,7 +107,7 @@ const BusinessAutomation = () => {
     {
       title: "Custom Integrations",
       description: "Connect any tools in your stack with tailored automation solutions.",
-      icon: <Link className="h-5 w-5 text-green-600" />,
+      icon: <LinkIcon className="h-5 w-5 text-green-600" />,
       tools: ["Zapier", "Make", "REST APIs"]
     },
   ];
@@ -325,9 +325,11 @@ const BusinessAutomation = () => {
         >
           <div className="container mx-auto flex justify-between items-center px-4">
             <p className="font-bold hidden sm:block">Ready to automate your business processes?</p>
-            <Button className="bg-green-600 text-white hover:bg-green-700">
-              Book Your Strategy Session
-              <ArrowRight className="ml-2 h-4 w-4" />
+            <Button className="bg-green-600 text-white hover:bg-green-700" asChild>
+              <Link to="/assessment">
+                Book Your Strategy Session
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </div>
         </div>
@@ -354,9 +356,11 @@ const BusinessAutomation = () => {
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "300ms" }}>
-                  <Button className="bg-green-600 text-white hover:bg-green-700 px-6 py-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg flex items-center text-lg">
-                    Book Your Strategy Session
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                  <Button className="bg-green-600 text-white hover:bg-green-700 px-6 py-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg flex items-center text-lg" asChild>
+                    <Link to="/assessment">
+                      Book Your Strategy Session
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -379,7 +383,7 @@ const BusinessAutomation = () => {
                         <div className="h-0.5 flex-grow bg-green-200 mx-2"></div>
                         <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
                           <svg className="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
                         </div>
                       </div>
@@ -630,6 +634,15 @@ const BusinessAutomation = () => {
             </div>
           </div>
         </section>
+        
+        {/* CTA at the bottom of ServicesShowcase.tsx */}
+        <div className="text-center mt-16">
+          <Button className="btn-primary" asChild>
+            <Link to="/assessment">
+              Explore Our Approach
+            </Link>
+          </Button>
+        </div>
         
         {/* CTA Section */}
         <CTASection />

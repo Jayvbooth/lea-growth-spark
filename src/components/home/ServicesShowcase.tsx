@@ -286,8 +286,10 @@ const ServicesShowcase = () => {
         
         {/* CTA */}
         <div className="text-center mt-16">
-          <Button className="btn-primary">
-            Explore Our Approach
+          <Button className="btn-primary" asChild>
+            <Link to="/assessment">
+              Explore Our Approach
+            </Link>
           </Button>
         </div>
       </div>
