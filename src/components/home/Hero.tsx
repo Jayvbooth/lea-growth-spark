@@ -66,7 +66,7 @@ const Hero = () => {
             </span>
           </div>
           
-          {/* Main headline with rotating text */}
+          {/* Main headline with rotating text - visible h1 for SEO */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight animate-slide-up relative">
             <div className="mb-4">Your Growth Partner In</div>
             <div className="relative inline-flex items-center justify-center">

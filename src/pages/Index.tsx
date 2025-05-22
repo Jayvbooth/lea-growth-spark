@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/home/Hero';
@@ -20,9 +21,21 @@ import ClientLogoCarousel from '@/components/home/ClientLogoCarousel';
 const Index = () => {
   return (
     <div className="min-h-screen bg-[#FAFBFC]">
+      <Helmet>
+        <title>Growth Spark | B2B Growth Systems & Marketing Automation</title>
+        <meta name="description" content="Growth Spark helps B2B companies generate qualified meetings and automate their workflows. Increase revenue with our lead generation and business automation solutions." />
+        <meta name="keywords" content="b2b growth, lead generation, marketing automation, sales automation, workflow optimization, business automation, qualified meetings" />
+        <meta property="og:title" content="Growth Spark | B2B Growth Systems & Marketing Automation" />
+        <meta property="og:description" content="Generate qualified B2B meetings and automate your marketing and sales workflows with Growth Spark's solutions." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="/" />
+        <link rel="canonical" href="/" />
+      </Helmet>
+      
       <Navbar />
       <main>
-        {/* Updated Hero component */}
+        {/* Updated Hero component with semantic HTML structure */}
+        <h1 className="sr-only">Growth Spark - B2B Growth Systems & Marketing Automation</h1>
         <Hero />
         
         {/* Trust indicators */}

@@ -18,11 +18,18 @@ const routesToPrerender = fs
 
 ;(async () => {
   for (const url of routesToPrerender) {
-    const appHtml = render(url);
-    const html = template.replace('<!--app-html-->', appHtml)
+    const { html: appHtml, helmet } = render(url);
+    
+    // Insert the Helmet elements into the HTML
+    const htmlWithHelmet = template
+      .replace('<title>lea-growth-spark</title>', 
+        `${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}`)
+      .replace('<!--app-html-->', appHtml);
 
     const filePath = `dist${url === '/' ? '/index' : url}.html`
-    fs.writeFileSync(toAbsolute(filePath), html)
+    fs.writeFileSync(toAbsolute(filePath), htmlWithHelmet)
     console.log('pre-rendered:', filePath)
   }
 })()
