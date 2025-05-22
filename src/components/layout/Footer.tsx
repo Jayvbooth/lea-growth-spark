@@ -32,18 +32,18 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center">
                 <MapPin className="h-5 w-5 text-green-400 mr-3" />
-                <span className="text-monochrome-300">5360 Legacy Drive, Suite 230<br />Plano, TX 75024</span>
+                <span className="text-monochrome-300">7200 Aloma Ave<br />Winter Park, Florida</span>
               </div>
               <div className="flex items-center">
                 <Mail className="h-5 w-5 text-green-400 mr-3" />
-                <a href="mailto:contact@growthspark.io" className="text-monochrome-300 hover:text-white transition-colors">
-                  contact@growthspark.io
+                <a href="mailto:contact@leadea.co" className="text-monochrome-300 hover:text-white transition-colors">
+                  contact@leadea.co
                 </a>
               </div>
               <div className="flex items-center">
                 <Phone className="h-5 w-5 text-green-400 mr-3" />
-                <a href="tel:+14697688870" className="text-monochrome-300 hover:text-white transition-colors">
-                  (469) 768-8870
+                <a href="tel:+13212093073" className="text-monochrome-300 hover:text-white transition-colors">
+                  (321) 209-3073
                 </a>
               </div>
             </div>
@@ -186,15 +186,15 @@ const Footer = () => {
               © {new Date().getFullYear()} Growth Spark. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="/privacy-policy" className="text-monochrome-400 hover:text-white transition-colors">
+              <Link to="/privacy-policy" onClick={scrollToTop} className="text-monochrome-400 hover:text-white transition-colors">
                 Privacy Policy
-              </a>
-              <a href="/terms-of-service" className="text-monochrome-400 hover:text-white transition-colors">
+              </Link>
+              <Link to="/terms-of-service" onClick={scrollToTop} className="text-monochrome-400 hover:text-white transition-colors">
                 Terms of Service
-              </a>
-              <a href="/sitemap.xml" className="text-monochrome-400 hover:text-white transition-colors">
+              </Link>
+              <Link to="/sitemap.xml" onClick={scrollToTop} className="text-monochrome-400 hover:text-white transition-colors">
                 Sitemap
-              </a>
+              </Link>
             </div>
           </div>
         </div>
