@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -14,12 +13,11 @@ const integrations = [
   { name: 'HubSpot', logo: 'https://cdn.worldvectorlogo.com/logos/hubspot.svg' },
   { name: 'Salesforce', logo: 'https://cdn.worldvectorlogo.com/logos/salesforce-2.svg' },
   { name: 'Clay', logo: '/lovable-uploads/c49165ff-c5ae-4c3d-a596-189762e81140.png' },
-  { name: 'Smartlead', logo: 'https://smartlead.ai/wp-content/uploads/2020/06/smartlead_favicon.png' },
+  { name: 'Smartlead', logo: '/lovable-uploads/571b3290-42af-473a-9d0c-f00e31c3a8c1.png' },
   { name: 'Instantly', logo: '/lovable-uploads/c59f6d87-8309-4682-9885-d8b36fc0d321.png' },
   { name: 'Zapier', logo: 'https://cdn.worldvectorlogo.com/logos/zapier-1.svg' },
   { name: 'Make', logo: '/lovable-uploads/5b87a8c2-45e5-477b-8dbb-b4ccab1d5036.png' },
   { name: 'Pipedrive', logo: 'https://cdn.worldvectorlogo.com/logos/pipedrive.svg' },
-  { name: 'Microsoft Teams', logo: '/lovable-uploads/bd84f938-f672-469c-8d46-fdb3dab50e04.png' },
 ];
 
 const IntegrationGrid: React.FC<IntegrationGridProps> = ({ 
