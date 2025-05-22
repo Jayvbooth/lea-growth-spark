@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Mail, Phone } from 'lucide-react';
+import { ArrowRight, Mail, Phone, CheckCircle } from 'lucide-react';
 
 const CTASection = () => {
   return (
@@ -34,16 +34,16 @@ const CTASection = () => {
             
             <div className="relative z-10">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-                Ready to Transform Your Growth Strategy?
+                Apply to Work With Our Expert Team
               </h2>
               <p className="text-white/90 text-lg mb-8 max-w-2xl">
-                Schedule a free strategy call to see how our lead generation and automation solutions can work together to accelerate your business growth.
+                Become one of our valued clients and experience firsthand how our lead generation and automation solutions can accelerate your business growth.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <Button asChild className="bg-white text-green-700 hover:bg-green-50 px-6">
                   <Link to="/assessment">
-                    Book a Strategy Call
+                    Apply Now
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
@@ -51,17 +51,18 @@ const CTASection = () => {
                 <div className="flex gap-4">
                   <Button variant="ghost" className="text-white hover:bg-green-500/20">
                     <Mail className="mr-2 h-4 w-4" />
-                    <Link to="mailto:hello@leadea.com">hello@leadea.com</Link>
+                    <Link to="mailto:contact@leadea.co">contact@leadea.co</Link>
                   </Button>
                   <Button variant="ghost" className="text-white hover:bg-green-500/20">
                     <Phone className="mr-2 h-4 w-4" />
-                    <Link to="tel:+1234567890">+1 (234) 567-890</Link>
+                    <Link to="tel:+13212093073">(321) 209-3073</Link>
                   </Button>
                 </div>
               </div>
               
               <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm">
-                <p className="text-white text-center font-medium">
+                <p className="text-white flex items-center justify-center font-medium">
+                  <CheckCircle className="mr-2 h-5 w-5 text-white" />
                   100% Satisfaction Guarantee - We deliver results or you don't pay.
                 </p>
               </div>
