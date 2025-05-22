@@ -16,7 +16,6 @@ import CTASection from '@/components/home/CTASection';
 import AnimatedLogoCarousel from '@/components/home/AnimatedLogoCarousel';
 import WhatWeDeliver from '@/components/home/WhatWeDeliver';
 import MetricsDashboard from '@/components/home/MetricsDashboard';
-import ClientLogoCarousel from '@/components/home/ClientLogoCarousel';
 
 const Index = () => {
   return (
@@ -42,11 +41,6 @@ const Index = () => {
         <div className="relative">
           <AnimatedLogoCarousel />
           <div className="absolute inset-0 gradient-overlay pointer-events-none"></div>
-        </div>
-        
-        {/* Client logos */}
-        <div className="relative py-10">
-          <ClientLogoCarousel title="Trusted By Leading Companies" />
         </div>
         
         {/* Main content sections */}
